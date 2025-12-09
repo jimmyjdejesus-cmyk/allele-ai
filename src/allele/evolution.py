@@ -265,7 +265,9 @@ class EvolutionEngine:
             elitism_count = int(
                 self.config.population_size * self.config.selection_pressure
             )
-            next_generation = population[:elitism_count]
+            # Clone elites so they are preserved even when in-place mutation
+            # is used on the source population during HPC mode.
+            next_generation = [ConversationalGenome.from_dict(g.to_dict()) for g in population[:elitism_count]]
 
         # Create offspring
         # If hpc_mode is enabled and immutable_evolution is False (default),
