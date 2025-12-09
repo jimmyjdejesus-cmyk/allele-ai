@@ -31,8 +31,8 @@ Version: 1.0.0
 License: MIT
 """
 
-__version__ = "1.0.0"
-__author__ = "Bravetto AI Systems"
+__version__ = "1.0.1"
+__author__ = "Jimmy De Jesus"
 __license__ = "MIT"
 
 # Core genome classes
