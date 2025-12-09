@@ -52,6 +52,8 @@ class EvolutionConfig:
         selection_pressure: Fraction of best individuals to keep (0.0-1.0)
         elitism_enabled: Whether to preserve best genomes
         tournament_size: Size of tournament for selection
+        immutable_evolution: If True, create new genome objects each generation (immutable flow)
+        hpc_mode: If True, optimize for high-performance (in-place mutation and reduced logging)
     """
     population_size: int = 100
     generations: int = 50

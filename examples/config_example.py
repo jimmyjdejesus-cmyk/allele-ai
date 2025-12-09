@@ -15,6 +15,7 @@ from allele import (
     settings,
     AgentConfig,
     EvolutionConfig,
+    EvolutionEngine,
     ConversationalGenome,
     KrakenLNN,
     create_agent
@@ -121,6 +122,8 @@ async def main():
         'AGENT__MODEL_NAME',
         'AGENT__TEMPERATURE',
         'EVOLUTION__POPULATION_SIZE',
+        'EVOLUTION__IMMUTABLE_EVOLUTION',
+        'EVOLUTION__HPC_MODE',
         'KRAKEN__RESERVOIR_SIZE'
     ]
     
@@ -165,6 +168,15 @@ async def main():
     print(f"\nAgentConfig from custom settings:")
     print(f"  Model: {custom_agent_config.model_name}")
     print(f"  Temperature: {custom_agent_config.temperature}")
+
+    # Demonstrate immutable vs in-place behavior
+    print_section("4b. Mutation Strategy Examples")
+    # HPC/in-place (default)
+    engine_hpc = EvolutionEngine(EvolutionConfig.from_settings())
+    print(f"  HPC mode (in-place): {engine_hpc.hpc_mode}, immutable: {engine_hpc.immutable_evolution}")
+    # Immutable
+    engine_immutable = EvolutionEngine(EvolutionConfig(immutable_evolution=True, hpc_mode=False))
+    print(f"  Immutable mode: {engine_immutable.immutable_evolution}, hpc: {engine_immutable.hpc_mode}")
     
     # ==========================================================================
     # Example 5: Hybrid Approach

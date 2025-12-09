@@ -15,3 +15,17 @@ def test_env_override_agent_model():
 
     # Cleanup
     del os.environ['AGENT__MODEL_NAME']
+
+
+def test_env_override_evolution_immutable_and_hpc_flags():
+    os.environ['EVOLUTION__IMMUTABLE_EVOLUTION'] = 'true'
+    os.environ['EVOLUTION__HPC_MODE'] = 'false'
+
+    from allele.config import AlleleSettings
+    config = AlleleSettings()
+
+    assert config.evolution.immutable_evolution is True
+    assert config.evolution.hpc_mode is False
+
+    del os.environ['EVOLUTION__IMMUTABLE_EVOLUTION']
+    del os.environ['EVOLUTION__HPC_MODE']

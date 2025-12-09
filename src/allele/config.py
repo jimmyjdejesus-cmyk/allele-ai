@@ -78,6 +78,10 @@ class EvolutionSettings(BaseModel):
     # Convenience flag that enables HPC-oriented optimizations (reduced logging,
     # in-place mutation, etc.). Defaults to True for high performance.
     hpc_mode: bool = True
+    # If you set immutable_evolution=True, it's recommended to also set
+    # hpc_mode=False to avoid conflicting intentions. However the engine will
+    # respect the immutable flag first and fall back to the hpc_mode setting
+    # only when immutable_evolution is False.
 
 class KrakenSettings(BaseModel):
     reservoir_size: int = 100

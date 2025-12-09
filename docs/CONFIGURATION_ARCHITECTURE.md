@@ -87,6 +87,20 @@ agent = await create_agent(genome, config)
 
 ---
 
+### HPC Mode & Mutation Strategy (Performance)
+
+We implement two evolution modes: an **in-place mutation** strategy (default, optimized for HPC), and an **immutable** strategy that returns new genome objects each generation.
+
+- Default: `hpc_mode=True` and `immutable_evolution=False`. This performs in-place updates to existing genome objects to minimize memory use and maximize throughput. It's the recommended option for long-running experiments or memory-constrained environments.
+- Immutable: `immutable_evolution=True` and `hpc_mode=False`. This creates new genome objects for offspring each generation, which is useful for functional programming patterns, reproducibility, and easier debugging, but uses more memory and is slower.
+
+Tradeoffs:
+- In-place (HPC): ✓ Faster, lower memory footprint, may have side effects and harder-to-track references.
+- Immutable: ✓ Easier to reason about and test, heavier memory usage and slower.
+
+Recommendation: Default to HPC/in-place in production environments; switch to immutable during testing and debugging for clearer lineage and reproducibility.
+
+
 ### 3. **Environment Variables with .env Files (Pattern C)**
 
 ```bash
