@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "allele"
+name = "abe-nlp"
 version = "1.0.0"
-description = "Phylogenic AI Agents - Beyond Prompt Engineering. Evolve Genetically Optimized Personalities with Liquid Memory."
+description = "Genome-based conversational AI SDK with 8 evolved traits and Kraken Liquid Neural Networks"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
@@ -16,15 +16,13 @@ maintainers = [
 ]
 keywords = [
     "ai",
-    "agents",
-    "phylogenic",
-    "genetic-algorithms",
+    "nlp",
+    "conversational-ai",
     "genome",
     "evolution",
-    "liquid-neural-networks",
+    "neural-networks",
     "llm",
-    "allele",
-    "neuromorphic"
+    "chatbot"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -73,14 +71,14 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/bravetto/allele"
-Documentation = "https://github.com/bravetto/allele#readme"
-Repository = "https://github.com/bravetto/allele"
-Issues = "https://github.com/bravetto/allele/issues"
-Changelog = "https://github.com/bravetto/allele/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/bravetto/Abe-NLP"
+Documentation = "https://github.com/bravetto/Abe-NLP#readme"
+Repository = "https://github.com/bravetto/Abe-NLP"
+Issues = "https://github.com/bravetto/Abe-NLP/issues"
+Changelog = "https://github.com/bravetto/Abe-NLP/blob/dev/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/allele"]
+packages = ["src/abe_nlp"]
 
 [tool.hatch.build.targets.sdist]
 include = [
@@ -101,7 +99,7 @@ python_functions = "test_*"
 addopts = [
     "--strict-markers",
     "--strict-config",
-    "--cov=allele",
+    "--cov=abe_nlp",
     "--cov-report=term-missing",
 ]
 
@@ -117,9 +115,9 @@ line_length = 88
 [tool.pylint.messages_control]
 max-line-length = 88
 disable = [
-    "C0111",
-    "C0103",
-    "R0913",
+    "C0111",  # missing-docstring
+    "C0103",  # invalid-name
+    "R0913",  # too-many-arguments
 ]
 
 [tool.mypy]
@@ -138,3 +136,4 @@ strict_equality = true
 [[tool.mypy.overrides]]
 module = "numpy.*"
 ignore_missing_imports = true
+

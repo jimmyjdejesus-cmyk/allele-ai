@@ -1,5 +1,5 @@
 """
-Kraken Liquid Neural Network (LNN) Implementation for Abe-NLP.
+Kraken Liquid Neural Network (LNN) Implementation for Allele.
 
 This module implements the advanced liquid neural network (LNN) for temporal
 sequence processing, adaptive dynamics, and memory capabilities.

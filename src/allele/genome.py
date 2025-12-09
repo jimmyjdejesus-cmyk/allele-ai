@@ -1,7 +1,7 @@
 """
 Genome classes for conversational AI with 8 evolved traits.
 
-This module implements the core genome system for Abe-NLP, featuring:
+This module implements the core genome system for Allele, featuring:
 - ConversationalGenome with 8 evolved traits
 - Gene expression and regulation
 - Mutation and crossover operators
@@ -203,6 +203,9 @@ class ConversationalGenome(GenomeBase):
             creation_timestamp=datetime.now(timezone.utc),
             generation=0
         )
+
+        # Sync generation from metadata to base class
+        self.generation = self.metadata.generation
 
         # Fitness tracking
         self.fitness_score: float = 0.0

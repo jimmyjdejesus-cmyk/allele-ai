@@ -1,5 +1,5 @@
 """
-Type definitions for Abe-NLP SDK.
+Type definitions for Allele SDK.
 
 Author: Bravetto AI Systems
 Version: 1.0.0

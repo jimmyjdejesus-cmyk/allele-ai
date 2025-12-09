@@ -6,8 +6,8 @@ Tests genome creation, mutation, crossover, and serialization.
 """
 
 import pytest
-from abe_nlp import ConversationalGenome
-from abe_nlp.exceptions import ValidationError
+from allele import ConversationalGenome
+from allele.exceptions import ValidationError
 
 
 class TestConversationalGenome:

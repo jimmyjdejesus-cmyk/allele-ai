@@ -1,5 +1,5 @@
 """
-Exception classes for Abe-NLP SDK.
+Exception classes for Allele SDK.
 
 Author: Bravetto AI Systems
 Version: 1.0.0
@@ -9,7 +9,7 @@ from typing import Optional, Dict, Any
 
 
 class AbeNLPError(Exception):
-    """Base exception for all Abe-NLP errors."""
+    """Base exception for all Allele errors."""
     
     def __init__(
         self,

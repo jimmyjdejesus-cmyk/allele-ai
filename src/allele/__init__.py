@@ -1,13 +1,13 @@
 """
-Abe-NLP: Genome-Based Conversational AI SDK
+Allele: Genome-Based Conversational AI SDK
 
 A production-ready SDK for creating genome-based conversational AI agents with
 8 evolved traits, Kraken Liquid Neural Networks, and evolutionary optimization.
 
-Official Python library for the Abe-NLP platform.
+Official Python library for the Allele platform.
 
 Example:
-    >>> from abe_nlp import ConversationalGenome, create_agent
+    >>> from allele import ConversationalGenome, create_agent
     >>> 
     >>> # Create genome with desired traits
     >>> genome = ConversationalGenome(

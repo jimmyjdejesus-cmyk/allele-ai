@@ -10,7 +10,7 @@ This example demonstrates:
 
 import asyncio
 import random
-from abe_nlp import (
+from allele import (
     ConversationalGenome,
     EvolutionEngine,
     EvolutionConfig,

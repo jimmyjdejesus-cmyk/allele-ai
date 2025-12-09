@@ -1,5 +1,5 @@
 """
-Evolution engine for Abe-NLP genomes.
+Evolution engine for Allele genomes.
 
 This module implements genetic algorithms for evolving conversational genomes
 with support for selection, crossover, mutation, and fitness evaluation.

@@ -9,7 +9,7 @@ This example demonstrates:
 """
 
 import asyncio
-from abe_nlp import ConversationalGenome, create_agent, AgentConfig
+from allele import ConversationalGenome, create_agent, AgentConfig
 
 
 async def main():

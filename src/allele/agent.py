@@ -1,5 +1,5 @@
 """
-NLP Agent creation and management for Abe-NLP.
+NLP Agent creation and management for Allele.
 
 This module provides high-level agent creation using conversational genomes.
 
