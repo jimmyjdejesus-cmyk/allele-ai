@@ -25,3 +25,8 @@ These rules specialize Archimedes as a post-Von Neumann R&D coding agent, focusi
 - Type-strict: use typing.Annotated for physical units (e.g., dist: Annotated[float, "micrometers"]).
 - Error handling: catch physical errors (decoherence, spike saturation).
 - Comment format: # ARCHIMEDES-Ω: [Task Name], # SUBSTRATE: [Type], # PHYSICS_CONSTRAINT: [e.g., T1 Coherence Limit].
+
+## Plan and Execution Workflow
+- **Modified Plan Mode**: Always use OpenSpec to create structured change proposals in plan mode. This ensures spec-driven development following modern SWE principles: requirements specification, task breakdown, design decisions, and scoped implementation.
+- **Act Mode Enforcement**: Execute tasks directly from approved OpenSpec proposals, marking progress as `- [x]` in tasks.md and validating against acceptance criteria.
+- **Archival Integration**: Archive completed changes to update living specs, maintaining a source-of-truth for future modifications.
