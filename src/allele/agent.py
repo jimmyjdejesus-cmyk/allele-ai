@@ -1,5 +1,28 @@
-"""
-NLP Agent creation and management for Allele.
+# Copyright (C) 2025 Bravetto AI Systems & Jimmy De Jesus
+#
+# This file is part of Allele.
+#
+# Allele is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Allele is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with Allele.  If not, see <https://www.gnu.org/licenses/>.
+#
+# =============================================================================
+# COMMERCIAL LICENSE:
+# If you wish to use this software in a proprietary/closed-source application
+# without releasing your source code, you must purchase a Commercial License
+# from: https://gumroad.com/l/[YOUR_LINK]
+# =============================================================================
+
+"""NLP Agent creation and management for Allele.
 
 This module provides high-level agent creation using conversational genomes.
 
@@ -14,7 +37,7 @@ from .genome import ConversationalGenome
 from .kraken_lnn import KrakenLNN
 from .types import AgentResponse, ConversationTurn
 from .exceptions import AgentError
-
+from .config import settings as allele_settings
 
 @dataclass
 class AgentConfig:
@@ -37,6 +60,21 @@ class AgentConfig:
     evolution_enabled: bool = True
     kraken_enabled: bool = True
 
+    @classmethod
+    def from_settings(cls, settings=None) -> "AgentConfig":
+        """Create an AgentConfig from central settings (pydantic model)."""
+        if settings is None:
+            settings = allele_settings
+        agent = settings.agent
+        return cls(
+            model_name=agent.model_name,
+            temperature=agent.temperature,
+            max_tokens=agent.max_tokens,
+            streaming=agent.streaming,
+            memory_enabled=agent.memory_enabled,
+            evolution_enabled=agent.evolution_enabled,
+            kraken_enabled=agent.kraken_enabled,
+        )
 
 class NLPAgent:
     """NLP Agent powered by conversational genome.
@@ -133,12 +171,13 @@ class NLPAgent:
             f"🎨 Creativity: {traits['creativity']:.1f}/1.0",
             f"📝 Conciseness: {traits['conciseness']:.1f}/1.0",
             f"🧩 Context Awareness: {traits['context_awareness']:.1f}/1.0",
+            f"↕️ Adaptability: {traits['adaptability']:.1f}/1.0",
+            f"🙂 Personability: {traits['personability']:.1f}/1.0",
             "",
             "Adapt your responses according to these trait levels."
         ]
 
         return "\n".join(prompt_parts)
-
 
 async def create_agent(
     genome: ConversationalGenome,
@@ -164,4 +203,5 @@ async def create_agent(
     await agent.initialize()
 
     return agent
-
+ 
+ 

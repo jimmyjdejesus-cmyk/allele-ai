@@ -1,5 +1,28 @@
-"""
-Kraken Liquid Neural Network (LNN) Implementation for Allele.
+# Copyright (C) 2025 Bravetto AI Systems & Jimmy De Jesus
+#
+# This file is part of Allele.
+#
+# Allele is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Allele is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with Allele.  If not, see <https://www.gnu.org/licenses/>.
+#
+# =============================================================================
+# COMMERCIAL LICENSE:
+# If you wish to use this software in a proprietary/closed-source application
+# without releasing your source code, you must purchase a Commercial License
+# from: https://gumroad.com/l/[YOUR_LINK]
+# =============================================================================
+
+"""Kraken Liquid Neural Network (LNN) Implementation for Allele.
 
 This module implements the advanced liquid neural network (LNN) for temporal
 sequence processing, adaptive dynamics, and memory capabilities.
@@ -21,7 +44,7 @@ import numpy as np
 import asyncio
 
 from .exceptions import AbeNLPError
-
+from .config import settings as allele_settings
 
 @dataclass
 class LiquidDynamics:
@@ -39,7 +62,6 @@ class LiquidDynamics:
     pressure: float = 1.0
     flow_rate: float = 0.5
     turbulence: float = 0.05
-
 
 @dataclass
 class AdaptiveWeightMatrix:
@@ -60,7 +82,6 @@ class AdaptiveWeightMatrix:
     min_weight: float = -2.0
     learning_threshold: float = 0.1
 
-
 @dataclass
 class TemporalMemoryBuffer:
     """Temporal memory buffer for sequence processing.
@@ -77,7 +98,6 @@ class TemporalMemoryBuffer:
     consolidation_threshold: float = 0.8
     retrieval_strength: float = 0.7
     memories: List[Dict[str, Any]] = field(default_factory=list)
-
 
 class LiquidStateMachine:
     """Liquid State Machine for reservoir computing.
@@ -248,7 +268,6 @@ class LiquidStateMachine:
     def get_state(self) -> np.ndarray:
         """Get current reservoir state."""
         return self.state.copy()
-
 
 class KrakenLNN:
     """Kraken Liquid Neural Network implementation.
@@ -448,5 +467,25 @@ class KrakenLNN:
         )
         self.processing_stats["memory_utilization"] = (
             len(self.temporal_memory.memories) / self.temporal_memory.buffer_size
+        )
+
+    @classmethod
+    def from_settings(cls, settings=None) -> "KrakenLNN":
+        """Create a KrakenLNN instance using central settings defaults."""
+        if settings is None:
+            settings = allele_settings
+        kraken = settings.kraken
+        dynamics = settings.liquid_dynamics
+        return cls(
+            reservoir_size=kraken.reservoir_size,
+            connectivity=kraken.connectivity,
+            memory_buffer_size=kraken.memory_buffer_size,
+            dynamics=LiquidDynamics(
+                viscosity=dynamics.viscosity,
+                temperature=dynamics.temperature,
+                pressure=dynamics.pressure,
+                flow_rate=dynamics.flow_rate,
+                turbulence=dynamics.turbulence
+            )
         )
 

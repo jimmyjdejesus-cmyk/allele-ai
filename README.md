@@ -2,7 +2,7 @@
 ## Phylogenic AI Agents
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](LICENSE)
 [![PyPI](https://img.shields.io/badge/PyPI-allele-blue)](https://pypi.org/project/allele/)
 
 **Beyond Prompt Engineering. Evolve Genetically Optimized Personalities with Liquid Memory.**
@@ -113,6 +113,25 @@ pip install allele[ollama]    # Ollama (local)
 pip install allele[all]       # All providers
 ```
 
+### Quick Configuration
+
+Allele uses **centralized configuration** for easy customization:
+
+```python
+from allele import settings, AgentConfig
+
+# Use defaults
+config = AgentConfig.from_settings()
+
+# Or override via environment variables
+# AGENT__MODEL_NAME=gpt-4-turbo
+# AGENT__TEMPERATURE=0.9
+```
+
+See [Configuration Guide](docs/configuration.md) for details.
+
+**HPC mode:** Allele defaults to an in-place mutation strategy for the evolution engine to favor speed and low memory usage. If you need immutable behavior for reproducibility, set `EVOLUTION__IMMUTABLE_EVOLUTION=true` or use `EvolutionConfig(immutable_evolution=True)`.
+
 ---
 
 ## Why Allele?
@@ -148,9 +167,11 @@ pip install allele[all]       # All providers
 
 ## Documentation
 
+- [Configuration Guide](docs/configuration.md) - **Start here for setup**
 - [API Reference](docs/api.md)
 - [Evolution Guide](docs/evolution.md)
 - [Kraken LNN](docs/kraken_lnn.md)
+- [Testing Guide](docs/TESTING.md)
 - [Examples](examples/)
 
 ---
@@ -172,7 +193,11 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT License - see [LICENSE](LICENSE)
+GNU AGPL v3 - see [LICENSE](LICENSE)
+
+**Commercial Use Note:** This project uses the AGPL v3 license with a commercial exception available. See [COMMERCIAL_LICENSE.txt](COMMERCIAL_LICENSE.txt) for details on commercial licensing.
+
+For academic/research use, the AGPL v3 terms are automatically satisfied without requiring a commercial license.
 
 ---
 

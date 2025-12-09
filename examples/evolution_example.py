@@ -14,7 +14,8 @@ from allele import (
     ConversationalGenome,
     EvolutionEngine,
     EvolutionConfig,
-    GeneticOperators
+    GeneticOperators,
+    settings
 )
 
 
@@ -47,15 +48,8 @@ async def main():
     
     # Step 1: Configure evolution
     print("\n⚙️  Step 1: Configuring evolution parameters...")
-    config = EvolutionConfig(
-        population_size=20,
-        generations=10,
-        mutation_rate=0.15,
-        crossover_rate=0.80,
-        selection_pressure=0.20,
-        elitism_enabled=True,
-        tournament_size=3
-    )
+    # Load defaults from central settings (pydantic)
+    config = EvolutionConfig.from_settings()
     
     print(f"   ✓ Population size: {config.population_size}")
     print(f"   ✓ Generations: {config.generations}")

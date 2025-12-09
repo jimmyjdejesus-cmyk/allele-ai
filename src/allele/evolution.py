@@ -1,5 +1,28 @@
-"""
-Evolution engine for Allele genomes.
+# Copyright (C) 2025 Bravetto AI Systems & Jimmy De Jesus
+#
+# This file is part of Allele.
+#
+# Allele is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Allele is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with Allele.  If not, see <https://www.gnu.org/licenses/>.
+#
+# =============================================================================
+# COMMERCIAL LICENSE:
+# If you wish to use this software in a proprietary/closed-source application
+# without releasing your source code, you must purchase a Commercial License
+# from: https://gumroad.com/l/[YOUR_LINK]
+# =============================================================================
+
+"""Evolution engine for Allele genomes.
 
 This module implements genetic algorithms for evolving conversational genomes
 with support for selection, crossover, mutation, and fitness evaluation.
@@ -15,7 +38,7 @@ import numpy as np
 from .genome import ConversationalGenome
 from .types import FitnessMetrics
 from .exceptions import EvolutionError
-
+from .config import settings as allele_settings
 
 @dataclass
 class EvolutionConfig:
@@ -29,6 +52,8 @@ class EvolutionConfig:
         selection_pressure: Fraction of best individuals to keep (0.0-1.0)
         elitism_enabled: Whether to preserve best genomes
         tournament_size: Size of tournament for selection
+        immutable_evolution: If True, create new genome objects each generation (immutable flow)
+        hpc_mode: If True, optimize for high-performance (in-place mutation and reduced logging)
     """
     population_size: int = 100
     generations: int = 50
@@ -37,7 +62,26 @@ class EvolutionConfig:
     selection_pressure: float = 0.2
     elitism_enabled: bool = True
     tournament_size: int = 3
+    immutable_evolution: bool = False
+    hpc_mode: bool = True
 
+    @classmethod
+    def from_settings(cls, settings=None) -> "EvolutionConfig":
+        """Create an EvolutionConfig from central settings (pydantic model)."""
+        if settings is None:
+            settings = allele_settings
+        ev = settings.evolution
+        return cls(
+            population_size=ev.population_size,
+            generations=ev.generations,
+            mutation_rate=ev.mutation_rate,
+            crossover_rate=ev.crossover_rate,
+            selection_pressure=ev.selection_pressure,
+            elitism_enabled=ev.elitism_enabled,
+            tournament_size=ev.tournament_size,
+            immutable_evolution=getattr(ev, "immutable_evolution", False),
+            hpc_mode=getattr(ev, "hpc_mode", True),
+        )
 
 class GeneticOperators:
     """Genetic operators for evolution."""
@@ -56,7 +100,13 @@ class GeneticOperators:
         Returns:
             Selected genome
         """
-        tournament = np.random.choice(population, tournament_size, replace=False)
+        if len(population) == 0:
+            raise ValueError("Cannot select from empty population")
+
+        actual_size = min(tournament_size, len(population))
+        # If requested tournament size > population, allow replacement to avoid errors
+        replace = actual_size > len(population)
+        tournament = np.random.choice(population, actual_size, replace=replace)
         return max(tournament, key=lambda g: g.fitness_score)
 
     @staticmethod
@@ -88,7 +138,6 @@ class GeneticOperators:
         """
         genome.mutate_all_traits(mutation_rate)
 
-
 class EvolutionEngine:
     """Evolution engine for conversational genomes.
 
@@ -109,6 +158,9 @@ class EvolutionEngine:
         self.generation = 0
         self.best_genome: Optional[ConversationalGenome] = None
         self.evolution_history: List[Dict[str, Any]] = []
+        # convenience flags
+        self.immutable_evolution = getattr(config, "immutable_evolution", False)
+        self.hpc_mode = getattr(config, "hpc_mode", True)
 
     def initialize_population(
         self,
@@ -127,6 +179,9 @@ class EvolutionEngine:
         # Default base traits
         if base_traits is None:
             base_traits = ConversationalGenome.DEFAULT_TRAITS.copy()
+
+        if self.config.population_size <= 0:
+            raise ValueError("population_size must be > 0")
 
         for i in range(self.config.population_size):
             # Add genetic variation
@@ -181,8 +236,9 @@ class EvolutionEngine:
                 "diversity": self._calculate_diversity(population)
             })
 
-            # Create next generation
-            population = self._create_next_generation(population)
+            # Create next generation (update population in-place so callers see changes)
+            next_gen = self._create_next_generation(population)
+            population[:] = next_gen
 
             self.generation += 1
 
@@ -212,6 +268,9 @@ class EvolutionEngine:
             next_generation = population[:elitism_count]
 
         # Create offspring
+        # If hpc_mode is enabled and immutable_evolution is False (default),
+        # prefer in-place mutation for speed and low memory. If immutable_evolution
+        # is True, create new genome instances for each offspring.
         while len(next_generation) < self.config.population_size:
             # Select parents
             parent1 = GeneticOperators.tournament_selection(
@@ -221,13 +280,30 @@ class EvolutionEngine:
                 population, self.config.tournament_size
             )
 
-            # Crossover
+            # Decide whether to crossover or clone
             if np.random.random() < self.config.crossover_rate:
-                offspring = GeneticOperators.crossover(parent1, parent2)
+                child = GeneticOperators.crossover(parent1, parent2)
+                if self.immutable_evolution:
+                    # Use newly created child as offspring (no mutation of existing objects)
+                    offspring = child
+                else:
+                    # Apply child's traits to parent1 in-place, preserving object identity
+                    parent1.traits = child.traits
+                    parent1.genes = child.genes
+                    parent1.metadata = child.metadata
+                    parent1.generation = child.generation
+                    offspring = parent1
             else:
-                offspring = parent1  # Clone if no crossover
+                if self.immutable_evolution:
+                    # Clone parent into a new object and mutate the clone
+                    offspring = ConversationalGenome.from_dict(parent1.to_dict())
+                    # Update ID to avoid duplicate IDs in population
+                    offspring.genome_id = f"clone_{offspring.genome_id}_{np.random.randint(1_000_000)}"
+                else:
+                    # Clone behavior (HPC): reuse parent1 object and mutate in place
+                    offspring = parent1
 
-            # Mutation
+            # Mutation (may be in-place or applied to clone/new object depending on immutability)
             GeneticOperators.mutate(offspring, self.config.mutation_rate)
 
             next_generation.append(offspring)

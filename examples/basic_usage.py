@@ -9,7 +9,7 @@ This example demonstrates:
 """
 
 import asyncio
-from allele import ConversationalGenome, create_agent, AgentConfig
+from allele import ConversationalGenome, create_agent, AgentConfig, settings
 
 
 async def main():
@@ -38,15 +38,8 @@ async def main():
     
     # Step 2: Configure agent
     print("\n⚙️  Step 2: Configuring agent...")
-    config = AgentConfig(
-        model_name="gpt-4",
-        temperature=0.7,
-        max_tokens=2048,
-        streaming=True,
-        memory_enabled=True,
-        evolution_enabled=True,
-        kraken_enabled=True
-    )
+    # Load defaults from central settings (pydantic)
+    config = AgentConfig.from_settings()
     
     print(f"   ✓ Model: {config.model_name}")
     print(f"   ✓ Temperature: {config.temperature}")

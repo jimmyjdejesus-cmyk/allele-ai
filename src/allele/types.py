@@ -1,5 +1,28 @@
-"""
-Type definitions for Allele SDK.
+# Copyright (C) 2025 Bravetto AI Systems & Jimmy De Jesus
+#
+# This file is part of Allele.
+#
+# Allele is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Allele is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with Allele.  If not, see <https://www.gnu.org/licenses/>.
+#
+# =============================================================================
+# COMMERCIAL LICENSE:
+# If you wish to use this software in a proprietary/closed-source application
+# without releasing your source code, you must purchase a Commercial License
+# from: https://gumroad.com/l/[YOUR_LINK]
+# =============================================================================
+
+"""Type definitions for Allele SDK.
 
 Author: Bravetto AI Systems
 Version: 1.0.0
@@ -9,14 +32,13 @@ from typing import Dict, List, Optional, Any, TypedDict, Literal
 from dataclasses import dataclass
 from datetime import datetime
 
-
 # Trait dictionary type
 TraitDict = Dict[str, float]
 
 # Trait names (8 core traits)
 TraitName = Literal[
     'empathy',
-    'engagement', 
+    'engagement',
     'technical_knowledge',
     'creativity',
     'conciseness',
@@ -25,11 +47,10 @@ TraitName = Literal[
     'personability'
 ]
 
-
 @dataclass
 class ConversationTurn:
     """Represents a single turn in a conversation.
-    
+
     Attributes:
         user_input: The user's message or query
         agent_response: The agent's response
@@ -45,11 +66,10 @@ class ConversationTurn:
     response_quality_score: float = 0.0
     evolutionary_adaptations: Optional[List[str]] = None
 
-
 @dataclass
 class AgentResponse:
     """Response from an NLP agent.
-    
+
     Attributes:
         content: The response content
         genome_id: ID of the genome that generated the response
@@ -65,10 +85,9 @@ class AgentResponse:
     generation_time: float
     metadata: Dict[str, Any]
 
-
 class AgentConfigDict(TypedDict, total=False):
     """Configuration dictionary for agent creation.
-    
+
     Attributes:
         model_name: Name of the LLM model to use
         temperature: Sampling temperature (0.0-1.0)
@@ -84,10 +103,9 @@ class AgentConfigDict(TypedDict, total=False):
     memory_enabled: bool
     evolution_enabled: bool
 
-
 class EvolutionConfigDict(TypedDict, total=False):
     """Configuration dictionary for evolution engine.
-    
+
     Attributes:
         population_size: Number of genomes in population
         generations: Maximum number of generations to evolve
@@ -103,11 +121,10 @@ class EvolutionConfigDict(TypedDict, total=False):
     selection_pressure: float
     elitism_enabled: bool
 
-
 @dataclass
 class FitnessMetrics:
     """Fitness metrics for genome evaluation.
-    
+
     Attributes:
         relevance: Relevance score (0.0-1.0)
         coherence: Coherence score (0.0-1.0)
@@ -127,11 +144,10 @@ class FitnessMetrics:
     empathy: float
     overall_fitness: float
 
-
 @dataclass
 class GenomeMetadata:
     """Metadata for genome instances.
-    
+
     Attributes:
         creation_timestamp: When the genome was created
         last_mutation: When the genome was last mutated

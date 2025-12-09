@@ -1,5 +1,28 @@
-"""
-Genome classes for conversational AI with 8 evolved traits.
+# Copyright (C) 2025 Bravetto AI Systems & Jimmy De Jesus
+#
+# This file is part of Allele.
+#
+# Allele is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Allele is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with Allele.  If not, see <https://www.gnu.org/licenses/>.
+#
+# =============================================================================
+# COMMERCIAL LICENSE:
+# If you wish to use this software in a proprietary/closed-source application
+# without releasing your source code, you must purchase a Commercial License
+# from: https://gumroad.com/l/[YOUR_LINK]
+# =============================================================================
+
+"""Genome classes for conversational AI with 8 evolved traits.
 
 This module implements the core genome system for Allele, featuring:
 - ConversationalGenome with 8 evolved traits
@@ -7,7 +30,7 @@ This module implements the core genome system for Allele, featuring:
 - Mutation and crossover operators
 - Fitness evaluation and adaptation
 
-Author: Bravetto AI Systems  
+Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
@@ -20,7 +43,7 @@ import numpy as np
 
 from .types import TraitDict, GenomeMetadata, FitnessMetrics
 from .exceptions import GenomeError, ValidationError
-
+from .config import settings as allele_settings
 
 class Gene:
     """Base gene class for evolutionary algorithms.
@@ -85,7 +108,6 @@ class Gene:
             self.expression_level + noise, 0.0, 1.0
         )
 
-
 class GenomeBase(ABC):
     """
     Abstract base class for all genome types.
@@ -125,7 +147,6 @@ class GenomeBase(ABC):
         """Deserialize from dictionary."""
         pass
 
-
 class ConversationalGenome(GenomeBase):
     """Genome specialized for conversational AI capabilities.
 
@@ -158,17 +179,8 @@ class ConversationalGenome(GenomeBase):
         >>> genome.crossover(other_genome)
     """
 
-    # Default trait values
-    DEFAULT_TRAITS: Dict[str, float] = {
-        'empathy': 0.5,
-        'engagement': 0.5,
-        'technical_knowledge': 0.5,
-        'creativity': 0.5,
-        'conciseness': 0.5,
-        'context_awareness': 0.5,
-        'adaptability': 0.5,
-        'personability': 0.5
-    }
+    # Default trait values (fallback to central settings.default_traits)
+    DEFAULT_TRAITS: Dict[str, float] = allele_settings.default_traits.copy()
 
     def __init__(
         self,
@@ -188,8 +200,8 @@ class ConversationalGenome(GenomeBase):
         """
         super().__init__(genome_id)
 
-        # Initialize traits with defaults
-        self.traits = self.DEFAULT_TRAITS.copy()
+        # Initialize traits with defaults (pull from settings if present)
+        self.traits = self.DEFAULT_TRAITS.copy() if self.DEFAULT_TRAITS else allele_settings.default_traits.copy()
         if traits:
             self._validate_traits(traits)
             self.traits.update(traits)
@@ -378,6 +390,17 @@ class ConversationalGenome(GenomeBase):
             traits=child_traits,
             metadata=child_metadata
         )
+
+    @classmethod
+    def from_settings(cls, genome_id: str, traits: Optional[TraitDict] = None, metadata: Optional[GenomeMetadata] = None, settings=None) -> 'ConversationalGenome':
+        """Create ConversationalGenome using central settings defaults when traits are not provided."""
+        if settings is None:
+            settings = allele_settings
+        combined_traits = settings.default_traits.copy()
+        if traits:
+            combined_traits.update(traits)
+
+        return cls(genome_id=genome_id, traits=combined_traits, metadata=metadata)
 
     def adapt_from_feedback(
         self,
