@@ -178,16 +178,18 @@ class TestEvolutionRuntime:
         # The deepcopied elites should be in the new population
         current_population = population
 
-        # Check that each original elite's traits are preserved somewhere in the population
+        # Check that each original elite's traits are preserved.
+        # We search in a copy of the population and remove found elites
+        # to correctly handle cases where multiple elites have identical traits.
+        searchable_population = list(current_population)
         for original_elite_data in elite_original_traits:
-            # Find genome with matching traits in current population
-            matched_elite = None
-            for genome in current_population:
+            match_found = False
+            for i, genome in enumerate(searchable_population):
                 if genome.traits == original_elite_data['traits']:
-                    matched_elite = genome
+                    searchable_population.pop(i)
+                    match_found = True
                     break
-
-            assert matched_elite is not None, f"Elite genome traits {original_elite_data['genome_id']} were not preserved in the population"
+            assert match_found, f"Elite genome traits from {original_elite_data['genome_id']} were not preserved"
     
     def test_population_diversity_tracking(self, evolution_engine, fitness_function):
         """Test population diversity is tracked correctly."""
