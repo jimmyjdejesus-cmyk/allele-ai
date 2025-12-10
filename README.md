@@ -4,10 +4,11 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](LICENSE)
 [![PyPI](https://img.shields.io/badge/PyPI-allele-blue)](https://pypi.org/project/allele/)
+[![Documentation Status](https://readthedocs.org/projects/allele/badge/?version=latest)](https://allele.readthedocs.io/en/latest/?badge=latest)
 [![LLM Ready](https://img.shields.io/badge/LLM-Ready-green.svg)](docs/LLM_INTEGRATION.md)
 [![Real API Tested](https://img.shields.io/badge/Real%20API-Tested-brightgreen.svg)](docs/REAL_INTEGRATION_TESTING.md)
-[![Ollama Cloud](https://img.shields.io/badge/Ollama-Cloud-green.svg)](docs/LLM_INTEGRATION.md#ollama-cloud-support)
-[![Behavioral AI](https://img.shields.io/badge/AI-Behavioral-blue.svg)](docs/LLM_INTEGRATION.md#behavioral-transformation)
+
+**[Website](https://allele-ai.github.io/allele/) | [Documentation](https://allele.readthedocs.io/) | [GitHub](https://github.com/allele-ai/allele)**
 
 **Beyond Prompt Engineering. Evolve Genetically Optimized Personalities with Liquid Memory & Real LLM Conversations.**
 

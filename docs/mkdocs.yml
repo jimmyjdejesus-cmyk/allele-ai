@@ -3,8 +3,8 @@ site_description: Genome-Based Conversational AI Agents with Evolutionary Optimi
 site_author: Jimmy De Jesus, Bravetto AI Systems
 site_url: https://allele.readthedocs.io/
 
-repo_name: Fission-AI/OpenSpec
-repo_url: https://github.com/Fission-AI/OpenSpec
+repo_name: allele-ai/allele
+repo_url: https://github.com/allele-ai/allele
 edit_uri: edit/main/docs/
 
 nav:
