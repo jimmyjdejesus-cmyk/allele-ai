@@ -87,7 +87,7 @@ All hypothesis tests were performed using Python scipy.stats with:
 |----------|-------------|--------------|------------|-----------|-----------------|
 | OpenAI   | ❌          | ✅           | Required   | ✅        | ✅              |
 | Ollama   | ✅          | ✅           | Optional   | ✅        | ❌              |
-| Anthropic| ❌          | ❌           | -          | -         | -               |
+| Anthropic| ❌          | ✅           | Required   | ✅        | ✅              |
 
 ### Rate Limiting Implementation
 
@@ -128,7 +128,7 @@ cd allele
 pip install -e .[dev]
 
 # Download required models (for Ollama testing)
-ollama pull llama2:latest
+ollama pull llama2:7b
 ```
 
 ### Running Benchmarks

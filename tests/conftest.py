@@ -17,56 +17,41 @@ def event_loop():
 
 @pytest.fixture(scope="session")
 async def ollama_available_models() -> List[str]:
-    """Get available Ollama models, pulling missing ones if needed."""
+    """Get available Ollama models."""
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get("http://localhost:11434/api/tags", timeout=aiohttp.ClientTimeout(total=5)) as response:
                 if response.status == 200:
                     data = await response.json()
                     return [model.get("name", "") for model in data.get("models", [])]
-    except Exception:
-        pass
+    except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+        print(f"Could not connect to Ollama to get available models: {e}")
     return []
 
 
 @pytest.fixture(scope="session")
 async def ensure_gemma_models(ollama_available_models):
-    """Ensure gemma models are available, trying to pull if needed."""
-    desired_models = ["gemma3:1b", "gemma2:2b", "gemma:latest"]
-    available = ollama_available_models
+    """Ensure gemma2:2b model is available for consistent testing."""
+    test_model = "gemma2:2b"  # Standardized test model
 
-    for model in desired_models:
-        if model in available:
-            return model  # Found exact gemma variant
+    if test_model in ollama_available_models:
+        return test_model
 
-    # Check for gemma prefix matches
-    for model in available:
-        if model.startswith("gemma"):
-            return model  # Found some gemma variant
-
-    # Try to pull gemma2:2b as it's most likely to exist
-    fallback_model = "gemma2:2b"
-
+    # Try to pull the standardized test model
     try:
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 "http://localhost:11434/api/pull",
-                json={"name": fallback_model},
+                json={"name": test_model},
                 timeout=aiohttp.ClientTimeout(total=120)  # 2 minute timeout for pulling
             ) as response:
                 if response.status == 200:
                     # Pull successful
-                    return fallback_model
-    except Exception:
-        pass
+                    return test_model
+    except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+        print(f"Failed to pull test model '{test_model}': {e}")
 
-    # Fall back to available models if gemma pull failed
-    if "llama2:latest" in ollama_available_models:
-        return "llama2:latest"
-    if tinyllama_available := [m for m in ollama_available_models if "tinyllama" in m]:
-        return tinyllama_available[0]
-
-    return None  # No suitable model available
+    return None  # Test model unavailable
 
 
 @pytest.fixture
