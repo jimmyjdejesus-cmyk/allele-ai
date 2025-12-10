@@ -1,253 +1,100 @@
-"""
-Pytest configuration and shared fixtures for Allele tests.
-
-This module provides reusable fixtures and test utilities for all test modules.
-"""
+"""Pytest configuration and fixtures for Allele testing."""
 
 import pytest
-import numpy as np
-from typing import Dict, List, Generator, Any
-from datetime import datetime, timezone
+import asyncio
+import aiohttp
+import os
+from typing import List, Optional
 
-from allele import (
-    ConversationalGenome,
-    EvolutionEngine,
-    EvolutionConfig,
-    AgentConfig,
-    KrakenLNN,
-    LiquidDynamics,
-)
+
+@pytest.fixture(scope="session")
+def event_loop():
+    """Create an instance of the default event loop for the test session."""
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
+
+
+@pytest.fixture(scope="session")
+async def ollama_available_models() -> List[str]:
+    """Get available Ollama models."""
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get("http://localhost:11434/api/tags", timeout=aiohttp.ClientTimeout(total=5)) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    return [model.get("name", "") for model in data.get("models", [])]
+    except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+        print(f"Could not connect to Ollama to get available models: {e}")
+    return []
+
+
+@pytest.fixture(scope="session")
+async def ensure_gemma_models(ollama_available_models):
+    """Ensure gemma2:2b model is available for consistent testing."""
+    test_model = "gemma2:2b"  # Standardized test model
+
+    if test_model in ollama_available_models:
+        return test_model
+
+    # Try to pull the standardized test model
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                "http://localhost:11434/api/pull",
+                json={"name": test_model},
+                timeout=aiohttp.ClientTimeout(total=120)  # 2 minute timeout for pulling
+            ) as response:
+                if response.status == 200:
+                    # Pull successful
+                    return test_model
+    except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+        print(f"Failed to pull test model '{test_model}': {e}")
+
+    return None  # Test model unavailable
 
 
 @pytest.fixture
-def sample_traits() -> Dict[str, float]:
-    """Sample trait dictionary for testing."""
-    return {
-        'empathy': 0.85,
-        'engagement': 0.75,
-        'technical_knowledge': 0.90,
-        'creativity': 0.65,
-        'conciseness': 0.80,
-        'context_awareness': 0.85,
-        'adaptability': 0.70,
-        'personability': 0.80
-    }
+def skip_if_cloud_models_unavailable():
+    """Skip test if cloud models are not configured."""
+    cloud_api_key = os.getenv("OLLAMA_API_KEY", "")
+
+    # Basic check - if no key is set, assume cloud not configured
+    if not cloud_api_key:
+        pytest.skip("Cloud models not configured (no OLLAMA_API_KEY)")
 
 
 @pytest.fixture
-def default_genome() -> ConversationalGenome:
-    """Create a genome with default traits."""
-    return ConversationalGenome(genome_id="test_default")
+async def local_ollama_config(ensure_gemma_models):
+    """Configuration for local Ollama testing."""
+    gemma_model = ensure_gemma_models
+    if gemma_model and isinstance(gemma_model, str):
+        from allele.agent import AgentConfig
+        return AgentConfig(
+            llm_provider="ollama",
+            model_name=gemma_model,
+            api_key="",  # Ollama doesn't require API key
+            temperature=0.1,  # Low creativity for predictable testing
+            request_timeout=30
+        )
+    else:
+        pytest.skip("No gemma models available locally and could not pull")
 
 
 @pytest.fixture
-def custom_genome(sample_traits: Dict[str, float]) -> ConversationalGenome:
-    """Create a genome with custom traits."""
+def mock_genome():
+    """Create a test genome for consistent testing."""
+    from allele.genome import ConversationalGenome
     return ConversationalGenome(
-        genome_id="test_custom",
-        traits=sample_traits
-    )
-
-
-@pytest.fixture
-def high_empathy_genome() -> ConversationalGenome:
-    """Create a genome with high empathy trait."""
-    return ConversationalGenome(
-        genome_id="test_high_empathy",
-        traits={'empathy': 0.95, 'engagement': 0.90}
-    )
-
-
-@pytest.fixture
-def technical_genome() -> ConversationalGenome:
-    """Create a genome optimized for technical knowledge."""
-    return ConversationalGenome(
-        genome_id="test_technical",
+        genome_id="test_genome",
         traits={
-            'technical_knowledge': 0.95,
-            'conciseness': 0.90,
-            'creativity': 0.40
+            'empathy': 0.8,
+            'engagement': 0.7,
+            'technical_knowledge': 0.6,
+            'creativity': 0.9,
+            'conciseness': 0.5,
+            'context_awareness': 0.8,
+            'adaptability': 0.7,
+            'personability': 0.8
         }
     )
-
-
-@pytest.fixture
-def population_of_genomes() -> List[ConversationalGenome]:
-    """Create a diverse population of genomes for testing."""
-    population = []
-    np.random.seed(42)  # Reproducible randomness
-    
-    for i in range(20):
-        traits = {}
-        for trait_name in ConversationalGenome.DEFAULT_TRAITS.keys():
-            traits[trait_name] = np.random.uniform(0.0, 1.0)
-        
-        genome = ConversationalGenome(
-            genome_id=f"pop_genome_{i:03d}",
-            traits=traits
-        )
-        population.append(genome)
-    
-    return population
-
-
-@pytest.fixture
-def evolution_config() -> EvolutionConfig:
-    """Create a standard evolution configuration for testing."""
-    return EvolutionConfig(
-        population_size=20,
-        generations=10,
-        mutation_rate=0.15,
-        crossover_rate=0.80,
-        selection_pressure=0.20,
-        elitism_enabled=True,
-        tournament_size=3
-    )
-
-
-@pytest.fixture
-def evolution_engine(evolution_config: EvolutionConfig) -> EvolutionEngine:
-    """Create an evolution engine instance."""
-    return EvolutionEngine(evolution_config)
-
-
-@pytest.fixture
-def agent_config() -> AgentConfig:
-    """Create a standard agent configuration for testing."""
-    return AgentConfig(
-        model_name="gpt-4",
-        temperature=0.7,
-        max_tokens=2048,
-        streaming=True,
-        memory_enabled=True,
-        evolution_enabled=True,
-        kraken_enabled=True
-    )
-
-
-@pytest.fixture
-def kraken_lnn() -> KrakenLNN:
-    """Create a Kraken LNN instance for testing."""
-    return KrakenLNN(
-        reservoir_size=100,
-        connectivity=0.1,
-        memory_buffer_size=1000
-    )
-
-
-@pytest.fixture
-def custom_liquid_dynamics() -> LiquidDynamics:
-    """Create custom liquid dynamics configuration."""
-    return LiquidDynamics(
-        viscosity=0.15,
-        temperature=1.2,
-        pressure=0.9,
-        flow_rate=0.6,
-        turbulence=0.08
-    )
-
-
-@pytest.fixture
-def sample_sequence() -> List[float]:
-    """Generate a sample input sequence for LNN processing."""
-    np.random.seed(42)
-    return [np.random.uniform(0.0, 1.0) for _ in range(50)]
-
-
-@pytest.fixture
-def long_sequence() -> List[float]:
-    """Generate a long input sequence for stress testing."""
-    np.random.seed(42)
-    return [np.random.uniform(0.0, 1.0) for _ in range(1000)]
-
-
-@pytest.fixture
-def fitness_function():
-    """Create a simple fitness function for testing."""
-    def fitness(genome: ConversationalGenome) -> float:
-        """Simple fitness: reward balanced traits with high mean."""
-        traits = genome.traits
-        trait_values = list(traits.values())
-        mean_value = sum(trait_values) / len(trait_values)
-        variance = sum((v - mean_value) ** 2 for v in trait_values) / len(trait_values)
-        
-        balance_score = 1.0 - min(variance, 1.0)
-        mean_score = mean_value
-        
-        return 0.6 * mean_score + 0.4 * balance_score
-    
-    return fitness
-
-
-@pytest.fixture(autouse=True)
-def reset_random_seed():
-    """Reset random seed before each test for reproducibility."""
-    np.random.seed(42)
-    yield
-    np.random.seed(None)
-
-
-@pytest.fixture
-def performance_timer():
-    """Fixture for performance timing."""
-    import time
-    
-    class Timer:
-        def __init__(self):
-            self.start_time = None
-            self.end_time = None
-        
-        def __enter__(self):
-            self.start_time = time.perf_counter()
-            return self
-        
-        def __exit__(self, *args):
-            self.end_time = time.perf_counter()
-        
-        @property
-        def elapsed(self) -> float:
-            if self.start_time is None or self.end_time is None:
-                return 0.0
-            return self.end_time - self.start_time
-    
-    return Timer
-
-
-@pytest.fixture
-def memory_monitor():
-    """Fixture for memory monitoring."""
-    try:
-        from memory_profiler import memory_usage
-        
-        class MemoryMonitor:
-            def __init__(self):
-                self.baseline = None
-                self.peak = None
-            
-            def start(self):
-                self.baseline = memory_usage()[0]
-            
-            def stop(self):
-                current = memory_usage()[0]
-                self.peak = current - self.baseline if self.baseline else current
-            
-            @property
-            def delta(self) -> float:
-                return self.peak if self.peak else 0.0
-        
-        return MemoryMonitor()
-    except ImportError:
-        # Fallback if memory-profiler not available
-        class DummyMonitor:
-            def start(self):
-                pass
-            
-            def stop(self):
-                pass
-            
-            @property
-            def delta(self) -> float:
-                return 0.0
-        
-        return DummyMonitor()
-

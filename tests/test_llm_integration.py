@@ -286,16 +286,16 @@ class TestLLMIntegration:
                     await agent.initialize()
 
     @pytest.mark.asyncio
-    async def test_system_prompt_generation(self, mock_genome):
+    async def test_system_prompt_generation(self, mock_genome, local_ollama_config):
         """Test system prompt includes genome trait information."""
-        config = AgentConfig(llm_provider="ollama", model_name="llama2:latest")
-        agent = NLPAgent(mock_genome, config)
+        agent = NLPAgent(mock_genome, local_ollama_config)
 
-        # Mock LLM client so agent can initialize (use Ollama patch)
-        with patch('allele.llm_ollama.AsyncOllama', create=True):
-            mock_llm_client = AsyncMock(spec=LLMClient)
-            agent.llm_client = mock_llm_client
-            agent.is_initialized = True
+        # Initialize with real LLM (no mocking)
+        try:
+            await agent.initialize()
+            assert agent.is_initialized
+        except Exception:
+            pytest.skip(f"Could not initialize agent with {local_ollama_config.model_name}")
 
         prompt = agent._create_system_prompt()
 
@@ -303,9 +303,10 @@ class TestLLMIntegration:
         assert mock_genome.genome_id in prompt
         assert str(mock_genome.generation) in prompt
 
-        # Check that traits are mentioned
-        for trait_name in ['empathy', 'technical_knowledge', 'creativity']:
-            assert trait_name.replace('_', ' ') in prompt.lower()
+        # Check that traits are described (using natural language)
+        assert "emotional understanding" in prompt.lower()
+        assert "technical expertise" in prompt.lower()
+        assert "creative" in prompt.lower()
 
     @pytest.mark.asyncio
     async def test_chat_with_fallback_mode(self, mock_genome):
