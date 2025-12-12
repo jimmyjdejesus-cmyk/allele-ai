@@ -1,0 +1,9 @@
+# This file defines the code owners for this repository.
+# Changes to files or directories must be approved by the listed users.
+
+# Global owners
+* @jimmyjdejesus-cmyk
+
+# Example: Specific files or directories can have different owners
+# src/ @team-member
+# docs/ @docs-team
