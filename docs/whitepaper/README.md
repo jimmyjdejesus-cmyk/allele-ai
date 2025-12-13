@@ -75,5 +75,5 @@ Bravetto AI Systems.
 
 For questions or collaboration:
 - Email: jimmydejesus1129@gmail.com
-- Repository: https://github.com/bravetto/allele
+- Repository: https://github.com/bravetto/allele-ai
 

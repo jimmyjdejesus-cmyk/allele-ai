@@ -1,10 +1,10 @@
 site_name: Allele Documentation
 site_description: Genome-Based Conversational AI Agents with Evolutionary Optimization
 site_author: Jimmy De Jesus, Bravetto AI Systems
-site_url: https://allele.readthedocs.io/
+site_url: https://jimmyjdejesus-cmyk.github.io/allele-ai/
 
-repo_name: allele-ai/allele
-repo_url: https://github.com/allele-ai/allele
+repo_name: jimmyjdejesus-cmyk/allele
+repo_url: https://github.com/jimmyjdejesus-cmyk/allele
 edit_uri: edit/main/docs/
 
 nav:

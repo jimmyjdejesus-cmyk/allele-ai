@@ -11,7 +11,7 @@ Briefly describe the changes made in this PR.
 - [ ] Other (please specify)
 
 ## Related Issues
-Closes #
+Closes #issue_number (or Fixes #issue_number, Resolves #issue_number)
 
 ## Testing
 Describe how you tested your changes. Include relevant test cases or commands.
