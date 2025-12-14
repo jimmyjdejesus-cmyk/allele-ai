@@ -24,6 +24,20 @@ This project follows a [Code of Conduct](CODE_OF_CONDUCT.md) to ensure a welcomi
 2. Install dependencies: `pip install -e .[dev]`
 3. Set up pre-commit hooks: `pre-commit install`
 
+### OpenSpec dependency
+
+Some documentation and CI jobs rely on the `openspec` CLI. It is distributed separately as an npm package. Please install it globally if you want to run docs or local tools that depend on it:
+
+```bash
+# with npm
+npm install -g openspec
+
+# with pnpm
+pnpm add -g openspec
+```
+
+OpenSpec requires Node.js >= 20.19.0.
+
 ## Making Changes
 - Follow the coding standards in this project.
 - Use [ruff](https://github.com/astral-sh/ruff) for linting.
