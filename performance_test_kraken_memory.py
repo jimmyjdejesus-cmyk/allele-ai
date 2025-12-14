@@ -46,7 +46,7 @@ async def benchmark_memory_operations():
         assert result['success']
 
     avg_storage_time = np.mean(times) * 1000  # convert to ms
-    print(".3f")
+    print(f"Average storage time: {avg_storage_time:.3f}ms")
 
     # Fill memory buffer
     print(f"\n[BUFFER] Filling memory buffer to {kraken.temporal_memory.buffer_size} entries...")
@@ -79,8 +79,8 @@ async def benchmark_memory_operations():
     avg_consolidation_time = np.mean(consolidation_times) * 1000  # convert to ms
     std_consolidation_time = np.std(consolidation_times) * 1000  # convert to ms
 
-    print(".3f")
-    print(".3f")
+    print(f"Average consolidation time: {avg_consolidation_time:.3f}ms")
+    print(f"Standard deviation: {std_consolidation_time:.3f}ms")
 
     # Test 3: Continuous processing with consolidation
     print("\n[CONTINUOUS] Testing Continuous Processing with Consolidation...")
@@ -108,9 +108,9 @@ async def benchmark_memory_operations():
     avg_continuous_time = np.mean(continuous_times) * 1000
     memory_efficiency = len(kraken.temporal_memory) / kraken.temporal_memory.buffer_size
 
-    print(".3f")
-    print(".3f")
-    print(".3f")
+    print(f"Average continuous processing time: {avg_continuous_time:.3f}ms")
+    print(f"Memory efficiency: {memory_efficiency:.3f}")
+    print(f"Total processing time: {total_time:.3f}s")
 
     # Performance Summary
     print("\n" + "=" * 50)
@@ -119,16 +119,18 @@ async def benchmark_memory_operations():
 
     # Calculate expected improvements
     theoretical_improvement = "10x (O(n log n) -> O(n log k))"
-    actual_measured = ".3f"
+    actual_efficiency = avg_storage_time / avg_consolidation_time if avg_consolidation_time > 0 else 0
 
     print(f"Theoretical Memory Consolidation Improvement: {theoretical_improvement}")
-    print(f"Actual Measurable Efficiency: {actual_measured}")
+    print(f"Actual Efficiency Ratio: {actual_efficiency:.1f}x")
     print(f"Memory Storage: {avg_storage_time:.3f}ms per sequence")
     print(f"Memory Consolidation: {avg_consolidation_time:.3f}ms (sigma={std_consolidation_time:.3f}ms)")
     print(f"Continuous Processing: {avg_continuous_time:.3f}ms per sequence")
-    print(".3f")
-    print("Memory consolidation running in sub-millisecond time!")
+    print(f"Memory Efficiency: {memory_efficiency:.1%}")
 
+    if avg_consolidation_time < 1.0:
+        print("Memory consolidation running in sub-millisecond time!")
+    
     # Calculate computational complexity validation
     if avg_consolidation_time < 1.0:  # Less than 1ms indicates near-linear performance
         complexity_status = "Near-linear performance achieved"

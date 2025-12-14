@@ -180,6 +180,20 @@ config = AgentConfig.from_settings()
 
 See [Configuration Guide](docs/configuration.md) for details.
 
+### External dependency: OpenSpec 🔧
+
+This project used to include `OpenSpec` as a git submodule, but it is now maintained and distributed separately as an npm package. Please install it globally on your machine (it is not tracked in this repository):
+
+```bash
+# with npm
+npm install -g openspec
+
+# with pnpm
+pnpm add -g openspec
+```
+
+OpenSpec requires Node.js >= 20.19.0.
+
 **HPC mode:** Allele defaults to an in-place mutation strategy for the evolution engine to favor speed and low memory usage. If you need immutable behavior for reproducibility, set `EVOLUTION__IMMUTABLE_EVOLUTION=true` or use `EvolutionConfig(immutable_evolution=True)`.
 
 ---
@@ -201,7 +215,7 @@ See [Configuration Guide](docs/configuration.md) for details.
 - **Crossover**: <5ms (breeding is cheap)
 - **LNN Processing**: <10ms (temporal coherence)
 - **Memory**: ~2KB per genome
-- **Code Quality**: 8.83/10, 95.8% tests passing (42/44 tests passing)
+- **Code Quality**: 8.83/10, 95.5% tests passing (42/44 tests passing)
 - **Kraken Determinism**: 100% determinism test suite success (12/12 tests)
 - **Biological Realism**: Enhanced liquid neural network accuracy preserved
 

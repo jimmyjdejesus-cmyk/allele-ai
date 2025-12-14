@@ -59,7 +59,7 @@ def benchmark_adaptive_weights():
     print(f"Average single update time: {avg_time_single:.4f}ms")
     print(f"Average batch update time: {batch_time:.4f}ms")
     print(f"Batch processing improvement: {avg_time_single/batch_time:.2f}x faster")
-    print("Performance Improvement:")
+    print("Adaptive weight optimization complete")
 
 
 async def benchmark_reservoir_operations():
@@ -160,9 +160,7 @@ async def benchmark_concurrent_processing():
     speedup = sequential_total / concurrent_total
     print(f"Concurrent processing speedup: {speedup:.2f}x")
     print(f"Sequential time: {avg_sequential:.3f}ms per sequence")
-
     print(f"Concurrent time: {avg_concurrent:.3f}ms per sequence")
-    print(f"Throughput improvement: {sequential_total/concurrent_total:.3f}x faster")
 
     return speedup, avg_concurrent
 
@@ -190,7 +188,7 @@ async def run_comprehensive_benchmark():
 
     # Calculate overall improvement
     matrix_improvement = "Optimized matrix operations and vectorization"
-    concurrent_improvement = ".2f"
+    concurrent_improvement = speedup
 
     # Calculate theoretical vs actual improvements
     expected_improvement = "5x (optimized matrix ops + batch processing)"
@@ -201,11 +199,9 @@ async def run_comprehensive_benchmark():
 
     print(f"Expected Reservoir Improvement: {expected_improvement}")
     print(f"Matrix Operation Optimization: {matrix_improvement}")
-    print(f"Concurrent Processing Speedup: {concurrent_improvement} ({concurrent_status})")
-    print("."
-    print("."
-    print("🚀 Phase 2 Reservoir Optimization Complete!")
-    print("Ready for LLM integration optimizations (Phase 3)")
+    print(f"Concurrent Processing Speedup: {concurrent_improvement:.2f}x ({concurrent_status})")
+    print(f"Reservoir Computing Phase 2 Complete!")
+    print("🚀 Ready for LLM integration optimizations (Phase 3)")
 
 
 if __name__ == "__main__":
