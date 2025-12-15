@@ -74,22 +74,25 @@ class DeterministicRandom:
         instance._rng = np.random.RandomState(seed_value)
 
     @classmethod
-    def random(cls, size=None, name: str = 'default') -> np.ndarray:
+    def random(cls, size: Optional[Any] = None, name: str = 'default') -> np.ndarray:
         """Generate random floats in [0, 1)."""
         instance = cls.get_instance(name)
-        return instance._rng.random_sample(size)
+        result: np.ndarray = np.asarray(instance._rng.random_sample(size))
+        return result
 
     @classmethod
-    def randn(cls, *args, name: str = 'default') -> np.ndarray:
+    def randn(cls, *args: Any, name: str = 'default') -> np.ndarray:
         """Generate standard normal random values."""
         instance = cls.get_instance(name)
-        return instance._rng.standard_normal(args)
+        result: np.ndarray = np.asarray(instance._rng.standard_normal(args))
+        return result
 
     @classmethod
-    def normal(cls, loc=0.0, scale=1.0, size=None, name: str = 'default') -> np.ndarray:
+    def normal(cls, loc: float = 0.0, scale: float = 1.0, size: Optional[Any] = None, name: str = 'default') -> np.ndarray:
         """Generate normal random values."""
         instance = cls.get_instance(name)
-        return instance._rng.normal(loc, scale, size)
+        result: np.ndarray = np.asarray(instance._rng.normal(loc, scale, size))
+        return result
 
     @classmethod
     def reset(cls, name: str = 'default') -> None:
@@ -228,7 +231,7 @@ class TemporalMemoryBuffer:
     _head: int = field(default=0, init=False)
     _count: int = field(default=0, init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize circular buffer after dataclass initialization."""
         if not self.memories or len(self.memories) != self.buffer_size:
             self.memories = [None] * self.buffer_size
@@ -272,12 +275,13 @@ class TemporalMemoryBuffer:
 
         # Calculate start position (oldest memory)
         start_idx = (self._head - self._count) % self.buffer_size
-        memories = []
+        memories: List[Dict[str, Any]] = []
 
         for i in range(self._count):
             idx = (start_idx + i) % self.buffer_size
-            if self.memories[idx] is not None:
-                memories.append(self.memories[idx])
+            mem = self.memories[idx]
+            if mem is not None:
+                memories.append(mem)
 
         return memories
 
@@ -285,7 +289,7 @@ class TemporalMemoryBuffer:
         """Return number of valid memories in buffer."""
         return self._count
 
-    def __iter__(self):
+    def __iter__(self) -> Any:
         """Iterate over memories in temporal order."""
         memories = self.get_memories()
         return iter(memories)
@@ -352,7 +356,7 @@ class LiquidStateMachine:
 
         # Initialize reservoir state
         self.state = np.zeros(reservoir_size)
-        self.activation_history = []
+        self.activation_history: List[np.ndarray] = []
 
         # Initialize connection matrix
         self.connections = self._initialize_connections()
@@ -370,7 +374,8 @@ class LiquidStateMachine:
         # Remove self-connections
         np.fill_diagonal(connections, 0)
 
-        return connections
+        result: np.ndarray = connections
+        return result
 
     def process_sequence(
         self,
@@ -475,7 +480,8 @@ class LiquidStateMachine:
             Noise vector for the reservoir
         """
         # Use instance's random state for reproducible behavior
-        return self.random_state.normal(0, self.dynamics.turbulence, self.reservoir_size)
+        noise: np.ndarray = self.random_state.normal(0, self.dynamics.turbulence, self.reservoir_size)
+        return noise
 
     def process_input(self, input_value: float) -> float:
         """Process a single input value through the liquid reservoir.
@@ -512,7 +518,8 @@ class LiquidStateMachine:
         total_flow = input_injection
         total_flow += recurrent_flow
 
-        return total_flow
+        result: np.ndarray = total_flow
+        return result
 
     def _generate_output(self) -> float:
         """Generate output from current reservoir state."""
@@ -557,7 +564,8 @@ class LiquidStateMachine:
 
     def get_state(self) -> np.ndarray:
         """Get current reservoir state."""
-        return self.state.copy()
+        result: np.ndarray = self.state.copy()
+        return result
 
 class KrakenLNN:
     """Kraken Liquid Neural Network implementation.
@@ -776,7 +784,7 @@ class KrakenLNN:
         # Calculate importance scores and create (importance, memory) tuples
         # Use heap to maintain top-k efficiently (O(n log k) vs O(n log n) sorting)
         keep_count = int(len(memories) * self.temporal_memory.consolidation_threshold)
-        top_memories = []
+        top_memories: List[tuple[float, Dict[str, Any]]] = []
 
         for memory in memories:
             if memory is not None:
@@ -820,7 +828,7 @@ class KrakenLNN:
         )
 
     @classmethod
-    def from_settings(cls, settings=None) -> "KrakenLNN":
+    def from_settings(cls, settings: Optional[Any] = None) -> "KrakenLNN":
         """Create a KrakenLNN instance using central settings defaults."""
         if settings is None:
             settings = allele_settings

@@ -67,7 +67,7 @@ class EvolutionConfig:
     hpc_mode: bool = True
 
     @classmethod
-    def from_settings(cls, settings=None) -> "EvolutionConfig":
+    def from_settings(cls, settings: Optional[Any] = None) -> "EvolutionConfig":
         """Create an EvolutionConfig from central settings (pydantic model)."""
         if settings is None:
             settings = allele_settings
@@ -110,12 +110,15 @@ class GeneticOperators:
         # If requested tournament size > population, allow replacement to avoid errors
         replace = actual_size > len(population)
 
+        rng: np.random.RandomState
         if seed is not None:
             rng = np.random.RandomState(seed)
             tournament = rng.choice(population, actual_size, replace=replace)
         else:
-            tournament = np.random.choice(population, actual_size, replace=replace)
-        return max(tournament, key=lambda g: g.fitness_score)
+            rng = np.random.RandomState()
+            tournament = rng.choice(population, actual_size, replace=replace)
+        tournament_genomes: List[ConversationalGenome] = list(tournament)
+        return max(tournament_genomes, key=lambda g: g.fitness_score)
 
     @staticmethod
     def crossover(
@@ -378,13 +381,17 @@ class EvolutionEngine:
 
                     # If we found a non-elite slot, insert a clone and mutate it
                     if non_elite_slot is not None:
-                        clone_dict = next(iter(initial_clones), None)
-                        if clone_dict:
+                        fallback_clone: Optional[Dict[str, Any]] = next(iter(initial_clones), None)
+                        if fallback_clone:
                             from allele.genome import ConversationalGenome
-                            population[non_elite_slot] = ConversationalGenome.from_dict(clone_dict)
+                            population[non_elite_slot] = ConversationalGenome.from_dict(fallback_clone)
                             GeneticOperators.mutate(population[non_elite_slot], self.config.mutation_rate)
 
-        return self.best_genome
+        best: ConversationalGenome
+        if self.best_genome is None:
+            raise RuntimeError("No best genome found after evolution")
+        best = self.best_genome
+        return best
 
     def _create_next_generation(
         self,

@@ -318,7 +318,7 @@ class ConversationalGenome(GenomeBase):
         self,
         trait_name: str,
         mutation_strength: float = 0.1,
-        rng: Optional[Any] = None
+        rng: Optional[np.random.RandomState] = None
     ) -> None:
         """Mutate a specific trait.
 
@@ -348,10 +348,11 @@ class ConversationalGenome(GenomeBase):
             mutation_rate: Probability of each trait mutating
             seed: Random seed for deterministic results
         """
+        rng: np.random.RandomState
         if seed is not None:
             rng = np.random.RandomState(seed)
         else:
-            rng = np.random
+            rng = np.random.RandomState()
 
         mutated = False
         trait_names = list(self.traits.keys())
@@ -378,10 +379,11 @@ class ConversationalGenome(GenomeBase):
         Returns:
             A new genome resulting from the crossover operation
         """
+        rng: np.random.RandomState
         if seed is not None:
             rng = np.random.RandomState(seed)
         else:
-            rng = np.random
+            rng = np.random.RandomState()
 
         # Blend traits from both parents
         child_traits = {}
@@ -418,7 +420,7 @@ class ConversationalGenome(GenomeBase):
         )
 
     @classmethod
-    def from_settings(cls, genome_id: str, traits: Optional[TraitDict] = None, metadata: Optional[GenomeMetadata] = None, settings=None) -> 'ConversationalGenome':
+    def from_settings(cls, genome_id: str, traits: Optional[TraitDict] = None, metadata: Optional[GenomeMetadata] = None, settings: Optional[Any] = None) -> 'ConversationalGenome':
         """Create ConversationalGenome using central settings defaults when traits are not provided."""
         if settings is None:
             settings = allele_settings

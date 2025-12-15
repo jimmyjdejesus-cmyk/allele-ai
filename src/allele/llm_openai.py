@@ -24,7 +24,7 @@
 
 """OpenAI LLM client implementation with comprehensive error handling."""
 
-from typing import AsyncGenerator, Dict, List, Optional
+from typing import Any, AsyncGenerator, Dict, List, Optional
 
 import structlog
 from openai import (
@@ -92,7 +92,7 @@ class OpenAIClient(LLMClient):
             self.logger.info("Initializing OpenAI client")
 
             # Validate API key format
-            if not self.config.api_key.startswith("sk-"):
+            if not self.config.api_key or not self.config.api_key.startswith("sk-"):
                 raise LLMAuthenticationError(
                     "Invalid OpenAI API key format. Key must start with 'sk-'",
                     "openai",
@@ -131,7 +131,8 @@ class OpenAIClient(LLMClient):
         """Validate OpenAI connection and API permissions."""
         try:
             # Test basic connectivity with a minimal call
-            models = await self._openai_client.models.list(limit=1)
+            assert self._openai_client is not None
+            models = await self._openai_client.models.list()
             if not hasattr(models, 'data') or not models.data:
                 raise LLMInitializationError("No models available - check API permissions")
 
@@ -178,29 +179,26 @@ class OpenAIClient(LLMClient):
         # Estimate input tokens for rate limiting
         estimated_input_tokens = self._estimate_token_count(messages)
 
-        async def _call_openai():
+        async def _call_openai() -> AsyncGenerator[str, None]:
             try:
-                # Prepare request parameters
-                request_params = {
-                    "model": self.config.model,
-                    "messages": messages,
-                    "temperature": self.config.temperature,
-                    "max_tokens": self.config.max_tokens,
-                    "stream": stream
-                }
-
-                # Add usage tracking for streaming responses
-                if stream:
-                    request_params["stream_options"] = {"include_usage": True}
-
                 # Make API call
-                response = await self._openai_client.chat.completions.create(**request_params)
+                assert self._openai_client is not None
+                # Cast messages to the expected type for OpenAI API
+                messages_param: Any = messages
+                response = await self._openai_client.chat.completions.create(
+                    messages=messages_param,
+                    model=self.config.model,
+                    temperature=self.config.temperature,
+                    max_tokens=self.config.max_tokens,
+                    stream=stream,
+                )
 
                 total_output_tokens = 0
                 response_content = ""
 
                 if stream:
-                    async for chunk in response:
+                    # Type ignore: stream response is AsyncIterable
+                    async for chunk in response:  # type: ignore[union-attr]
                         if hasattr(chunk, 'choices') and chunk.choices:
                             delta = chunk.choices[0].delta
                             if hasattr(delta, 'content') and delta.content:
@@ -211,14 +209,16 @@ class OpenAIClient(LLMClient):
 
                         # Handle usage information in final chunk
                         if hasattr(chunk, 'usage') and chunk.usage:
-                            self._update_metrics(chunk.usage)
+                            await self._update_metrics(chunk.usage)
                 else:
                     if hasattr(response, 'choices') and response.choices:
-                        response_content = response.choices[0].message.content
-                        yield response_content
+                        msg_content = response.choices[0].message.content
+                        if msg_content is not None:
+                            response_content = msg_content
+                            yield response_content
 
                     if hasattr(response, 'usage') and response.usage:
-                        self._update_metrics(response.usage)
+                        await self._update_metrics(response.usage)
 
             except RateLimitError as e:
                 self.logger.warning("OpenAI rate limit hit", retry_after=e.retry_after if hasattr(e, 'retry_after') else None)
@@ -297,7 +297,7 @@ class OpenAIClient(LLMClient):
     def _estimate_token_count(self, messages: List[Dict[str, str]]) -> int:
         """Estimate token count using tiktoken for accurate OpenAI tokenization."""
         try:
-            import tiktoken
+            import tiktoken  # type: ignore[import-not-found]
             # Use the appropriate encoding for the model
             # For GPT-4 and newer models, use cl100k_base
             encoding = tiktoken.get_encoding("cl100k_base")
@@ -324,20 +324,20 @@ class OpenAIClient(LLMClient):
 
             # Better approximation: ~3.5-4 characters per token for English
             # Use 3.8 for conservative estimation (avoid API errors)
-            estimated_tokens = max(1, total_chars // 3.8)
+            estimated_tokens = int(max(1, total_chars / 3.8))
 
             # Add overhead proportional to messages
             overhead_tokens = len(messages) * 6  # Reduced from 10
             return estimated_tokens + overhead_tokens
 
-    def _update_metrics(self, usage) -> None:
+    async def _update_metrics(self, usage: Any) -> None:
         """Update usage metrics from OpenAI usage data."""
         if hasattr(usage, 'total_tokens') and usage.total_tokens:
             self.metrics.total_tokens += usage.total_tokens
 
         # Estimate cost if usage details are available
         if hasattr(usage, 'prompt_tokens') and hasattr(usage, 'completion_tokens'):
-            cost = self.estimate_cost(usage.prompt_tokens, usage.completion_tokens)
+            cost = await self.estimate_cost(usage.prompt_tokens, usage.completion_tokens)
             self.metrics.total_cost += cost
 
     async def estimate_cost(self, input_tokens: int, output_tokens: int) -> float:

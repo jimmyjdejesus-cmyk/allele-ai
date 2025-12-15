@@ -167,8 +167,9 @@ class OllamaClient(LLMClient):
         if system_message:
             payload["system"] = system_message
 
-        async def _ollama_request():
+        async def _ollama_request() -> AsyncGenerator[str, None]:
             try:
+                assert self._http_client is not None
                 response = await self._http_client.post(
                     "/api/chat",
                     json=payload,

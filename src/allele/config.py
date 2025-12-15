@@ -22,24 +22,18 @@
 # from: https://gumroad.com/l/[YOUR_LINK]
 # =============================================================================
 
-from typing import Dict
+from typing import Any, Dict
 
 try:
-    # Pydantic v1 still exposes BaseSettings; in v2 it is moved to pydantic-settings
+    # Pydantic v1 or v2 - use BaseModel for compatibility
     from pydantic import BaseModel, Field
-    from pydantic import BaseSettings as _BaseSettings
 except Exception:
-    # Fallback for pydantic v2 where BaseSettings comes from pydantic-settings
+    # Fallback (unlikely to be needed)
     from pydantic import BaseModel, Field
-    try:
-        from pydantic_settings import BaseSettings as _BaseSettings
-    except Exception:
-        # Last resort: use BaseModel as a simple replacement (no env loading)
-        _BaseSettings = BaseModel
 
 try:
     # Pydantic v2 uses ConfigDict
-    from pydantic import ConfigDict  # type: ignore
+    from pydantic import ConfigDict
     _HAS_CONFIGDICT = True
 except Exception:
     _HAS_CONFIGDICT = False
@@ -97,21 +91,21 @@ class LiquidDynamicsSettings(BaseModel):
     flow_rate: float = 0.5
     turbulence: float = 0.05
 
-class AlleleSettings(_BaseSettings):
+class AlleleSettings(BaseModel):
     """Application settings loaded from environment variables or .env files.
 
     Naming convention for env vars is uppercase with underscores; nested fields
     will be prefixed (e.g., AGENT_MODEL_NAME, EVOLUTION_POPULATION_SIZE).
     """
 
-    agent: AgentSettings = AgentSettings()
+    agent: AgentSettings = AgentSettings(model_name="gpt-4")
     evolution: EvolutionSettings = EvolutionSettings()
     kraken: KrakenSettings = KrakenSettings()
     liquid_dynamics: LiquidDynamicsSettings = LiquidDynamicsSettings()
     default_traits: Dict[str, float] = DEFAULT_TRAITS
 
     if _HAS_CONFIGDICT:
-        model_config = ConfigDict(env_nested_delimiter="__")
+        model_config: Any = ConfigDict(env_nested_delimiter="__")  # type: ignore[misc,typeddict-unknown-key]
     else:
         class Config:
             env_nested_delimiter = "__"

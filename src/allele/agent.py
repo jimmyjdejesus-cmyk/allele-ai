@@ -142,7 +142,7 @@ Respond naturally while embodying these traits in your communication style.
     enable_metrics: bool = True
     correlation_id_enabled: bool = True
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Validate configuration after initialization."""
         if self.llm_provider not in ['openai', 'anthropic', 'ollama']:
             raise ValueError(f"Unsupported LLM provider: {self.llm_provider}")
@@ -168,13 +168,14 @@ Respond naturally while embodying these traits in your communication style.
 
         if self.context_window > 100:
             raise ValueError("context_window is unreasonably large; must be <= 100")
+        return None
 
     def validate(self) -> None:
         """Validate configuration parameters."""
         self.__post_init__()
 
     @classmethod
-    def from_settings(cls, settings=None) -> "AgentConfig":
+    def from_settings(cls, settings: Optional[Any] = None) -> "AgentConfig":
         """Create an AgentConfig from central settings."""
         if settings is None:
             settings = allele_settings
@@ -442,6 +443,7 @@ class NLPAgent:
         test_messages = [{"role": "user", "content": "Hello"}]
 
         try:
+            assert self.llm_client is not None
             async for _ in self.llm_client.chat_completion(test_messages, stream=False):
                 break  # Just test that it doesn't error
             self.logger.debug("Basic functionality test passed")
@@ -508,9 +510,10 @@ class NLPAgent:
             messages = self._truncate_context(messages)
 
             # Step 6: Generate response using LLM
+            assert self.llm_client is not None
             async for chunk in self.llm_client.chat_completion(
                 messages,
-                stream=self.config.streaming
+                stream=self.config.streaming,
             ):
                 response_chunks.append(chunk)
                 yield chunk
@@ -690,16 +693,21 @@ class NLPAgent:
         try:
             # Try to use LLM client's token estimation if available
             if self.llm_client and hasattr(self.llm_client, '_estimate_token_count'):
-                return self.llm_client._estimate_token_count(messages)
+                client = self.llm_client
+                # `_estimate_token_count` is provider-specific (OpenAI/others) and
+                # not part of the abstract `LLMClient` interface, so narrow safely
+                # and coerce the result to int for callers.
+                estimate = client._estimate_token_count(messages)
+                return int(estimate)
             else:
                 # Fallback to character-based approximation
                 total_chars = sum(len(str(msg.get("content", ""))) for msg in messages)
                 # Conservative estimate: ~3.5 characters per token
-                return max(1, total_chars // 3.5)
+                return int(max(1, total_chars / 3.5))
         except Exception:
             # Ultimate fallback
             total_chars = sum(len(str(msg.get("content", ""))) for msg in messages)
-            return max(1, total_chars // 4)
+            return int(max(1, total_chars / 4))
 
     async def _add_conversation_turn(
         self,

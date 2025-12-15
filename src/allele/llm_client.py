@@ -29,7 +29,7 @@ import time
 from abc import ABC, abstractmethod
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-from typing import Any, AsyncGenerator, Dict, List, Optional
+from typing import Any, AsyncGenerator, Callable, Dict, List, Optional
 
 import structlog
 
@@ -61,7 +61,7 @@ class LLMConfig:
     rate_limit_requests_per_minute: int = 60
     rate_limit_tokens_per_minute: int = 10000
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Validate configuration after initialization."""
         if not self.provider or not isinstance(self.provider, str):
             raise ValueError("provider must be a non-empty string")
@@ -86,6 +86,8 @@ class LLMConfig:
             raise ValueError("rate_limit_requests_per_minute must be positive")
         if self.rate_limit_tokens_per_minute <= 0:
             raise ValueError("rate_limit_tokens_per_minute must be positive")
+        return None
+        return None
 
 @dataclass
 class LLMUsageMetrics:
@@ -181,11 +183,11 @@ class LLMClient(ABC):
         pass
 
     @abstractmethod
-    async def chat_completion(
+    def chat_completion(
         self, messages: List[Dict[str, str]], stream: bool = True
     ) -> AsyncGenerator[str, None]:
-        """Generate chat completion."""
-        pass
+        """Generate chat completion (async generator). Implementations should be async generators."""
+        ...
 
     @abstractmethod
     async def estimate_cost(self, input_tokens: int, output_tokens: int) -> float:
@@ -203,7 +205,7 @@ class LLMClient(ABC):
         pass
 
     @asynccontextmanager
-    async def session(self):
+    async def session(self) -> AsyncGenerator["LLMClient", None]:
         """Context manager for LLM operations with automatic cleanup."""
         try:
             if not self.initialized:
@@ -214,15 +216,15 @@ class LLMClient(ABC):
 
     async def _retry_with_exponential_backoff(
         self,
-        operation,
+        operation: Callable[..., Any],
         operation_name: str,
         tokens_used: int = 1,
-        *args,
-        **kwargs
+        *args: Any,
+        **kwargs: Any
     ) -> AsyncGenerator[str, None]:
         """Retry operation with exponential backoff and circuit breaker pattern."""
         last_exception = None
-        total_wait_time = 0
+        total_wait_time: float = 0.0
 
         for attempt in range(self.config.max_retries):
             try:
