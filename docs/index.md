@@ -1,6 +1,6 @@
 # Allele Documentation
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
+[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](https://github.com/allele-ai/allele/blob/main/LICENSE)
 [![PyPI](https://img.shields.io/badge/PyPI-allele-blue)](https://pypi.org/project/allele/)
 [![Documentation Status](https://readthedocs.org/projects/allele/badge/?version=latest)](https://allele.readthedocs.io/en/latest/?badge=latest)
