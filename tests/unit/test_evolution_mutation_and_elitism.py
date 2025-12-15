@@ -1,12 +1,12 @@
 """Deterministic tests for evolution mutation and elitism with seeded RNG."""
 
-import pytest
-import numpy as np
-from unittest.mock import patch
 
-from allele.evolution import EvolutionEngine, EvolutionConfig, GeneticOperators
+import numpy as np
+import pytest
+
+from allele.evolution import EvolutionConfig, EvolutionEngine, GeneticOperators
 from allele.genome import ConversationalGenome
-from tests.test_utils import generate_population, generate_fitness_function
+from tests.test_utils import generate_fitness_function, generate_population
 
 
 class TestEvolutionMutationAndElitism:
@@ -81,7 +81,7 @@ class TestEvolutionMutationAndElitism:
 
         np.random.seed(101)
         genome2 = ConversationalGenome(
-            genome_id="test_genome_2", 
+            genome_id="test_genome_2",
             traits={'empathy': 0.5, 'technical_knowledge': 0.6, 'creativity': 0.7}
         )
 
@@ -102,7 +102,7 @@ class TestEvolutionMutationAndElitism:
 
         np.random.seed(151)
         parent2 = ConversationalGenome(
-            genome_id="parent2", 
+            genome_id="parent2",
             traits={'empathy': 0.2, 'technical_knowledge': 0.1, 'creativity': 0.9}
         )
 
@@ -155,7 +155,7 @@ class TestEvolutionMutationAndElitism:
         preserved_elites = 0
         for elite_id in elite_ids:
             elite_trait_dict[elite_id] = elite_trait_dict[elite_id]  # Refresh reference
-            
+
             # Find this elite in the new population
             found = False
             for genome in deterministic_population:
@@ -168,7 +168,7 @@ class TestEvolutionMutationAndElitism:
                     found = True
                     preserved_elites += 1
                     break
-            
+
             assert found, f"Elite genome {elite_id} not found in population"
 
         # Should preserve at least some elites
@@ -245,7 +245,7 @@ class TestEvolutionMutationAndElitism:
 
         # Store original traits for non-elites
         non_elite_original_traits = {
-            genome.genome_id: genome.traits.copy() 
+            genome.genome_id: genome.traits.copy()
             for genome in non_elite_genomes
         }
 
@@ -276,7 +276,7 @@ class TestEvolutionMutationAndElitism:
         selections1 = []
         for _ in range(10):
             selected = GeneticOperators.tournament_selection(
-                deterministic_population, 
+                deterministic_population,
                 tournament_size=3,
                 seed=900
             )
@@ -287,7 +287,7 @@ class TestEvolutionMutationAndElitism:
         selections2 = []
         for _ in range(10):
             selected = GeneticOperators.tournament_selection(
-                deterministic_population, 
+                deterministic_population,
                 tournament_size=3,
                 seed=900
             )
@@ -369,11 +369,11 @@ class TestEvolutionMutationAndElitism:
 
         # Populations should be similar (allowing for floating point differences)
         assert len(result_population) == len(deterministic_population2)
-        
+
         # Compare fitness scores
         fitness1 = sorted([g.fitness_score for g in result_population])
         fitness2 = sorted([g.fitness_score for g in deterministic_population2])
-        
+
         for f1, f2 in zip(fitness1, fitness2):
             assert abs(f1 - f2) < 1e-6
 
@@ -395,7 +395,7 @@ class TestEvolutionMutationAndElitism:
         # Test high mutation rate
         np.random.seed(1500)
         high_mut_genome = ConversationalGenome(
-            genome_id="high_mut", 
+            genome_id="high_mut",
             traits={'empathy': 0.5, 'technical_knowledge': 0.5, 'creativity': 0.5}
         )
         GeneticOperators.mutate(high_mut_genome, mutation_rate=0.5, seed=1600)

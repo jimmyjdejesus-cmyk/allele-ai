@@ -1,5 +1,4 @@
 import pytest
-import numpy as np
 
 from allele.evolution import EvolutionConfig, EvolutionEngine
 from allele.genome import ConversationalGenome
@@ -7,7 +6,7 @@ from allele.genome import ConversationalGenome
 
 def _make_population(size=4):
     pop = []
-    base_traits = {t: 0.5 for t in ConversationalGenome.DEFAULT_TRAITS.keys()}
+    base_traits = dict.fromkeys(ConversationalGenome.DEFAULT_TRAITS.keys(), 0.5)
     for i in range(size):
         pop.append(ConversationalGenome(genome_id=f"g_{i}", traits=base_traits.copy()))
     return pop

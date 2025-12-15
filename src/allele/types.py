@@ -28,9 +28,9 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-from typing import Dict, List, Optional, Any, TypedDict, Literal
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Any, Dict, List, Literal, Optional, TypedDict
 
 # Trait dictionary type
 TraitDict = Dict[str, float]

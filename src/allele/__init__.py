@@ -59,6 +59,26 @@ __author__ = "Jimmy De Jesus & Bravetto AI Systems"
 __license__ = "AGPL-3.0"
 
 # Core genome classes
+# Agent creation and management
+from .agent import (
+    AgentConfig,
+    NLPAgent,
+    create_agent,
+)
+from .config import settings as settings
+
+# Evolution engine
+from .evolution import (
+    EvolutionConfig,
+    EvolutionEngine,
+    GeneticOperators,
+)
+from .exceptions import (
+    AbeNLPError,
+    AgentError,
+    EvolutionError,
+    GenomeError,
+)
 from .genome import (
     ConversationalGenome,
     Gene,
@@ -67,41 +87,19 @@ from .genome import (
 
 # Neural network components
 from .kraken_lnn import (
-    KrakenLNN,
-    LiquidStateMachine,
-    LiquidDynamics,
     AdaptiveWeightMatrix,
+    KrakenLNN,
+    LiquidDynamics,
+    LiquidStateMachine,
     TemporalMemoryBuffer,
-)
-
-# Evolution engine
-from .evolution import (
-    EvolutionEngine,
-    EvolutionConfig,
-    GeneticOperators,
-)
-
-# Agent creation and management
-from .agent import (
-    NLPAgent,
-    create_agent,
-    AgentConfig,
 )
 
 # Type definitions and exceptions
 from .types import (
-    TraitDict,
-    ConversationTurn,
     AgentResponse,
+    ConversationTurn,
+    TraitDict,
 )
-
-from .exceptions import (
-    AbeNLPError,
-    GenomeError,
-    EvolutionError,
-    AgentError,
-)
-from .config import settings as settings
 
 __all__ = [
     # Version info

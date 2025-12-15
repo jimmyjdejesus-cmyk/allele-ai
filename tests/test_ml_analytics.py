@@ -31,62 +31,63 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-import pytest
 import asyncio
-import numpy as np
-from datetime import datetime, timezone, timedelta
-from typing import List, Dict, Any
-import tempfile
 import json
+import tempfile
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+
+import numpy as np
+import pytest
+
+from src.allele.observability.ml_analytics.alert_intelligence import (
+    AlertCorrelator,
+    IntelligentAlertManager,
+)
 
 # Import ML analytics components
 from src.allele.observability.ml_analytics.anomaly_detection import (
+    EnsembleAnomalyDetector,
     IsolationForestDetector,
     OneClassSVMDetector,
-    EnsembleAnomalyDetector
 )
-from src.allele.observability.ml_analytics.predictive_analytics import (
-    TimeSeriesForecaster,
-    PerformancePredictor,
-    PredictiveAnalyzer
-)
-from src.allele.observability.ml_analytics.alert_intelligence import (
-    AlertCorrelator,
-    IntelligentAlertManager
+from src.allele.observability.ml_analytics.ml_config import (
+    AlertIntelligenceConfig,
+    AnomalyDetectionConfig,
+    MLAnalyticsConfig,
+    OptimizationEngineConfig,
+    PredictiveAnalyticsConfig,
 )
 from src.allele.observability.ml_analytics.optimization_engine import (
-    PerformanceOptimizer,
     ConfigurationRecommender,
-    OptimizationEngine
+    OptimizationEngine,
+    PerformanceOptimizer,
+)
+from src.allele.observability.ml_analytics.predictive_analytics import (
+    PerformancePredictor,
+    PredictiveAnalyzer,
+    TimeSeriesForecaster,
 )
 
 # Import types and configuration
 from src.allele.observability.ml_analytics.types import (
-    MLMetric,
-    AnomalyResult,
-    PredictionResult,
     AlertCluster,
-    OptimizationRecommendation,
-    AnomalyType,
-    PredictionType,
-    OptimizationCategory,
-    ComponentType,
     AlertSeverity,
-    TimeSeriesData
-)
-from src.allele.observability.ml_analytics.ml_config import (
-    AnomalyDetectionConfig,
-    PredictiveAnalyticsConfig,
-    AlertIntelligenceConfig,
-    OptimizationEngineConfig,
-    MLAnalyticsConfig
+    AnomalyResult,
+    AnomalyType,
+    ComponentType,
+    MLMetric,
+    OptimizationCategory,
+    OptimizationRecommendation,
+    PredictionResult,
+    PredictionType,
+    TimeSeriesData,
 )
 
 
 class TestMLAnalyticsConfig:
     """Test ML analytics configuration management."""
-    
+
     def test_config_creation(self):
         """Test basic configuration creation."""
         config = MLAnalyticsConfig()
@@ -96,38 +97,38 @@ class TestMLAnalyticsConfig:
         assert config.predictive_analytics.enabled is True
         assert config.alert_intelligence.enabled is True
         assert config.optimization_engine.enabled is True
-    
+
     def test_feature_toggle(self):
         """Test feature enabling/disabling."""
         config = MLAnalyticsConfig()
         config.anomaly_detection.enabled = False
         assert not config.is_feature_enabled("anomaly_detection")
         assert config.is_feature_enabled("predictive_analytics")
-    
+
     def test_component_config(self):
         """Test component-specific configuration."""
         config = MLAnalyticsConfig()
         evolution_config = config.get_component_config("evolution_engine")
         assert evolution_config["enabled"] is True
         assert evolution_config["threshold"] > 0
-    
+
     def test_config_validation(self):
         """Test configuration validation."""
         config = MLAnalyticsConfig()
         issues = config.validate_config()
         # Should have no issues with default config
         assert len([i for i in issues if "enabled" not in i]) == 0
-    
+
     def test_env_config_creation(self):
         """Test configuration from environment variables."""
         import os
         os.environ["ALLELE_ML_ANOMALY_DETECTION"] = "false"
         os.environ["ALLELE_ML_DEBUG"] = "true"
-        
+
         config = MLAnalyticsConfig.from_env()
         assert config.anomaly_detection.enabled is False
         assert config.debug_mode is True
-        
+
         # Clean up
         del os.environ["ALLELE_ML_ANOMALY_DETECTION"]
         del os.environ["ALLELE_ML_DEBUG"]
@@ -135,7 +136,7 @@ class TestMLAnalyticsConfig:
 
 class TestAnomalyDetection:
     """Test anomaly detection functionality."""
-    
+
     @pytest.fixture
     def anomaly_config(self):
         """Create anomaly detection configuration."""
@@ -146,13 +147,13 @@ class TestAnomalyDetection:
             anomaly_threshold=0.7,
             min_training_samples=50
         )
-    
+
     @pytest.fixture
     def sample_metrics(self):
         """Create sample ML metrics for testing."""
         metrics = []
         base_time = datetime.now(timezone.utc)
-        
+
         # Normal metrics
         for i in range(100):
             metrics.append(MLMetric(
@@ -163,7 +164,7 @@ class TestAnomalyDetection:
                 value=np.random.normal(0.5, 0.1),
                 metadata={"generation": i}
             ))
-        
+
         # Add some anomalous metrics
         for i in range(10):
             metrics.append(MLMetric(
@@ -174,31 +175,31 @@ class TestAnomalyDetection:
                 value=np.random.normal(2.0, 0.2),  # Much higher values
                 metadata={"generation": 100+i}
             ))
-        
+
         return metrics
-    
+
     @pytest.mark.asyncio
     async def test_isolation_forest_training(self, anomaly_config, sample_metrics):
         """Test Isolation Forest model training."""
         detector = IsolationForestDetector(anomaly_config)
-        
+
         # Should fail without enough training data
         with pytest.raises(ValueError):
             await detector.train(sample_metrics[:10])
-        
+
         # Should succeed with enough data
         metrics = await detector.train(sample_metrics[:80])
         assert detector.is_trained is True
         assert metrics.model_name == "IsolationForest"
         assert metrics.training_samples == 80
         assert 0.0 <= metrics.accuracy <= 1.0
-    
+
     @pytest.mark.asyncio
     async def test_isolation_forest_detection(self, anomaly_config, sample_metrics):
         """Test anomaly detection with Isolation Forest."""
         detector = IsolationForestDetector(anomaly_config)
         await detector.train(sample_metrics[:80])
-        
+
         # Test normal metric
         normal_metric = MLMetric(
             timestamp=datetime.now(timezone.utc),
@@ -208,11 +209,11 @@ class TestAnomalyDetection:
             value=0.5,
             metadata={}
         )
-        
+
         result = await detector.detect_anomaly(normal_metric)
         # Normal value should not trigger anomaly
         assert result is None or result.anomaly_score < anomaly_config.anomaly_threshold
-        
+
         # Test anomalous metric
         anomalous_metric = MLMetric(
             timestamp=datetime.now(timezone.utc),
@@ -222,29 +223,29 @@ class TestAnomalyDetection:
             value=2.0,  # Significantly higher than training data
             metadata={}
         )
-        
+
         result = await detector.detect_anomaly(anomalous_metric)
         if result:
             assert result.anomaly_score > anomaly_config.anomaly_threshold
             assert result.anomaly_type == AnomalyType.PERFORMANCE_DEGRADATION
             assert result.severity in [AlertSeverity.WARNING, AlertSeverity.ERROR, AlertSeverity.CRITICAL]
-    
+
     @pytest.mark.asyncio
     async def test_one_class_svm_training(self, anomaly_config, sample_metrics):
         """Test One-Class SVM model training."""
         detector = OneClassSVMDetector(anomaly_config)
         metrics = await detector.train(sample_metrics[:80])
-        
+
         assert detector.is_trained is True
         assert metrics.model_name == "OneClassSVM"
         assert metrics.training_samples == 80
-    
+
     @pytest.mark.asyncio
     async def test_ensemble_anomaly_detection(self, anomaly_config, sample_metrics):
         """Test ensemble anomaly detection."""
         detector = EnsembleAnomalyDetector(anomaly_config)
         await detector.train(sample_metrics[:80])
-        
+
         test_metric = MLMetric(
             timestamp=datetime.now(timezone.utc),
             component_type=ComponentType.EVOLUTION_ENGINE,
@@ -253,29 +254,29 @@ class TestAnomalyDetection:
             value=2.0,
             metadata={}
         )
-        
+
         result = await detector.detect_anomaly(test_metric)
         if result:
             assert result.model_name == "EnsembleAnomalyDetector"
             assert 0.0 <= result.confidence <= 1.0
-    
+
     def test_model_persistence(self, anomaly_config, sample_metrics):
         """Test model save/load functionality."""
         detector = IsolationForestDetector(anomaly_config)
-        
+
         # Train model
         asyncio.run(detector.train(sample_metrics[:80]))
-        
+
         # Save model to temporary file
         with tempfile.NamedTemporaryFile(suffix='.pkl', delete=False) as tmp_file:
             detector.save_model(Path(tmp_file.name))
-            
+
             # Create new detector and load model
             new_detector = IsolationForestDetector(anomaly_config)
             success = new_detector.load_model(Path(tmp_file.name))
             assert success is True
             assert new_detector.is_trained is True
-            
+
             # Test anomaly detection with loaded model
             test_metric = MLMetric(
                 timestamp=datetime.now(timezone.utc),
@@ -285,18 +286,18 @@ class TestAnomalyDetection:
                 value=2.0,
                 metadata={}
             )
-            
+
             result = asyncio.run(new_detector.detect_anomaly(test_metric))
             # Should be able to detect anomalies with loaded model
             assert result is not None or result is None  # Either way should work
-        
+
         # Clean up
         Path(tmp_file.name).unlink()
 
 
 class TestPredictiveAnalytics:
     """Test predictive analytics functionality."""
-    
+
     @pytest.fixture
     def predictive_config(self):
         """Create predictive analytics configuration."""
@@ -308,14 +309,14 @@ class TestPredictiveAnalytics:
             lstm_sequence_length=10,
             min_training_samples=50
         )
-    
+
     @pytest.fixture
     def sample_time_series(self):
         """Create sample time series data."""
         timestamps = []
         values = []
         base_time = datetime.now(timezone.utc)
-        
+
         # Generate trending time series
         for i in range(100):
             timestamp = base_time + timedelta(minutes=i)
@@ -323,7 +324,7 @@ class TestPredictiveAnalytics:
             value = 0.5 + 0.01 * i + np.random.normal(0, 0.05)
             timestamps.append(timestamp)
             values.append(max(0, value))  # Ensure non-negative values
-        
+
         return TimeSeriesData(
             timestamps=timestamps,
             values=values,
@@ -332,33 +333,33 @@ class TestPredictiveAnalytics:
             metric_name="fitness_score",
             frequency_minutes=1
         )
-    
+
     @pytest.mark.asyncio
     async def test_arima_training(self, predictive_config, sample_time_series):
         """Test ARIMA model training."""
         forecaster = TimeSeriesForecaster(predictive_config)
-        
+
         time_series_data = {"evolution_engine": sample_time_series}
         metrics = await forecaster.train(time_series_data)
-        
+
         assert "evolution_engine" in metrics
         evolution_metrics = metrics["evolution_engine"]
         assert evolution_metrics.model_name.startswith("ARIMA")
         assert evolution_metrics.training_samples == len(sample_time_series.values)
         assert 0.0 <= evolution_metrics.accuracy <= 1.0
-    
+
     @pytest.mark.asyncio
     async def test_forecasting(self, predictive_config, sample_time_series):
         """Test time series forecasting."""
         forecaster = TimeSeriesForecaster(predictive_config)
-        
+
         # Train model
         time_series_data = {"evolution_engine": sample_time_series}
         await forecaster.train(time_series_data)
-        
+
         # Generate forecast
         prediction = await forecaster.forecast("evolution_engine", horizon_minutes=60)
-        
+
         assert prediction is not None
         assert prediction.prediction_type == PredictionType.PERFORMANCE_FORECAST
         assert prediction.prediction_horizon_minutes == 60
@@ -368,28 +369,28 @@ class TestPredictiveAnalytics:
         assert len(prediction.confidence_interval) == 2
         assert prediction.confidence_interval[0] <= prediction.predicted_value <= prediction.confidence_interval[1]
         assert 0.0 <= prediction.model_accuracy <= 1.0
-    
+
     @pytest.mark.asyncio
     async def test_performance_predictor(self, predictive_config, sample_time_series):
         """Test performance prediction across multiple horizons."""
         predictor = PerformancePredictor(predictive_config)
-        
+
         time_series_data = {"evolution_engine": sample_time_series}
         predictions = await predictor.predict_component_performance(
             "evolution_engine", time_series_data
         )
-        
+
         assert len(predictions) > 0
         for prediction in predictions:
             assert prediction.component_type == ComponentType.EVOLUTION_ENGINE
             assert prediction.prediction_type == PredictionType.PERFORMANCE_FORECAST
             assert prediction.predicted_value > 0
-    
+
     @pytest.mark.asyncio
     async def test_trend_analysis(self, predictive_config, sample_time_series):
         """Test performance trend analysis."""
         analyzer = PredictiveAnalyzer(predictive_config)
-        
+
         # Create metrics from time series
         metrics = [
             MLMetric(
@@ -402,24 +403,24 @@ class TestPredictiveAnalytics:
             )
             for ts, value in zip(sample_time_series.timestamps, sample_time_series.values)
         ]
-        
+
         trend_analysis = await analyzer.get_performance_trends("evolution_engine", metrics)
-        
+
         assert "trend" in trend_analysis
         assert "confidence" in trend_analysis
         assert "slope" in trend_analysis
         assert trend_analysis["trend"] in ["improving", "degrading", "stable", "insufficient_data", "error"]
         assert 0.0 <= trend_analysis["confidence"] <= 1.0
-    
+
     @pytest.mark.asyncio
     async def test_pattern_detection(self, predictive_config, sample_time_series):
         """Test performance pattern detection."""
         analyzer = PredictiveAnalyzer(predictive_config)
-        
+
         # Create longer metrics history for pattern detection
         metrics = []
         base_time = datetime.now(timezone.utc)
-        
+
         for i in range(60):  # Need at least 50 data points
             metrics.append(MLMetric(
                 timestamp=base_time + timedelta(minutes=i),
@@ -429,9 +430,9 @@ class TestPredictiveAnalytics:
                 value=np.sin(i * 0.1) + np.random.normal(0, 0.1),  # Cyclic pattern
                 metadata={}
             ))
-        
+
         pattern_analysis = await analyzer.detect_performance_patterns("evolution_engine", metrics)
-        
+
         assert "patterns" in pattern_analysis
         assert "confidence" in pattern_analysis
         assert isinstance(pattern_analysis["patterns"], list)
@@ -440,7 +441,7 @@ class TestPredictiveAnalytics:
 
 class TestAlertIntelligence:
     """Test alert intelligence functionality."""
-    
+
     @pytest.fixture
     def alert_config(self):
         """Create alert intelligence configuration."""
@@ -452,13 +453,13 @@ class TestAlertIntelligence:
             similarity_threshold=0.8,
             deduplication_window_minutes=5
         )
-    
+
     @pytest.fixture
     def sample_alerts(self):
         """Create sample alerts for testing."""
         base_time = datetime.now(timezone.utc)
         alerts = []
-        
+
         # Component-related alerts
         for i in range(5):
             alerts.append({
@@ -477,7 +478,7 @@ class TestAlertIntelligence:
                 "context": {"generation": i},
                 "recommendations": ["Review evolution parameters"]
             })
-        
+
         # Add some different component alerts
         for i in range(3):
             alerts.append({
@@ -496,15 +497,15 @@ class TestAlertIntelligence:
                 "context": {"request_id": f"req_{i}"},
                 "recommendations": ["Optimize response time"]
             })
-        
+
         return alerts
-    
+
     @pytest.mark.asyncio
     async def test_alert_clustering(self, alert_config, sample_alerts):
         """Test alert clustering functionality."""
         correlator = AlertCorrelator(alert_config)
         clusters = await correlator.process_alert_batch(sample_alerts)
-        
+
         assert len(clusters) > 0
         for cluster in clusters:
             assert isinstance(cluster, AlertCluster)
@@ -514,7 +515,7 @@ class TestAlertIntelligence:
             assert 0.0 <= cluster.confidence <= 1.0
             assert 0.0 <= cluster.priority_score <= 1.0
             assert cluster.impact_assessment is not None
-    
+
     @pytest.mark.asyncio
     async def test_simple_clustering(self, alert_config, sample_alerts):
         """Test simple clustering algorithm."""
@@ -522,15 +523,15 @@ class TestAlertIntelligence:
         # Force simple clustering
         alert_config.clustering_algorithm = "simple"
         clusters = await correlator.process_alert_batch(sample_alerts)
-        
+
         # Should still create some clusters
         assert len(clusters) >= 0
-    
+
     @pytest.mark.asyncio
     async def test_alert_deduplication(self, alert_config, sample_alerts):
         """Test intelligent alert deduplication."""
         manager = IntelligentAlertManager(alert_config)
-        
+
         # Create sample anomalies
         anomalies = []
         for i in range(3):
@@ -551,9 +552,9 @@ class TestAlertIntelligence:
                 recommendations=["Review parameters"]
             )
             anomalies.append(anomaly)
-        
+
         processed_alerts = await manager.process_alerts(anomalies)
-        
+
         assert len(processed_alerts) > 0
         for alert in processed_alerts:
             assert "alert_id" in alert
@@ -561,12 +562,12 @@ class TestAlertIntelligence:
             assert "cluster_info" in alert
             assert alert["priority_score"] >= 0.0
             assert alert["priority_score"] <= 1.0
-    
+
     @pytest.mark.asyncio
     async def test_alert_similarity(self, alert_config, sample_alerts):
         """Test alert similarity calculation."""
         manager = IntelligentAlertManager(alert_config)
-        
+
         # Create similar alerts
         alert1 = {
             "component_type": "evolution_engine",
@@ -576,7 +577,7 @@ class TestAlertIntelligence:
             "actual_value": 0.3,
             "expected_value": 0.5
         }
-        
+
         alert2 = {
             "component_type": "evolution_engine",
             "metric_name": "fitness_score",
@@ -585,16 +586,16 @@ class TestAlertIntelligence:
             "actual_value": 0.32,  # Similar value
             "expected_value": 0.5
         }
-        
+
         similarity = manager._calculate_alert_similarity(alert1, alert2)
         assert 0.0 <= similarity <= 1.0
         assert similarity > 0.8  # Should be very similar
-    
+
     @pytest.mark.asyncio
     async def test_escalation_management(self, alert_config, sample_alerts):
         """Test alert escalation functionality."""
         manager = IntelligentAlertManager(alert_config)
-        
+
         # Create high-priority alerts
         high_priority_alerts = []
         for i in range(3):
@@ -607,9 +608,9 @@ class TestAlertIntelligence:
                 "priority_score": 0.9
             }
             high_priority_alerts.append(alert)
-        
+
         await manager._setup_escalation_timers(high_priority_alerts)
-        
+
         # Check escalations (should not have any immediately)
         escalations = await manager.check_escalations()
         assert len(escalations) == 0
@@ -617,7 +618,7 @@ class TestAlertIntelligence:
 
 class TestOptimizationEngine:
     """Test optimization engine functionality."""
-    
+
     @pytest.fixture
     def optimization_config(self):
         """Create optimization engine configuration."""
@@ -629,13 +630,13 @@ class TestOptimizationEngine:
             enable_ml_based=True,
             enable_rule_based=True
         )
-    
+
     @pytest.fixture
     def sample_metrics_history(self):
         """Create sample metrics history for optimization testing."""
         metrics_history = {}
         base_time = datetime.now(timezone.utc)
-        
+
         # Evolution engine metrics
         evolution_metrics = []
         for i in range(50):
@@ -649,9 +650,9 @@ class TestOptimizationEngine:
                 value=fitness_value,
                 metadata={"generation": i}
             ))
-        
+
         metrics_history["evolution_engine"] = evolution_metrics
-        
+
         # NLP agent metrics
         nlp_metrics = []
         for i in range(30):
@@ -663,16 +664,16 @@ class TestOptimizationEngine:
                 value=3000 + np.random.normal(0, 200),  # High response times
                 metadata={"request_id": f"req_{i}"}
             ))
-        
+
         metrics_history["nlp_agent"] = nlp_metrics
-        
+
         return metrics_history
-    
+
     @pytest.fixture
     def sample_predictions(self):
         """Create sample predictions for optimization."""
         predictions = {}
-        
+
         # Evolution engine predictions
         evolution_predictions = [
             PredictionResult(
@@ -690,9 +691,9 @@ class TestOptimizationEngine:
             )
         ]
         predictions["evolution_engine"] = evolution_predictions
-        
+
         return predictions
-    
+
     @pytest.fixture
     def sample_configs(self):
         """Create sample configurations for optimization."""
@@ -708,22 +709,22 @@ class TestOptimizationEngine:
                 "top_p": 0.9
             }
         }
-    
+
     @pytest.mark.asyncio
     async def test_performance_optimization(self, optimization_config, sample_metrics_history, sample_predictions):
         """Test performance optimization analysis."""
         optimizer = PerformanceOptimizer(optimization_config)
-        
+
         recommendations = await optimizer.analyze_performance(
             sample_metrics_history, sample_predictions
         )
-        
+
         assert isinstance(recommendations, list)
-        
+
         for rec in recommendations:
             assert isinstance(rec, OptimizationRecommendation)
             assert rec.recommendation_id is not None
-            assert rec.category in [OptimizationCategory.CONFIGURATION_TUNING, 
+            assert rec.category in [OptimizationCategory.CONFIGURATION_TUNING,
                                   OptimizationCategory.PERFORMANCE_TUNING,
                                   OptimizationCategory.RESOURCE_ALLOCATION]
             assert rec.title is not None
@@ -732,65 +733,65 @@ class TestOptimizationEngine:
             assert rec.expected_improvement > 0
             assert len(rec.implementation_steps) > 0
             assert rec.component_type in [ComponentType.EVOLUTION_ENGINE, ComponentType.NLP_AGENT, ComponentType.KRAKEN_LNN]
-    
+
     @pytest.mark.asyncio
     async def test_configuration_recommendations(self, optimization_config, sample_metrics_history, sample_configs):
         """Test configuration recommendation engine."""
         recommender = ConfigurationRecommender(optimization_config)
-        
+
         recommendations = await recommender.recommend_configuration_changes(
             "evolution_engine",
             sample_configs["evolution_engine"],
             sample_metrics_history["evolution_engine"]
         )
-        
+
         assert isinstance(recommendations, list)
-        
+
         # Should recommend optimization for stagnating fitness
         evolution_recs = [r for r in recommendations if r.category == OptimizationCategory.CONFIGURATION_TUNING]
         assert len(evolution_recs) > 0
-        
+
         for rec in evolution_recs:
             assert rec.component_type == ComponentType.EVOLUTION_ENGINE
             assert rec.expected_improvement > 0
             assert rec.confidence >= optimization_config.min_confidence_threshold
-    
+
     @pytest.mark.asyncio
     async def test_comprehensive_optimization(self, optimization_config, sample_metrics_history, sample_predictions, sample_configs):
         """Test comprehensive system optimization."""
         engine = OptimizationEngine(optimization_config)
-        
+
         recommendations = await engine.optimize_system(
             sample_metrics_history,
             sample_predictions,
             sample_configs
         )
-        
+
         assert isinstance(recommendations, list)
         assert len(recommendations) > 0
-        
+
         # Should have recommendations for multiple categories
         categories = {rec.category for rec in recommendations}
         assert len(categories) > 1
-        
+
         # Should have recommendations for multiple components
         components = {rec.component_type for rec in recommendations}
         assert len(components) > 1
-    
+
     @pytest.mark.asyncio
     async def test_optimization_summary(self, optimization_config, sample_metrics_history, sample_predictions, sample_configs):
         """Test optimization summary generation."""
         engine = OptimizationEngine(optimization_config)
-        
+
         # Run optimization to generate recommendations
         await engine.optimize_system(
             sample_metrics_history,
             sample_predictions,
             sample_configs
         )
-        
+
         summary = await engine.get_optimization_summary()
-        
+
         assert isinstance(summary, dict)
         assert "total_active_recommendations" in summary
         assert "category_distribution" in summary
@@ -798,56 +799,56 @@ class TestOptimizationEngine:
         assert "high_priority_count" in summary
         assert "average_confidence" in summary
         assert "average_expected_improvement" in summary
-        
+
         assert summary["total_active_recommendations"] >= 0
         assert summary["high_priority_count"] >= 0
         assert 0.0 <= summary["average_confidence"] <= 1.0
         assert summary["average_expected_improvement"] >= 0
-    
+
     def test_recommendation_export(self, optimization_config, sample_metrics_history, sample_predictions, sample_configs):
         """Test recommendation export functionality."""
         engine = OptimizationEngine(optimization_config)
-        
+
         # Generate some recommendations
         asyncio.run(engine.optimize_system(
             sample_metrics_history,
             sample_predictions,
             sample_configs
         ))
-        
+
         # Export to temporary file
         with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tmp_file:
             asyncio.run(engine.export_recommendations(Path(tmp_file.name)))
-            
+
             # Verify file was created and contains valid JSON
             assert Path(tmp_file.name).exists()
-            
-            with open(tmp_file.name, 'r') as f:
+
+            with open(tmp_file.name) as f:
                 data = json.load(f)
                 assert isinstance(data, list)
-            
+
             # Clean up
             Path(tmp_file.name).unlink()
 
 
 class TestMLAnalyticsIntegration:
     """Test integration between ML analytics components."""
-    
+
     @pytest.mark.asyncio
     async def test_end_to_end_workflow(self):
         """Test complete ML analytics workflow."""
         # Create configurations
         ml_config = MLAnalyticsConfig()
-        
+
         # Create sample data
         base_time = datetime.now(timezone.utc)
         metrics = []
-        
+
         # Generate metrics with anomalies
         for i in range(100):
             is_anomaly = i > 80  # Last 20 are anomalous
             value = np.random.normal(2.0, 0.2) if is_anomaly else np.random.normal(0.5, 0.1)
-            
+
             metrics.append(MLMetric(
                 timestamp=base_time + timedelta(minutes=i),
                 component_type=ComponentType.EVOLUTION_ENGINE,
@@ -856,24 +857,24 @@ class TestMLAnalyticsIntegration:
                 value=value,
                 metadata={"generation": i}
             ))
-        
+
         # 1. Anomaly Detection
         anomaly_config = AnomalyDetectionConfig(min_training_samples=50)
         detector = IsolationForestDetector(anomaly_config)
         await detector.train(metrics[:80])
-        
+
         # Detect anomalies in last 20 metrics
         anomalies = []
         for metric in metrics[80:]:
             result = await detector.detect_anomaly(metric)
             if result:
                 anomalies.append(result)
-        
+
         assert len(anomalies) > 0
-        
+
         # 2. Predictive Analytics
         predictive_config = PredictiveAnalyticsConfig(min_training_samples=50)
-        
+
         # Create time series data
         ts_data = TimeSeriesData(
             timestamps=[m.timestamp for m in metrics],
@@ -882,37 +883,37 @@ class TestMLAnalyticsIntegration:
             component_id="test_engine",
             metric_name="fitness_score"
         )
-        
+
         forecaster = TimeSeriesForecaster(predictive_config)
         await forecaster.train({"evolution_engine": ts_data})
         predictions = await forecaster.forecast("evolution_engine", horizon_minutes=60)
-        
+
         assert predictions is not None
         assert predictions.predicted_value > 0
-        
+
         # 3. Alert Intelligence
         alert_config = AlertIntelligenceConfig()
         manager = IntelligentAlertManager(alert_config)
         processed_alerts = await manager.process_alerts(anomalies)
-        
+
         assert len(processed_alerts) > 0
-        
+
         # 4. Optimization
         optimization_config = OptimizationEngineConfig()
         engine = OptimizationEngine(optimization_config)
-        
+
         # Prepare data for optimization
         metrics_history = {"evolution_engine": metrics}
         predictions_dict = {"evolution_engine": [predictions]} if predictions else {}
         configs = {"evolution_engine": {"population_size": 100}}
-        
+
         optimization_recs = await engine.optimize_system(
             metrics_history, predictions_dict, configs
         )
-        
+
         assert isinstance(optimization_recs, list)
-        
-        print(f"End-to-end workflow completed successfully:")
+
+        print("End-to-end workflow completed successfully:")
         print(f"- Detected {len(anomalies)} anomalies")
         print(f"- Generated {len(processed_alerts)} processed alerts")
         print(f"- Created {len(optimization_recs)} optimization recommendations")
@@ -921,38 +922,38 @@ class TestMLAnalyticsIntegration:
 if __name__ == "__main__":
     # Run basic smoke tests
     print("Running ML Analytics Smoke Tests...")
-    
+
     # Test configuration
     print("\n1. Testing Configuration...")
     config_test = TestMLAnalyticsConfig()
     config_test.test_config_creation()
     config_test.test_feature_toggle()
     print("✅ Configuration tests passed")
-    
+
     # Test anomaly detection
     print("\n2. Testing Anomaly Detection...")
     anomaly_test = TestAnomalyDetection()
     # This would require async execution
     print("✅ Anomaly detection setup completed")
-    
+
     # Test predictive analytics
     print("\n3. Testing Predictive Analytics...")
     predictive_test = TestPredictiveAnalytics()
     # This would require async execution
     print("✅ Predictive analytics setup completed")
-    
+
     # Test alert intelligence
     print("\n4. Testing Alert Intelligence...")
     alert_test = TestAlertIntelligence()
     # This would require async execution
     print("✅ Alert intelligence setup completed")
-    
+
     # Test optimization engine
     print("\n5. Testing Optimization Engine...")
     optimization_test = TestOptimizationEngine()
     # This would require async execution
     print("✅ Optimization engine setup completed")
-    
+
     print("\n🎉 All ML Analytics smoke tests completed successfully!")
     print("Run with pytest for full async test execution:")
     print("  pytest tests/test_ml_analytics.py -v")

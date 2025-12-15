@@ -6,7 +6,12 @@ This example shows two ways to configure: environment variables and programmatic
 
 import os
 
-from allele import settings, AgentConfig, EvolutionConfig, ConversationalGenome, KrakenLNN
+from allele import (
+    AgentConfig,
+    ConversationalGenome,
+    KrakenLNN,
+    settings,
+)
 
 
 def main():

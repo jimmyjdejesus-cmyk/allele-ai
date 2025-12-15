@@ -31,13 +31,14 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-from typing import Dict, List, Any, Optional, Union, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 
-from ..types import ComponentType, AlertSeverity
+from ..types import AlertSeverity, ComponentType
 
 
 class AnomalyType(str, Enum):
@@ -90,7 +91,7 @@ class MLMetric:
     metric_name: str
     value: float
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     def to_vector(self) -> np.ndarray:
         """Convert to numerical vector for ML models."""
         # Create a feature vector from the metric
@@ -101,7 +102,7 @@ class MLMetric:
             hash(self.metric_name) % 1000
         ]
         return np.array(features, dtype=float)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
         return {
@@ -125,30 +126,30 @@ class AnomalyResult:
     anomaly_score: float
     confidence: float
     severity: AlertSeverity
-    
+
     # Anomaly details
     actual_value: float
     expected_value: float
     deviation: float
     threshold: float
-    
+
     # Context information
     context: Dict[str, Any] = field(default_factory=dict)
     recommendations: List[str] = field(default_factory=list)
-    
+
     # Model information
     model_name: str = ""
     model_version: str = ""
-    
+
     def __post_init__(self):
         """Calculate derived fields."""
         self.deviation = self.actual_value - self.expected_value
         self.severity = self._calculate_severity()
-    
+
     def _calculate_severity(self) -> AlertSeverity:
         """Calculate alert severity based on anomaly score and confidence."""
         score_confidence_product = self.anomaly_score * self.confidence
-        
+
         if score_confidence_product > 0.8:
             return AlertSeverity.CRITICAL
         elif score_confidence_product > 0.6:
@@ -157,7 +158,7 @@ class AnomalyResult:
             return AlertSeverity.WARNING
         else:
             return AlertSeverity.INFO
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
         return {
@@ -188,21 +189,21 @@ class PredictionResult:
     component_type: ComponentType
     component_id: str
     metric_name: str
-    
+
     # Prediction details
     predicted_value: float
     confidence_interval: Tuple[float, float]  # (lower, upper)
     prediction_horizon_minutes: int
-    
+
     # Model information
     model_name: str = ""
     model_version: str = ""
     model_accuracy: float = 0.0
-    
+
     # Additional metrics
     feature_importance: Dict[str, float] = field(default_factory=dict)
     prediction_explanation: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
         return {
@@ -227,22 +228,22 @@ class AlertCluster:
     """Cluster of related alerts."""
     cluster_id: str
     cluster_type: str  # "root_cause", "cascading", "independent"
-    
+
     # Cluster information
     alerts: List[Dict[str, Any]]  # Alert data
     common_attributes: Dict[str, Any] = field(default_factory=dict)
     root_cause_candidates: List[str] = field(default_factory=list)
-    
+
     # Analysis results
     confidence: float = 0.0
     priority_score: float = 0.0
     impact_assessment: str = ""
-    
+
     # Timing information
     first_alert_time: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     last_alert_time: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     duration_minutes: float = 0.0
-    
+
     def update_cluster(self, alert_data: Dict[str, Any]) -> None:
         """Update cluster with new alert."""
         self.alerts.append(alert_data)
@@ -250,18 +251,18 @@ class AlertCluster:
         self.duration_minutes = (
             self.last_alert_time - self.first_alert_time
         ).total_seconds() / 60.0
-        
+
         # Recalculate priority score
         self.priority_score = self._calculate_priority_score()
-    
+
     def _calculate_priority_score(self) -> float:
         """Calculate priority score for the cluster."""
         if not self.alerts:
             return 0.0
-        
+
         # Base score from number of alerts
         alert_count_score = min(len(self.alerts) / 10.0, 1.0)
-        
+
         # Severity score
         severity_scores = {
             AlertSeverity.CRITICAL: 1.0,
@@ -269,25 +270,25 @@ class AlertCluster:
             AlertSeverity.WARNING: 0.5,
             AlertSeverity.INFO: 0.2
         }
-        
+
         severity_score = 0.0
         for alert in self.alerts:
             severity = alert.get("severity", AlertSeverity.INFO)
             severity_score += severity_scores.get(severity, 0.0)
         severity_score /= len(self.alerts)
-        
+
         # Duration score (longer duration = higher priority for resolution)
         duration_score = min(self.duration_minutes / 60.0, 1.0)  # Cap at 1 hour
-        
+
         # Combined score
         self.priority_score = (
             alert_count_score * 0.3 +
             severity_score * 0.5 +
             duration_score * 0.2
         )
-        
+
         return self.priority_score
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
         return {
@@ -312,34 +313,34 @@ class OptimizationRecommendation:
     category: OptimizationCategory
     title: str
     description: str
-    
+
     # Recommendation details
     current_value: Any
     recommended_value: Any
     expected_improvement: float  # percentage improvement
     confidence: float
-    
+
     # Implementation details
     implementation_steps: List[str] = field(default_factory=list)
     estimated_effort: str = "low"  # low, medium, high
     risk_level: str = "low"  # low, medium, high
-    
+
     # Context
     component_type: ComponentType = ComponentType.SYSTEM
     component_id: str = ""
     context: Dict[str, Any] = field(default_factory=dict)
-    
+
     # Metadata
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     expires_at: Optional[datetime] = None
     priority: int = 1  # 1=highest, 5=lowest
-    
+
     def is_expired(self) -> bool:
         """Check if recommendation has expired."""
         if self.expires_at is None:
             return False
         return datetime.now(timezone.utc) > self.expires_at
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
         return {
@@ -370,40 +371,40 @@ class ModelMetrics:
     model_name: str
     model_version: str
     status: ModelStatus
-    
+
     # Performance metrics
     accuracy: float = 0.0
     precision: float = 0.0
     recall: float = 0.0
     f1_score: float = 0.0
     auc_score: float = 0.0
-    
+
     # Training metrics
     training_samples: int = 0
     validation_samples: int = 0
     last_training_time: Optional[datetime] = None
     training_duration_seconds: float = 0.0
-    
+
     # Inference metrics
     total_predictions: int = 0
     successful_predictions: int = 0
     failed_predictions: int = 0
     average_inference_time_ms: float = 0.0
-    
+
     # Drift metrics
     data_drift_score: float = 0.0
     concept_drift_score: float = 0.0
-    
+
     # Timestamps
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    
+
     def calculate_success_rate(self) -> float:
         """Calculate prediction success rate."""
         if self.total_predictions == 0:
             return 0.0
         return self.successful_predictions / self.total_predictions
-    
+
     def is_healthy(self) -> bool:
         """Check if model is healthy."""
         return (
@@ -422,31 +423,31 @@ class TimeSeriesData:
     component_type: ComponentType
     component_id: str
     metric_name: str
-    
+
     # Additional metadata
     frequency_minutes: int = 1
     missing_values: List[int] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     def __post_init__(self):
         """Validate time series data."""
         if len(self.timestamps) != len(self.values):
             raise ValueError("Timestamps and values must have same length")
-        
+
         if len(self.timestamps) < 10:
             raise ValueError("Time series must have at least 10 data points")
-    
+
     def to_numpy_arrays(self) -> Tuple[np.ndarray, np.ndarray]:
         """Convert to numpy arrays for ML models."""
         timestamps_float = np.array([ts.timestamp() for ts in self.timestamps])
         values_array = np.array(self.values)
         return timestamps_float, values_array
-    
+
     def get_statistics(self) -> Dict[str, float]:
         """Get basic statistics of the time series."""
         if not self.values:
             return {}
-        
+
         values_array = np.array(self.values)
         return {
             "mean": float(np.mean(values_array)),

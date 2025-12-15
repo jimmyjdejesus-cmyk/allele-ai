@@ -26,15 +26,17 @@
 
 import json
 import os
-from typing import List, Dict, Any, AsyncGenerator, Optional
+from typing import AsyncGenerator, Dict, List, Optional
 
 import httpx
 import structlog
 
 from .llm_client import LLMClient, LLMConfig
 from .llm_exceptions import (
-    LLMInitializationError, LLMGenerationError,
-    LLMTimeoutError, LLMModelNotAvailableError
+    LLMGenerationError,
+    LLMInitializationError,
+    LLMModelNotAvailableError,
+    LLMTimeoutError,
 )
 
 logger = structlog.get_logger(__name__)

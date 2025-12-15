@@ -24,17 +24,27 @@
 
 """OpenAI LLM client implementation with comprehensive error handling."""
 
-import json
-from typing import List, Dict, Any, AsyncGenerator, Optional
+from typing import AsyncGenerator, Dict, List, Optional
 
 import structlog
-from openai import AsyncOpenAI, APIError, RateLimitError, AuthenticationError, APITimeoutError
+from openai import (
+    APIError,
+    APITimeoutError,
+    AsyncOpenAI,
+    AuthenticationError,
+    RateLimitError,
+)
 
 from .llm_client import LLMClient, LLMConfig
 from .llm_exceptions import (
-    LLMInitializationError, LLMRateLimitError, LLMGenerationError,
-    LLMAuthenticationError, LLMTimeoutError, LLMQuotaExceededError,
-    LLMModelNotAvailableError, LLMContentFilterError
+    LLMAuthenticationError,
+    LLMContentFilterError,
+    LLMGenerationError,
+    LLMInitializationError,
+    LLMModelNotAvailableError,
+    LLMQuotaExceededError,
+    LLMRateLimitError,
+    LLMTimeoutError,
 )
 
 logger = structlog.get_logger(__name__)

@@ -1,14 +1,13 @@
 """Unit tests for OpenAI LLM client with mocked dependencies."""
 
-import pytest
 import asyncio
-from unittest.mock import Mock, AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
+
+import pytest
 
 from allele.llm_client import LLMConfig
+from allele.llm_exceptions import LLMAuthenticationError, LLMModelNotAvailableError
 from allele.llm_openai import OpenAIClient
-from allele.llm_exceptions import (
-    LLMAuthenticationError, LLMModelNotAvailableError
-)
 
 
 class TestOpenAIClientUnit:

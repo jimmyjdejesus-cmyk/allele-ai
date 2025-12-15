@@ -1,16 +1,16 @@
 """Unit and integration tests for LLM functionality."""
 
-import pytest
-import asyncio
 import os
-from unittest.mock import Mock, AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
-from allele.llm_client import LLMConfig, LLMClient
-from allele.llm_openai import OpenAIClient
-from allele.llm_ollama import OllamaClient
-from allele.llm_exceptions import LLMInitializationError, LLMAuthenticationError
-from allele.agent import AgentConfig, NLPAgent
+import pytest
+
 from allele import ConversationalGenome
+from allele.agent import AgentConfig, NLPAgent
+from allele.llm_client import LLMClient, LLMConfig
+from allele.llm_exceptions import LLMAuthenticationError
+from allele.llm_ollama import OllamaClient
+from allele.llm_openai import OpenAIClient
 
 
 class TestLLMIntegration:

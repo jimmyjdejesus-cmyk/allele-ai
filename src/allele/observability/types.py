@@ -31,13 +31,11 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-from typing import Dict, List, Any, Optional, Union, Callable, Literal
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from pathlib import Path
-import uuid
-import numpy as np
+from typing import Any, Dict, List, Literal, Optional, Union
 
 
 class MetricType(str, Enum):
@@ -78,7 +76,7 @@ class MetricValue:
     unit: Optional[str] = None
     component: Optional[ComponentType] = None
     correlation_id: Optional[str] = None
-    
+
     def __post_init__(self):
         """Validate metric value."""
         if self.value is None:
@@ -92,7 +90,7 @@ class PerformanceMetrics:
     """Comprehensive performance metrics for a component."""
     component_type: ComponentType
     component_id: str
-    
+
     # Timing metrics
     total_operations: int = 0
     successful_operations: int = 0
@@ -103,39 +101,39 @@ class PerformanceMetrics:
     p99_latency_ms: float = 0.0
     min_latency_ms: float = 0.0
     max_latency_ms: float = 0.0
-    
+
     # Throughput metrics
     throughput_per_second: float = 0.0
     tokens_per_second: float = 0.0
     requests_per_minute: float = 0.0
-    
+
     # Memory and resource metrics
     memory_usage_mb: float = 0.0
     cpu_usage_percent: float = 0.0
     gpu_usage_percent: float = 0.0
     disk_usage_mb: float = 0.0
-    
+
     # Error and quality metrics
     error_rate: float = 0.0
     success_rate: float = 0.0
     quality_score: float = 0.0
-    
+
     # Evolution-specific metrics
     generation_number: int = 0
     fitness_improvement: float = 0.0
     diversity_score: float = 0.0
     convergence_rate: float = 0.0
-    
+
     # LLM-specific metrics
     token_usage: Dict[str, int] = field(default_factory=dict)
     cost_usd: float = 0.0
     api_response_time_ms: float = 0.0
-    
+
     # Kraken LNN metrics
     reservoir_utilization: float = 0.0
     learning_rate: float = 0.0
     memory_consolidation_time_ms: float = 0.0
-    
+
     # Timestamp and correlation
     timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     correlation_id: Optional[str] = None
@@ -158,46 +156,46 @@ class PerformanceMetrics:
             old_sum = self.average_latency_ms * (self.total_operations - 1)
             new_sum = old_sum + latency_ms
             self.average_latency_ms = new_sum / self.total_operations
-        
+
         # Store for percentile calculation
         if not hasattr(self, '_latency_history'):
             self._latency_history = []
         self._latency_history.append(latency_ms)
-        
+
         # Keep only recent history for memory efficiency
         if len(self._latency_history) > 1000:
             self._latency_history = self._latency_history[-1000:]
-            
+
         self._update_percentiles()
-    
+
     def _update_percentiles(self) -> None:
         """Update percentile metrics from latency history."""
         if hasattr(self, '_latency_history') and self._latency_history:
             latencies = sorted(self._latency_history)
             n = len(latencies)
-            
+
             if n >= 2:
                 self.p50_latency_ms = latencies[int(0.5 * n)]
                 self.p95_latency_ms = latencies[int(0.95 * n)]
                 self.p99_latency_ms = latencies[int(0.99 * n)]
-    
+
     def update_success(self, success: bool) -> None:
         """Update success/failure metrics."""
         if success:
             self.successful_operations += 1
         else:
             self.failed_operations += 1
-            
+
         total = self.successful_operations + self.failed_operations
         if total > 0:
             self.success_rate = self.successful_operations / total
             self.error_rate = self.failed_operations / total
-    
+
     def update_throughput(self, time_delta_seconds: float, operations: int = 1) -> None:
         """Update throughput metrics."""
         if time_delta_seconds > 0:
             self.throughput_per_second = operations / time_delta_seconds
-    
+
     def update_resource_usage(self, **kwargs) -> None:
         """Update resource usage metrics."""
         for metric, value in kwargs.items():
@@ -236,20 +234,20 @@ class BenchmarkResult:
     throughput_mb_per_second: float = 0.0
     cpu_utilization_percent: float = 0.0
     gpu_utilization_percent: float = 0.0
-    
+
     # Metadata
     environment: Dict[str, Any] = field(default_factory=dict)
     component_info: Dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     correlation_id: Optional[str] = None
-    
+
     @property
     def success_rate(self) -> float:
         """Calculate success rate."""
         if self.total_runs == 0:
             return 0.0
         return self.successful_runs / self.total_runs
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
         return {
@@ -285,7 +283,7 @@ class BenchmarkResult:
 class SystemMetrics:
     """System-level metrics across all components."""
     timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    
+
     # System resource metrics
     cpu_usage_percent: float = 0.0
     memory_usage_mb: float = 0.0
@@ -293,28 +291,28 @@ class SystemMetrics:
     disk_usage_mb: float = 0.0
     disk_available_mb: float = 0.0
     network_bytes_per_second: float = 0.0
-    
+
     # GPU metrics (if available)
     gpu_usage_percent: float = 0.0
     gpu_memory_usage_mb: float = 0.0
     gpu_temperature_c: float = 0.0
-    
+
     # Process metrics
     active_processes: int = 0
     thread_count: int = 0
     file_descriptors: int = 0
-    
+
     # Component summaries
     total_components: int = 0
     healthy_components: int = 0
     degraded_components: int = 0
     failed_components: int = 0
-    
+
     # Alert metrics
     active_alerts: int = 0
     critical_alerts: int = 0
     error_alerts: int = 0
-    
+
     def health_percentage(self) -> float:
         """Calculate overall system health percentage."""
         if self.total_components == 0:
@@ -328,23 +326,23 @@ class ComponentMetrics:
     component_type: ComponentType
     component_id: str
     instance_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    
+
     # Status
     is_healthy: bool = True
     is_running: bool = True
     last_heartbeat: Optional[datetime] = None
-    
+
     # Performance data
     performance_metrics: Optional[PerformanceMetrics] = None
-    
+
     # Configuration info
     config: Dict[str, Any] = field(default_factory=dict)
-    
+
     # Metadata
     tags: Dict[str, str] = field(default_factory=dict)
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    
+
     def update_heartbeat(self) -> None:
         """Update the last heartbeat timestamp."""
         self.last_heartbeat = datetime.now(timezone.utc)
@@ -365,16 +363,16 @@ class AlertRule:
     enabled: bool = True
     cooldown_seconds: int = 300  # 5 minutes default cooldown
     notification_channels: List[str] = field(default_factory=list)
-    
+
     # Evaluation context
     evaluation_window: int = 60  # seconds
     minimum_samples: int = 5
-    
+
     def evaluate(self, value: float, sample_count: int) -> bool:
         """Evaluate if the rule should trigger an alert."""
         if not self.enabled or sample_count < self.minimum_samples:
             return False
-            
+
         if self.condition == "gt":
             return value > self.threshold
         elif self.condition == "gte":
@@ -387,7 +385,7 @@ class AlertRule:
             return abs(value - self.threshold) < 1e-10
         elif self.condition == "ne":
             return abs(value - self.threshold) >= 1e-10
-        
+
         return False
 
 
@@ -399,21 +397,21 @@ class Alert:
     name: str = ""
     description: str = ""
     severity: AlertSeverity = AlertSeverity.INFO
-    
+
     # Alert context
     component_type: ComponentType = ComponentType.SYSTEM
     component_id: str = ""
     metric_name: str = ""
     current_value: float = 0.0
     threshold: float = 0.0
-    
+
     # Status
     status: Literal["active", "acknowledged", "resolved"] = "active"
     triggered_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     resolved_at: Optional[datetime] = None
     acknowledged_at: Optional[datetime] = None
     acknowledged_by: Optional[str] = None
-    
+
     # Additional context
     context: Dict[str, Any] = field(default_factory=dict)
     correlation_id: Optional[str] = None
@@ -425,34 +423,34 @@ class MonitoringConfig:
     enabled: bool = True
     collection_interval_seconds: int = 10
     retention_hours: int = 168  # 1 week
-    
+
     # Component monitoring
     monitor_evolution: bool = True
     monitor_kraken: bool = True
     monitor_agents: bool = True
     monitor_system: bool = True
-    
+
     # Alerting configuration
     alerting_enabled: bool = True
     alert_rules: List[AlertRule] = field(default_factory=list)
-    
+
     # Performance thresholds
     performance_thresholds: Dict[str, float] = field(default_factory=dict)
-    
+
     # Data storage
     storage_backend: str = "memory"  # memory, file, database
     storage_path: Optional[str] = None
     compression_enabled: bool = False
-    
+
     # Rate limiting
     max_metrics_per_second: int = 1000
     max_alerts_per_minute: int = 100
-    
+
     # Dashboard settings
     dashboard_enabled: bool = True
     dashboard_port: int = 8080
     dashboard_host: str = "localhost"
-    
+
     # MLflow integration
     mlflow_enabled: bool = True
     mlflow_tracking_uri: str = "sqlite:///mlflow.db"
@@ -466,24 +464,24 @@ class DashboardConfig:
     host: str = "localhost"
     port: int = 8080
     title: str = "Allele Monitoring Dashboard"
-    
+
     # Refresh settings
     refresh_interval_seconds: int = 30
     auto_refresh: bool = True
-    
+
     # Layout configuration
     layout: Dict[str, Any] = field(default_factory=dict)
-    
+
     # Component visibility
     show_evolution_metrics: bool = True
     show_kraken_metrics: bool = True
     show_agent_metrics: bool = True
     show_system_metrics: bool = True
-    
+
     # Alert settings
     show_active_alerts: bool = True
     alert_sound_enabled: bool = False
-    
+
     # Export settings
     export_enabled: bool = True
     export_formats: List[str] = field(default_factory=lambda: ["json", "csv"])
@@ -493,30 +491,30 @@ class DashboardConfig:
 class MatrixBenchmarkConfig:
     """Configuration for matrix benchmarking."""
     enabled: bool = True
-    
+
     # Test parameters to vary
     population_sizes: List[int] = field(default_factory=lambda: [50, 100, 200, 500, 1000])
     mutation_rates: List[float] = field(default_factory=lambda: [0.05, 0.1, 0.2, 0.3])
     reservoir_sizes: List[int] = field(default_factory=lambda: [50, 100, 200, 500])
     temperatures: List[float] = field(default_factory=lambda: [0.1, 0.3, 0.7, 1.0])
-    
+
     # LLM providers and models to test
     llm_providers: List[str] = field(default_factory=lambda: ["openai", "ollama"])
     llm_models: List[str] = field(default_factory=lambda: ["gpt-4", "gpt-3.5-turbo"])
-    
+
     # Test configuration
     runs_per_config: int = 3
     timeout_seconds: int = 300
-    
+
     # Parallel execution
     parallel_workers: int = 1
     max_concurrent_tests: int = 4
-    
+
     # Output settings
     save_results: bool = True
     results_path: str = "benchmark_results"
     generate_report: bool = True
-    
+
     # Performance settings
     warmup_runs: int = 1
     measure_memory: bool = True
@@ -530,24 +528,24 @@ class MLflowConfig:
     enabled: bool = True
     tracking_uri: str = "sqlite:///mlflow.db"
     experiment_name: str = "allele_observability"
-    
+
     # Model registry
     model_registry_enabled: bool = True
     model_registry_uri: str = "sqlite:///mlflow_registry.db"
-    
+
     # Artifact storage
     artifact_location: str = "./mlflow_artifacts"
     artifact_store_type: str = "local"
-    
+
     # Auto-logging settings
     auto_log_evolution: bool = True
     auto_log_kraken: bool = True
     auto_log_agents: bool = True
-    
+
     # Run configuration
     run_tags: Dict[str, str] = field(default_factory=dict)
     experiment_tags: Dict[str, str] = field(default_factory=dict)
-    
+
     # Performance settings
     batch_logging: bool = True
     batch_size: int = 100

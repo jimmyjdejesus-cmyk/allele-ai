@@ -8,8 +8,8 @@ achieved in Phase 1 of the optimization plan.
 
 import asyncio
 import time
+
 import numpy as np
-from dataclasses import asdict
 
 from src.allele.kraken_lnn import KrakenLNN
 
@@ -130,7 +130,7 @@ async def benchmark_memory_operations():
 
     if avg_consolidation_time < 1.0:
         print("Memory consolidation running in sub-millisecond time!")
-    
+
     # Calculate computational complexity validation
     if avg_consolidation_time < 1.0:  # Less than 1ms indicates near-linear performance
         complexity_status = "Near-linear performance achieved"

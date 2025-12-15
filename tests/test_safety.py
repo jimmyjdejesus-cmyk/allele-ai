@@ -1,8 +1,8 @@
 import pytest
 
-from allele.kraken_lnn import LiquidStateMachine
-from allele.evolution import EvolutionConfig, EvolutionEngine
 from allele.agent import AgentConfig
+from allele.evolution import EvolutionConfig, EvolutionEngine
+from allele.kraken_lnn import LiquidStateMachine
 
 
 def test_large_reservoir_rejected():

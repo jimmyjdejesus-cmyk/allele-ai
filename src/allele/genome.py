@@ -34,16 +34,17 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-from typing import Dict, List, Optional, Any
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
 import hashlib
+from abc import ABC, abstractmethod
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional
+
 import numpy as np
 
-from .types import TraitDict, GenomeMetadata, FitnessMetrics
-from .exceptions import GenomeError, ValidationError
 from .config import settings as allele_settings
+from .exceptions import ValidationError
+from .types import FitnessMetrics, GenomeMetadata, TraitDict
+
 
 class Gene:
     """Base gene class for evolutionary algorithms.

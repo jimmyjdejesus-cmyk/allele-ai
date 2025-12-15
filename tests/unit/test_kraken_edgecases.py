@@ -1,10 +1,10 @@
 """Edge case and boundary tests for Kraken LNN to prevent OOM and ensure robustness."""
 
-import pytest
-import numpy as np
-from unittest.mock import patch
 
-from allele.kraken_lnn import KrakenLNN, LiquidStateMachine, AdaptiveWeightMatrix
+import numpy as np
+import pytest
+
+from allele.kraken_lnn import KrakenLNN, LiquidStateMachine
 from tests.test_utils import generate_test_sequence
 
 
@@ -165,8 +165,9 @@ class TestKrakenEdgeCases:
 
     def test_large_sequence_memory_efficiency(self):
         """Test that large sequences don't cause excessive memory usage."""
-        import psutil
         import os
+
+        import psutil
 
         lnn = KrakenLNN(reservoir_size=200, connectivity=0.05)
 

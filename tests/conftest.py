@@ -1,10 +1,11 @@
 """Pytest configuration and fixtures for Allele testing."""
 
-import pytest
 import asyncio
-import aiohttp
 import os
-from typing import List, Optional
+from typing import List
+
+import aiohttp
+import pytest
 
 
 @pytest.fixture(scope="session")

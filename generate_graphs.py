@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
 # Set academic style
 plt.style.use('seaborn-v0_8-paper')

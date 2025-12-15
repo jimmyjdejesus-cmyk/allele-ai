@@ -9,14 +9,15 @@ This example demonstrates:
 """
 
 import asyncio
-from allele import ConversationalGenome, create_agent, AgentConfig, settings
+
+from allele import AgentConfig, ConversationalGenome, create_agent
 
 
 async def main():
     """Run basic usage example."""
     print("🧬 Abe-NLP Basic Usage Example\n")
     print("="*50)
-    
+
     # Step 1: Create a genome with specific traits
     print("\n📊 Step 1: Creating conversational genome...")
     genome = ConversationalGenome(
@@ -32,44 +33,44 @@ async def main():
             'personability': 0.80         # Friendly personality
         }
     )
-    
+
     print(f"   ✓ Genome ID: {genome.genome_id}")
     print(f"   ✓ Traits: {genome.traits}")
-    
+
     # Step 2: Configure agent
     print("\n⚙️  Step 2: Configuring agent...")
     # Load defaults from central settings (pydantic)
     config = AgentConfig.from_settings()
-    
+
     print(f"   ✓ Model: {config.model_name}")
     print(f"   ✓ Temperature: {config.temperature}")
     print(f"   ✓ Kraken LNN: {'Enabled' if config.kraken_enabled else 'Disabled'}")
-    
+
     # Step 3: Create agent
     print("\n🤖 Step 3: Creating agent...")
     agent = await create_agent(genome, config)
-    
+
     print(f"   ✓ Agent initialized: {agent.is_initialized}")
-    
+
     # Step 4: Chat with agent
     print("\n💬 Step 4: Starting conversation...")
     print("\n" + "="*50)
-    
+
     messages = [
         "Hello! Can you introduce yourself?",
         "What are your strengths?",
         "Tell me about your technical capabilities."
     ]
-    
+
     for i, message in enumerate(messages, 1):
         print(f"\n[User #{i}]: {message}")
-        print(f"[Agent]: ", end='')
-        
+        print("[Agent]: ", end='')
+
         async for response_chunk in agent.chat(message):
             print(response_chunk, end='')
-        
+
         print()  # New line after response
-    
+
     print("\n" + "="*50)
     print("\n✅ Example completed successfully!")
     print("\nNext steps:")

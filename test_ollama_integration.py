@@ -6,7 +6,9 @@ Run this to test the new Ollama support without needing API keys.
 """
 
 import asyncio
-from allele import ConversationalGenome, AgentConfig, NLPAgent
+
+from allele import AgentConfig, ConversationalGenome, NLPAgent
+
 
 async def test_ollama_agent():
     """Test Ollama integration with a simple conversational agent."""

@@ -8,9 +8,10 @@ achieved in Phase 2 of the optimization plan, demonstrating 5x+ improvement.
 
 import asyncio
 import time
+
 import numpy as np
 
-from src.allele.kraken_lnn import KrakenLNN, LiquidStateMachine, AdaptiveWeightMatrix
+from src.allele.kraken_lnn import AdaptiveWeightMatrix, KrakenLNN, LiquidStateMachine
 
 
 def generate_test_sequence(length: int, seed: int = 42) -> list[float]:
@@ -200,7 +201,7 @@ async def run_comprehensive_benchmark():
     print(f"Expected Reservoir Improvement: {expected_improvement}")
     print(f"Matrix Operation Optimization: {matrix_improvement}")
     print(f"Concurrent Processing Speedup: {concurrent_improvement:.2f}x ({concurrent_status})")
-    print(f"Reservoir Computing Phase 2 Complete!")
+    print("Reservoir Computing Phase 2 Complete!")
     print("🚀 Ready for LLM integration optimizations (Phase 3)")
 
 

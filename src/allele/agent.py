@@ -30,22 +30,23 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-from typing import Dict, Any, Optional, AsyncGenerator, List
-from dataclasses import dataclass
-from datetime import datetime, timezone
+import asyncio
+import os
 import time
 import uuid
-import os
-import asyncio
-
-from .genome import ConversationalGenome
-from .kraken_lnn import KrakenLNN
-from .types import AgentResponse, ConversationTurn
-from .exceptions import AgentError
-from .config import settings as allele_settings
-from .llm_client import LLMClient, LLMConfig
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from typing import Any, AsyncGenerator, Dict, List, Optional
 
 import structlog
+
+from .config import settings as allele_settings
+from .exceptions import AgentError
+from .genome import ConversationalGenome
+from .kraken_lnn import KrakenLNN
+from .llm_client import LLMClient, LLMConfig
+from .types import ConversationTurn
+
 logger = structlog.get_logger(__name__)
 
 @dataclass

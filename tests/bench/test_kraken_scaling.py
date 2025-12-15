@@ -1,10 +1,10 @@
 """Performance benchmarks for Kraken LNN scaling and sequence processing."""
 
-import pytest
-import time
-import numpy as np
 import asyncio
-from typing import List, Dict, Any
+import time
+
+import numpy as np
+import pytest
 
 from allele.kraken_lnn import KrakenLNN, LiquidStateMachine
 from tests.test_utils import generate_test_sequence
@@ -112,31 +112,31 @@ class TestKrakenScalingBenchmarks:
         """Benchmark memory consolidation performance."""
         def benchmark_memory_consolidation():
             lnn = KrakenLNN(reservoir_size=100, connectivity=0.1)
-            
+
             # Fill memory with multiple sequences
             sequences = [generate_test_sequence(20, seed=i) for i in range(50)]
-            
+
             # First, add all memories
             for seq in sequences:
                 asyncio.run(lnn.process_sequence(seq, memory_consolidation=False))
-            
+
             initial_memory_count = len(lnn.temporal_memory.memories)
-            
+
             # Benchmark consolidation
             start_time = time.time()
             consolidation_seq = generate_test_sequence(20)
             result = asyncio.run(lnn.process_sequence(consolidation_seq, memory_consolidation=True))
             consolidation_time = time.time() - start_time
-            
+
             final_memory_count = len(lnn.temporal_memory.memories)
-            
+
             assert result['success'] is True
             assert final_memory_count <= initial_memory_count
-            
+
             return consolidation_time
-        
+
         consolidation_time = benchmark(benchmark_memory_consolidation)
-        
+
         # Memory consolidation should be relatively fast
         assert consolidation_time < 1.0  # 1 second max
 
@@ -146,18 +146,18 @@ class TestKrakenScalingBenchmarks:
         def benchmark_lsm_operations():
             lsm = LiquidStateMachine(reservoir_size=100, connectivity=0.1)
             sequence = generate_test_sequence(100)
-            
+
             start_time = time.time()
             outputs = lsm.process_sequence(sequence)
             processing_time = time.time() - start_time
-            
+
             assert len(outputs) == len(sequence)
             assert all(np.isfinite(outputs))
-            
+
             return processing_time
-        
+
         processing_time = benchmark(benchmark_lsm_operations)
-        
+
         # LSM operations should be fast
         assert processing_time < 0.5  # 500ms max
 
@@ -166,27 +166,27 @@ class TestKrakenScalingBenchmarks:
         """Benchmark processing multiple sequences in batch."""
         def benchmark_batch_processing():
             lnn = KrakenLNN(reservoir_size=100, connectivity=0.1)
-            
+
             # Create batch of sequences
             sequences = [generate_test_sequence(50, seed=i) for i in range(10)]
-            
+
             start_time = time.time()
             results = []
-            
+
             for seq in sequences:
                 result = asyncio.run(lnn.process_sequence(seq))
                 results.append(result)
-            
+
             total_time = time.time() - start_time
-            
+
             # All results should be successful
             assert all(r['success'] for r in results)
             assert len(results) == len(sequences)
-            
+
             return total_time
-        
+
         batch_time = benchmark(benchmark_batch_processing)
-        
+
         # Batch processing should be efficient
         assert batch_time < 10.0  # 10 seconds max for 10 sequences
 
@@ -197,18 +197,18 @@ class TestKrakenScalingBenchmarks:
             # Test with moderately large reservoir
             lnn = KrakenLNN(reservoir_size=500, connectivity=0.05)  # Lower connectivity for large size
             sequence = generate_test_sequence(100)
-            
+
             start_time = time.time()
             result = asyncio.run(lnn.process_sequence(sequence))
             processing_time = time.time() - start_time
-            
+
             assert result['success'] is True
             assert len(result['reservoir_state']) == 500
-            
+
             return processing_time
-        
+
         processing_time = benchmark(process_large_reservoir)
-        
+
         # Large reservoir should still complete in reasonable time
         assert processing_time < 10.0  # 10 seconds max
 
@@ -217,24 +217,24 @@ class TestKrakenScalingBenchmarks:
         """Benchmark memory efficiency during continuous processing."""
         def benchmark_memory_efficiency():
             lnn = KrakenLNN(reservoir_size=200, connectivity=0.1)
-            
+
             # Process many sequences to test memory efficiency
             start_time = time.time()
-            
+
             for i in range(100):
                 sequence = generate_test_sequence(25, seed=i)
                 result = asyncio.run(lnn.process_sequence(sequence))
-                
+
                 if not result['success']:
                     break
-            
+
             total_time = time.time() - start_time
-            
+
             # Should complete all sequences without issues
             return total_time
-        
+
         total_time = benchmark(benchmark_memory_efficiency)
-        
+
         # Continuous processing should be stable
         avg_time_per_sequence = total_time / 100
         assert avg_time_per_sequence < 0.5  # Average < 500ms per sequence
@@ -287,25 +287,25 @@ class TestKrakenScalingBenchmarks:
         """Benchmark liquid dynamics calculation performance."""
         def benchmark_dynamics():
             from allele.kraken_lnn import LiquidDynamics
-            
+
             dynamics = LiquidDynamics(viscosity=0.2, temperature=1.0, pressure=1.0)
             reservoir_state = np.random.random(100)  # Random state
-            
+
             start_time = time.time()
-            
+
             # Calculate dynamics for multiple time steps
             for _ in range(100):
                 perturbation = dynamics.calculate_perturbation(0.5, reservoir_state)
                 reservoir_state += perturbation * 0.1  # Simple update
-            
+
             calculation_time = time.time() - start_time
-            
+
             assert np.all(np.isfinite(reservoir_state))
-            
+
             return calculation_time
-        
+
         calc_time = benchmark(benchmark_dynamics)
-        
+
         # Dynamics calculations should be fast
         assert calc_time < 0.1  # 100ms max for 100 calculations
 
@@ -314,23 +314,23 @@ class TestKrakenScalingBenchmarks:
         """Benchmark weight matrix operations."""
         def benchmark_weight_operations():
             lsm = LiquidStateMachine(reservoir_size=150, connectivity=0.1)
-            
+
             start_time = time.time()
-            
+
             # Perform multiple weight updates
             for _ in range(50):
                 learning_signal = np.random.random()  # Random learning signal
                 state_vector = np.random.random(150)   # Random state vector
                 lsm.adaptive_weights.update(learning_signal, state_vector)
-            
+
             operation_time = time.time() - start_time
-            
+
             # Weight matrix should remain valid
             assert np.all(np.isfinite(lsm.adaptive_weights.weights))
-            
+
             return operation_time
-        
+
         op_time = benchmark(benchmark_weight_operations)
-        
+
         # Weight operations should be efficient
         assert op_time < 1.0  # 1 second max for 50 updates

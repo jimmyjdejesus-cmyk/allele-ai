@@ -22,10 +22,12 @@
 # from: https://gumroad.com/l/[YOUR_LINK]
 # =============================================================================
 
-from typing import Dict, Optional
+from typing import Dict
+
 try:
     # Pydantic v1 still exposes BaseSettings; in v2 it is moved to pydantic-settings
-    from pydantic import BaseSettings as _BaseSettings, BaseModel, Field
+    from pydantic import BaseModel, Field
+    from pydantic import BaseSettings as _BaseSettings
 except Exception:
     # Fallback for pydantic v2 where BaseSettings comes from pydantic-settings
     from pydantic import BaseModel, Field

@@ -1,7 +1,5 @@
 import os
 
-from allele import settings
-
 
 def test_env_override_agent_model():
     # Set env var to change AGENT model name

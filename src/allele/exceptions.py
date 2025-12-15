@@ -28,7 +28,8 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
+
 
 class AbeNLPError(Exception):
     """Base exception for all Allele errors."""

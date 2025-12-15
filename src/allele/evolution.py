@@ -31,15 +31,15 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-from typing import List, Dict, Any, Optional, Callable
-from dataclasses import dataclass
 import copy
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional
+
 import numpy as np
 
-from .genome import ConversationalGenome
-from .types import FitnessMetrics
-from .exceptions import EvolutionError
 from .config import settings as allele_settings
+from .genome import ConversationalGenome
+
 
 @dataclass
 class EvolutionConfig:

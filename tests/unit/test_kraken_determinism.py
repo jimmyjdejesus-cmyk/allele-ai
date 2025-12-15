@@ -1,10 +1,16 @@
 """Deterministic tests for Kraken LNN with seeded RNG."""
 
-import pytest
-import numpy as np
 from unittest.mock import patch
 
-from allele.kraken_lnn import KrakenLNN, LiquidStateMachine, LiquidDynamics, AdaptiveWeightMatrix, DeterministicRandom
+import numpy as np
+import pytest
+
+from allele.kraken_lnn import (
+    DeterministicRandom,
+    KrakenLNN,
+    LiquidDynamics,
+    LiquidStateMachine,
+)
 from tests.test_utils import generate_test_sequence
 
 

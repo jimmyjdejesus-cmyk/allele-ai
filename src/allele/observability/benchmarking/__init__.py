@@ -31,16 +31,16 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
+from .comparator import BenchmarkComparator
+from .config import MatrixBenchmarkSettings
+from .integration import PytestBenchmarkIntegration
 from .matrix_runner import MatrixBenchmarkRunner
 from .profiler import PerformanceProfiler
-from .comparator import BenchmarkComparator
-from .integration import PytestBenchmarkIntegration
-from .config import MatrixBenchmarkSettings
 from .types import BenchmarkConfig, BenchmarkResult, PerformanceProfile
 
 __all__ = [
     'MatrixBenchmarkRunner',
-    'PerformanceProfiler', 
+    'PerformanceProfiler',
     'BenchmarkComparator',
     'PytestBenchmarkIntegration',
     'MatrixBenchmarkSettings',

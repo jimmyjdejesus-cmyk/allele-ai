@@ -5,9 +5,10 @@ This module provides utility functions for test data generation,
 comparison, and analysis.
 """
 
-from typing import Dict, List, Tuple, Any, Optional
-import numpy as np
 from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 
 from allele import ConversationalGenome, TraitDict
 
@@ -27,11 +28,11 @@ def generate_random_genome(
     """
     if seed is not None:
         np.random.seed(seed)
-    
+
     traits = {}
     for trait_name in ConversationalGenome.DEFAULT_TRAITS.keys():
         traits[trait_name] = np.random.uniform(0.0, 1.0)
-    
+
     return ConversationalGenome(genome_id=genome_id, traits=traits)
 
 
@@ -52,23 +53,23 @@ def generate_population(
     """
     if seed is not None:
         np.random.seed(seed)
-    
+
     if base_traits is None:
         base_traits = ConversationalGenome.DEFAULT_TRAITS.copy()
-    
+
     population = []
     for i in range(size):
         traits = {}
         for trait_name, base_value in base_traits.items():
             variation = np.random.uniform(-0.2, 0.2)
             traits[trait_name] = np.clip(base_value + variation, 0.0, 1.0)
-        
+
         genome = ConversationalGenome(
             genome_id=f"genome_{i:04d}",
             traits=traits
         )
         population.append(genome)
-    
+
     return population
 
 
@@ -90,10 +91,10 @@ def compare_genomes(
         val1 = genome1.get_trait_value(trait_name)
         val2 = genome2.get_trait_value(trait_name)
         trait_diffs[trait_name] = abs(val1 - val2)
-    
+
     mean_diff = np.mean(list(trait_diffs.values()))
     max_diff = max(trait_diffs.values())
-    
+
     return {
         'trait_differences': trait_diffs,
         'mean_difference': mean_diff,
@@ -115,18 +116,18 @@ def calculate_population_diversity(
     """
     if len(population) < 2:
         return 0.0
-    
+
     trait_values = {}
     for trait_name in ConversationalGenome.DEFAULT_TRAITS.keys():
         trait_values[trait_name] = [
             g.get_trait_value(trait_name) for g in population
         ]
-    
+
     diversities = []
     for trait, values in trait_values.items():
         std_dev = np.std(values)
         diversities.append(std_dev)
-    
+
     return float(np.mean(diversities)) if diversities else 0.0
 
 
@@ -150,9 +151,9 @@ def calculate_population_statistics(
             'worst_fitness': 0.0,
             'diversity': 0.0
         }
-    
+
     fitness_scores = [g.fitness_score for g in population]
-    
+
     return {
         'size': len(population),
         'mean_fitness': float(np.mean(fitness_scores)),
@@ -177,7 +178,7 @@ def generate_fitness_function(
         Fitness function that takes a genome and returns a score
     """
     if weights is None:
-        weights = {trait: 1.0 for trait in ConversationalGenome.DEFAULT_TRAITS.keys()}
+        weights = dict.fromkeys(ConversationalGenome.DEFAULT_TRAITS.keys(), 1.0)
 
     def fitness(genome: ConversationalGenome) -> float:
         """Calculate fitness based on weighted traits."""
@@ -205,14 +206,14 @@ def assert_genome_valid(genome: ConversationalGenome) -> None:
     """
     assert genome.genome_id is not None
     assert len(genome.genome_id) > 0
-    
+
     assert len(genome.traits) == 8
     assert len(genome.genes) == 8
-    
+
     for trait_name, value in genome.traits.items():
         assert trait_name in ConversationalGenome.DEFAULT_TRAITS
         assert 0.0 <= value <= 1.0
-    
+
     assert genome.generation >= 0
     assert 0.0 <= genome.fitness_score <= 1.0
 
@@ -234,7 +235,7 @@ def generate_test_sequence(
     """
     if seed is not None:
         np.random.seed(seed)
-    
+
     if pattern == "random":
         return [np.random.uniform(0.0, 1.0) for _ in range(length)]
     elif pattern == "sine":
@@ -259,11 +260,11 @@ def measure_execution_time(func, *args, **kwargs) -> Tuple[Any, float]:
         Tuple of (result, execution_time_seconds)
     """
     import time
-    
+
     start = time.perf_counter()
     result = func(*args, **kwargs)
     end = time.perf_counter()
-    
+
     return result, end - start
 
 
@@ -279,11 +280,11 @@ async def measure_async_execution_time(func, *args, **kwargs) -> Tuple[Any, floa
         Tuple of (result, execution_time_seconds)
     """
     import time
-    
+
     start = time.perf_counter()
     result = await func(*args, **kwargs)
     end = time.perf_counter()
-    
+
     return result, end - start
 
 

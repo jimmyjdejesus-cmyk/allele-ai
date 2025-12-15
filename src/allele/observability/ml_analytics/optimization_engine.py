@@ -31,32 +31,30 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-from typing import Dict, List, Any, Optional, Tuple, Union
-from datetime import datetime, timezone, timedelta
-from pathlib import Path
-import asyncio
-import numpy as np
-import logging
 import json
+import logging
 from collections import defaultdict, deque
-from dataclasses import asdict
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from typing import Any, Dict, List
 
+import numpy as np
+
+from .ml_config import OptimizationEngineConfig
 from .types import (
-    OptimizationRecommendation,
-    OptimizationCategory,
     ComponentType,
-    AlertSeverity,
+    MLMetric,
+    OptimizationCategory,
+    OptimizationRecommendation,
     PredictionResult,
-    MLMetric
 )
-from .ml_config import get_ml_analytics_config, OptimizationEngineConfig
 
 logger = logging.getLogger(__name__)
 
 
 class PerformanceOptimizer:
     """ML-based performance optimization recommendations."""
-    
+
     def __init__(self, config: OptimizationEngineConfig):
         """Initialize performance optimizer.
         
@@ -68,7 +66,7 @@ class PerformanceOptimizer:
         self.performance_history = deque(maxlen=1000)
         self.optimization_models = {}
         self.recommendation_cache = {}
-        
+
     def _load_optimization_rules(self) -> Dict[str, Any]:
         """Load optimization rules from file or create defaults.
         
@@ -78,14 +76,14 @@ class PerformanceOptimizer:
         try:
             rule_file = Path(self.config.rule_file_path)
             if rule_file.exists():
-                with open(rule_file, 'r') as f:
+                with open(rule_file) as f:
                     return json.load(f)
         except Exception as e:
             logger.warning(f"Could not load optimization rules: {e}")
-        
+
         # Default optimization rules
         return self._create_default_rules()
-    
+
     def _create_default_rules(self) -> Dict[str, Any]:
         """Create default optimization rules.
         
@@ -122,8 +120,8 @@ class PerformanceOptimizer:
                 "io_intensive_tasks": ["nlp_agent"]
             }
         }
-    
-    async def analyze_performance(self, metrics_history: Dict[str, List[MLMetric]], 
+
+    async def analyze_performance(self, metrics_history: Dict[str, List[MLMetric]],
                                 predictions: Dict[str, List[PredictionResult]]) -> List[OptimizationRecommendation]:
         """Analyze performance and generate optimization recommendations.
         
@@ -135,42 +133,42 @@ class PerformanceOptimizer:
             List of optimization recommendations
         """
         recommendations = []
-        
+
         try:
             # Analyze each component
             for component_type, metrics in metrics_history.items():
                 if not metrics:
                     continue
-                
+
                 # Rule-based analysis
                 rule_recommendations = await self._rule_based_analysis(
                     component_type, metrics, predictions.get(component_type, [])
                 )
                 recommendations.extend(rule_recommendations)
-                
+
                 # ML-based analysis (if enabled)
                 if self.config.enable_ml_based:
                     ml_recommendations = await self._ml_based_analysis(
                         component_type, metrics, predictions.get(component_type, [])
                     )
                     recommendations.extend(ml_recommendations)
-            
+
             # Filter and rank recommendations
             filtered_recommendations = await self._filter_recommendations(recommendations)
-            
+
             # Cache recommendations
             self.recommendation_cache = {
                 rec.recommendation_id: rec for rec in filtered_recommendations
             }
-            
+
             return filtered_recommendations
-            
+
         except Exception as e:
             logger.error(f"Performance analysis failed: {e}")
             return []
-    
-    async def _rule_based_analysis(self, component_type: str, 
-                                 metrics: List[MLMetric], 
+
+    async def _rule_based_analysis(self, component_type: str,
+                                 metrics: List[MLMetric],
                                  predictions: List[PredictionResult]) -> List[OptimizationRecommendation]:
         """Perform rule-based optimization analysis.
         
@@ -183,30 +181,30 @@ class PerformanceOptimizer:
             List of rule-based recommendations
         """
         recommendations = []
-        
+
         try:
             # Analyze performance thresholds
             threshold_recommendations = await self._analyze_thresholds(component_type, metrics)
             recommendations.extend(threshold_recommendations)
-            
+
             # Analyze component-specific parameters
             parameter_recommendations = await self._analyze_component_parameters(component_type, metrics)
             recommendations.extend(parameter_recommendations)
-            
+
             # Analyze resource allocation
             resource_recommendations = await self._analyze_resource_allocation(component_type, metrics)
             recommendations.extend(resource_recommendations)
-            
+
             # Analyze predictions for future optimization
             prediction_recommendations = await self._analyze_predictions(component_type, predictions)
             recommendations.extend(prediction_recommendations)
-            
+
         except Exception as e:
             logger.error(f"Rule-based analysis failed for {component_type}: {e}")
-        
+
         return recommendations
-    
-    async def _analyze_thresholds(self, component_type: str, 
+
+    async def _analyze_thresholds(self, component_type: str,
                                 metrics: List[MLMetric]) -> List[OptimizationRecommendation]:
         """Analyze performance thresholds and generate recommendations.
         
@@ -218,28 +216,28 @@ class PerformanceOptimizer:
             List of threshold-based recommendations
         """
         recommendations = []
-        
+
         # Group metrics by name
         metric_groups = defaultdict(list)
         for metric in metrics:
             metric_groups[metric.metric_name].append(metric)
-        
+
         thresholds = self.optimization_rules.get("performance_thresholds", {})
 
         for metric_name, metric_list in metric_groups.items():
             if len(metric_list) < 10:
                 continue
-            
+
             values = [m.value for m in metric_list]
             avg_value = np.mean(values)
             max_value = np.max(values)
             std_value = np.std(values)
-            
+
             # Check if metric exceeds thresholds
             threshold_key = metric_name.lower().replace(" ", "_")
             if threshold_key in thresholds:
                 threshold = thresholds[threshold_key]
-                
+
                 # Critical threshold exceeded
                 if max_value > threshold["critical"]:
                     recommendations.append(OptimizationRecommendation(
@@ -261,7 +259,7 @@ class PerformanceOptimizer:
                         component_type=ComponentType(component_type),
                         priority=1
                     ))
-                
+
                 # Warning threshold exceeded
                 elif avg_value > threshold["warning"]:
                     recommendations.append(OptimizationRecommendation(
@@ -282,10 +280,10 @@ class PerformanceOptimizer:
                         component_type=ComponentType(component_type),
                         priority=2
                     ))
-        
+
         return recommendations
-    
-    async def _analyze_component_parameters(self, component_type: str, 
+
+    async def _analyze_component_parameters(self, component_type: str,
                                           metrics: List[MLMetric]) -> List[OptimizationRecommendation]:
         """Analyze component-specific parameters.
         
@@ -297,13 +295,13 @@ class PerformanceOptimizer:
             List of parameter optimization recommendations
         """
         recommendations = []
-        
+
         component_rules = self.optimization_rules.get("component_specific_rules", {})
         if component_type not in component_rules:
             return recommendations
-        
+
         component_config = component_rules[component_type]
-        
+
         # Analyze fitness/performance metrics for evolution
         if component_type == "evolution_engine":
             fitness_metrics = [m for m in metrics if "fitness" in m.metric_name.lower()]
@@ -311,7 +309,7 @@ class PerformanceOptimizer:
                 recent_fitness = [m.value for m in fitness_metrics[-10:]]
                 if len(recent_fitness) >= 5:
                     avg_fitness = np.mean(recent_fitness)
-                    
+
                     # Check if fitness is stagnating
                     if len(recent_fitness) >= 10:
                         fitness_trend = np.polyfit(range(len(recent_fitness)), recent_fitness, 1)[0]
@@ -335,7 +333,7 @@ class PerformanceOptimizer:
                                 component_type=ComponentType.EVOLUTION_ENGINE,
                                 priority=1
                             ))
-        
+
         # Analyze latency metrics for NLP agent
         elif component_type == "nlp_agent":
             latency_metrics = [m for m in metrics if "latency" in m.metric_name.lower() or "response_time" in m.metric_name.lower()]
@@ -343,7 +341,7 @@ class PerformanceOptimizer:
                 recent_latency = [m.value for m in latency_metrics[-10:]]
                 if len(recent_latency) >= 5:
                     avg_latency = np.mean(recent_latency)
-                    
+
                     if avg_latency > 2000:  # 2 seconds
                         recommendations.append(OptimizationRecommendation(
                             recommendation_id=f"{component_type}_high_latency",
@@ -364,10 +362,10 @@ class PerformanceOptimizer:
                             component_type=ComponentType.NLP_AGENT,
                             priority=2
                         ))
-        
+
         return recommendations
-    
-    async def _analyze_resource_allocation(self, component_type: str, 
+
+    async def _analyze_resource_allocation(self, component_type: str,
                                          metrics: List[MLMetric]) -> List[OptimizationRecommendation]:
         """Analyze resource allocation and generate recommendations.
         
@@ -379,15 +377,15 @@ class PerformanceOptimizer:
             List of resource allocation recommendations
         """
         recommendations = []
-        
+
         # Group CPU and memory metrics
         cpu_metrics = [m for m in metrics if "cpu" in m.metric_name.lower()]
         memory_metrics = [m for m in metrics if "memory" in m.metric_name.lower()]
-        
+
         if cpu_metrics:
             recent_cpu = [m.value for m in cpu_metrics[-10:]]
             avg_cpu = np.mean(recent_cpu)
-            
+
             # High CPU usage
             if avg_cpu > 80.0:
                 recommendations.append(OptimizationRecommendation(
@@ -409,11 +407,11 @@ class PerformanceOptimizer:
                     component_type=ComponentType(component_type),
                     priority=1
                 ))
-        
+
         if memory_metrics:
             recent_memory = [m.value for m in memory_metrics[-10:]]
             avg_memory = np.mean(recent_memory)
-            
+
             # High memory usage
             if avg_memory > 85.0:
                 recommendations.append(OptimizationRecommendation(
@@ -435,10 +433,10 @@ class PerformanceOptimizer:
                     component_type=ComponentType(component_type),
                     priority=1
                 ))
-        
+
         return recommendations
-    
-    async def _analyze_predictions(self, component_type: str, 
+
+    async def _analyze_predictions(self, component_type: str,
                                  predictions: List[PredictionResult]) -> List[OptimizationRecommendation]:
         """Analyze performance predictions for optimization.
         
@@ -450,13 +448,13 @@ class PerformanceOptimizer:
             List of prediction-based recommendations
         """
         recommendations = []
-        
+
         for prediction in predictions:
             try:
                 # Check if predicted performance will degrade
                 predicted_value = prediction.predicted_value
                 confidence_interval = prediction.confidence_interval
-                
+
                 # Simple heuristic: if predicted value is significantly worse
                 # than current trend, suggest optimization
                 if prediction.prediction_type.value == "performance_forecast":
@@ -484,11 +482,11 @@ class PerformanceOptimizer:
             except Exception as e:
                 logger.warning(f"Prediction analysis failed: {e}")
                 continue
-        
+
         return recommendations
-    
-    async def _ml_based_analysis(self, component_type: str, 
-                                metrics: List[MLMetric], 
+
+    async def _ml_based_analysis(self, component_type: str,
+                                metrics: List[MLMetric],
                                 predictions: List[PredictionResult]) -> List[OptimizationRecommendation]:
         """Perform ML-based optimization analysis.
         
@@ -501,24 +499,24 @@ class PerformanceOptimizer:
             List of ML-based recommendations
         """
         recommendations = []
-        
+
         try:
             # Simple ML-based analysis using correlation and regression
             if len(metrics) >= 20:
                 # Analyze metric correlations
                 correlation_recommendations = await self._analyze_metric_correlations(component_type, metrics)
                 recommendations.extend(correlation_recommendations)
-                
+
                 # Analyze performance patterns
                 pattern_recommendations = await self._analyze_performance_patterns(component_type, metrics)
                 recommendations.extend(pattern_recommendations)
-                
+
         except Exception as e:
             logger.warning(f"ML-based analysis failed for {component_type}: {e}")
-        
+
         return recommendations
-    
-    async def _analyze_metric_correlations(self, component_type: str, 
+
+    async def _analyze_metric_correlations(self, component_type: str,
                                          metrics: List[MLMetric]) -> List[OptimizationRecommendation]:
         """Analyze correlations between metrics for optimization insights.
         
@@ -530,26 +528,26 @@ class PerformanceOptimizer:
             List of correlation-based recommendations
         """
         recommendations = []
-        
+
         # Group metrics by name
         metric_groups = defaultdict(list)
         for metric in metrics:
             metric_groups[metric.metric_name].append(metric)
-        
+
         metric_names = list(metric_groups.keys())
         if len(metric_names) < 2:
             return recommendations
-        
+
         # Calculate correlations between different metric types
         for i, name1 in enumerate(metric_names):
             for name2 in metric_names[i+1:]:
                 values1 = [m.value for m in metric_groups[name1]]
                 values2 = [m.value for m in metric_groups[name2]]
-                
+
                 if len(values1) >= 10 and len(values2) >= 10:
                     try:
                         correlation = np.corrcoef(values1, values2)[0, 1]
-                        
+
                         # Strong positive correlation (potential optimization target)
                         if correlation > 0.7:
                             recommendations.append(OptimizationRecommendation(
@@ -577,10 +575,10 @@ class PerformanceOptimizer:
                     except AttributeError as e:
                         logger.debug(f"Component attribute error in optimization analysis: {e}")
                         continue
-        
+
         return recommendations
-    
-    async def _analyze_performance_patterns(self, component_type: str, 
+
+    async def _analyze_performance_patterns(self, component_type: str,
                                           metrics: List[MLMetric]) -> List[OptimizationRecommendation]:
         """Analyze performance patterns for optimization opportunities.
         
@@ -592,15 +590,15 @@ class PerformanceOptimizer:
             List of pattern-based recommendations
         """
         recommendations = []
-        
+
         # Analyze overall performance trend
         if len(metrics) >= 50:
             values = [m.value for m in metrics]
             timestamps = [m.timestamp.timestamp() for m in metrics]
-            
+
             # Fit polynomial trend
             trend_coef = np.polyfit(timestamps, values, 2)
-            
+
             # If trend is negative quadratic (performance degrading over time)
             if trend_coef[0] < -0.0001:  # Negative quadratic coefficient
                 recommendations.append(OptimizationRecommendation(
@@ -622,9 +620,9 @@ class PerformanceOptimizer:
                     component_type=ComponentType(component_type),
                     priority=1
                 ))
-        
+
         return recommendations
-    
+
     async def _filter_recommendations(self, recommendations: List[OptimizationRecommendation]) -> List[OptimizationRecommendation]:
         """Filter and rank optimization recommendations.
         
@@ -637,37 +635,37 @@ class PerformanceOptimizer:
         # Remove expired recommendations
         current_time = datetime.now(timezone.utc)
         active_recommendations = [
-            rec for rec in recommendations 
+            rec for rec in recommendations
             if not rec.is_expired()
         ]
-        
+
         # Filter by confidence threshold
         min_confidence = self.config.min_confidence_threshold
         confident_recommendations = [
-            rec for rec in active_recommendations 
+            rec for rec in active_recommendations
             if rec.confidence >= min_confidence
         ]
-        
+
         # Filter by expected improvement threshold
         min_improvement = self.config.min_expected_improvement
         valuable_recommendations = [
-            rec for rec in confident_recommendations 
+            rec for rec in confident_recommendations
             if rec.expected_improvement >= min_improvement * 100  # Convert to percentage
         ]
-        
+
         # Sort by priority, confidence, and expected improvement
         sorted_recommendations = sorted(
             valuable_recommendations,
             key=lambda x: (x.priority, -x.confidence, -x.expected_improvement)
         )
-        
+
         # Limit to batch size
         return sorted_recommendations[:self.config.batch_optimization_size]
 
 
 class ConfigurationRecommender:
     """Smart configuration tuning recommendations."""
-    
+
     def __init__(self, config: OptimizationEngineConfig):
         """Initialize configuration recommender.
         
@@ -677,8 +675,8 @@ class ConfigurationRecommender:
         self.config = config
         self.config_history = deque(maxlen=100)
         self.performance_baselines = {}
-        
-    async def recommend_configuration_changes(self, component_type: str, 
+
+    async def recommend_configuration_changes(self, component_type: str,
                                             current_config: Dict[str, Any],
                                             performance_metrics: List[MLMetric]) -> List[OptimizationRecommendation]:
         """Recommend configuration changes based on performance analysis.
@@ -692,11 +690,11 @@ class ConfigurationRecommender:
             List of configuration recommendations
         """
         recommendations = []
-        
+
         try:
             # Analyze current performance
             baseline_performance = self._calculate_baseline_performance(component_type, performance_metrics)
-            
+
             # Component-specific configuration analysis
             if component_type == "evolution_engine":
                 recommendations.extend(await self._recommend_evolution_config(current_config, baseline_performance))
@@ -704,13 +702,13 @@ class ConfigurationRecommender:
                 recommendations.extend(await self._recommend_kraken_config(current_config, baseline_performance))
             elif component_type == "nlp_agent":
                 recommendations.extend(await self._recommend_nlp_config(current_config, baseline_performance))
-            
+
         except Exception as e:
             logger.error(f"Configuration recommendation failed for {component_type}: {e}")
-        
+
         return recommendations
-    
-    def _calculate_baseline_performance(self, component_type: str, 
+
+    def _calculate_baseline_performance(self, component_type: str,
                                       metrics: List[MLMetric]) -> Dict[str, float]:
         """Calculate baseline performance metrics.
         
@@ -722,12 +720,12 @@ class ConfigurationRecommender:
             Baseline performance dictionary
         """
         baseline = {}
-        
+
         # Group metrics by name
         metric_groups = defaultdict(list)
         for metric in metrics:
             metric_groups[metric.metric_name].append(metric.value)
-        
+
         for metric_name, values in metric_groups.items():
             if len(values) >= 10:
                 baseline[metric_name] = {
@@ -737,11 +735,11 @@ class ConfigurationRecommender:
                     "p95": np.percentile(values, 95),
                     "trend": np.polyfit(range(len(values)), values, 1)[0]
                 }
-        
+
         self.performance_baselines[component_type] = baseline
         return baseline
-    
-    async def _recommend_evolution_config(self, current_config: Dict[str, Any], 
+
+    async def _recommend_evolution_config(self, current_config: Dict[str, Any],
                                         baseline: Dict[str, float]) -> List[OptimizationRecommendation]:
         """Recommend evolution engine configuration changes.
         
@@ -753,11 +751,11 @@ class ConfigurationRecommender:
             List of configuration recommendations
         """
         recommendations = []
-        
+
         # Analyze fitness metrics
         if "fitness" in baseline:
             fitness_baseline = baseline["fitness"]
-            
+
             # Low average fitness
             if fitness_baseline["mean"] < 0.5:
                 recommendations.append(OptimizationRecommendation(
@@ -778,7 +776,7 @@ class ConfigurationRecommender:
                     risk_level="low",
                     priority=2
                 ))
-            
+
             # Stagnating fitness (low trend)
             if abs(fitness_baseline["trend"]) < 0.001:
                 recommendations.append(OptimizationRecommendation(
@@ -799,10 +797,10 @@ class ConfigurationRecommender:
                     risk_level="medium",
                     priority=1
                 ))
-        
+
         return recommendations
-    
-    async def _recommend_kraken_config(self, current_config: Dict[str, Any], 
+
+    async def _recommend_kraken_config(self, current_config: Dict[str, Any],
                                      baseline: Dict[str, float]) -> List[OptimizationRecommendation]:
         """Recommend Kraken LNN configuration changes.
         
@@ -814,11 +812,11 @@ class ConfigurationRecommender:
             List of configuration recommendations
         """
         recommendations = []
-        
+
         # Analyze processing latency
         if "processing_latency" in baseline:
             latency_baseline = baseline["processing_latency"]
-            
+
             # High latency
             if latency_baseline["mean"] > 1000:  # 1 second
                 recommendations.append(OptimizationRecommendation(
@@ -839,11 +837,11 @@ class ConfigurationRecommender:
                     risk_level="low",
                     priority=1
                 ))
-        
+
         # Analyze memory usage
         if "memory_usage" in baseline:
             memory_baseline = baseline["memory_usage"]
-            
+
             # High memory usage
             if memory_baseline["mean"] > 80.0:
                 recommendations.append(OptimizationRecommendation(
@@ -864,10 +862,10 @@ class ConfigurationRecommender:
                     risk_level="medium",
                     priority=1
                 ))
-        
+
         return recommendations
-    
-    async def _recommend_nlp_config(self, current_config: Dict[str, Any], 
+
+    async def _recommend_nlp_config(self, current_config: Dict[str, Any],
                                   baseline: Dict[str, float]) -> List[OptimizationRecommendation]:
         """Recommend NLP agent configuration changes.
         
@@ -879,11 +877,11 @@ class ConfigurationRecommender:
             List of configuration recommendations
         """
         recommendations = []
-        
+
         # Analyze response time
         if "response_time" in baseline:
             response_baseline = baseline["response_time"]
-            
+
             # High response time
             if response_baseline["mean"] > 3000:  # 3 seconds
                 recommendations.append(OptimizationRecommendation(
@@ -904,11 +902,11 @@ class ConfigurationRecommender:
                     risk_level="low",
                     priority=2
                 ))
-        
+
         # Analyze token usage efficiency
         if "tokens_per_response" in baseline:
             token_baseline = baseline["tokens_per_response"]
-            
+
             # Inefficient token usage
             if token_baseline["p95"] > current_config.get("max_tokens", 1000) * 0.9:
                 recommendations.append(OptimizationRecommendation(
@@ -929,13 +927,13 @@ class ConfigurationRecommender:
                     risk_level="low",
                     priority=3
                 ))
-        
+
         return recommendations
 
 
 class OptimizationEngine:
     """Main optimization engine coordinator."""
-    
+
     def __init__(self, config: OptimizationEngineConfig):
         """Initialize optimization engine.
         
@@ -947,8 +945,8 @@ class OptimizationEngine:
         self.configuration_recommender = ConfigurationRecommender(config)
         self.recommendation_history = deque(maxlen=1000)
         self.optimization_metrics = {}
-        
-    async def optimize_system(self, metrics_history: Dict[str, List[MLMetric]], 
+
+    async def optimize_system(self, metrics_history: Dict[str, List[MLMetric]],
                             predictions: Dict[str, List[PredictionResult]],
                             current_configs: Dict[str, Dict[str, Any]]) -> List[OptimizationRecommendation]:
         """Perform comprehensive system optimization.
@@ -962,14 +960,14 @@ class OptimizationEngine:
             List of optimization recommendations
         """
         all_recommendations = []
-        
+
         try:
             # Performance optimization analysis
             performance_recommendations = await self.performance_optimizer.analyze_performance(
                 metrics_history, predictions
             )
             all_recommendations.extend(performance_recommendations)
-            
+
             # Configuration optimization analysis
             for component_type, config in current_configs.items():
                 if component_type in metrics_history:
@@ -977,19 +975,19 @@ class OptimizationEngine:
                         component_type, config, metrics_history[component_type]
                     )
                     all_recommendations.extend(config_recommendations)
-            
+
             # Store recommendations in history
             self.recommendation_history.extend(all_recommendations)
-            
+
             # Clean up expired recommendations
             await self._cleanup_expired_recommendations()
-            
+
             return all_recommendations
-            
+
         except Exception as e:
             logger.error(f"System optimization failed: {e}")
             return []
-    
+
     async def _cleanup_expired_recommendations(self) -> None:
         """Clean up expired recommendations."""
         current_time = datetime.now(timezone.utc)
@@ -997,7 +995,7 @@ class OptimizationEngine:
             [rec for rec in self.recommendation_history if not rec.is_expired()],
             maxlen=1000
         )
-    
+
     async def get_optimization_summary(self) -> Dict[str, Any]:
         """Get optimization summary and statistics.
         
@@ -1005,22 +1003,22 @@ class OptimizationEngine:
             Optimization summary dictionary
         """
         active_recommendations = [rec for rec in self.recommendation_history if not rec.is_expired()]
-        
+
         # Group by category
         category_counts = defaultdict(int)
         for rec in active_recommendations:
             category_counts[rec.category.value] += 1
-        
+
         # Group by component
         component_counts = defaultdict(int)
         for rec in active_recommendations:
             component_counts[rec.component_type.value] += 1
-        
+
         # Calculate priority distribution
         priority_distribution = defaultdict(int)
         for rec in active_recommendations:
             priority_distribution[f"priority_{rec.priority}"] += 1
-        
+
         return {
             "total_active_recommendations": len(active_recommendations),
             "category_distribution": dict(category_counts),
@@ -1030,7 +1028,7 @@ class OptimizationEngine:
             "average_confidence": np.mean([r.confidence for r in active_recommendations]) if active_recommendations else 0.0,
             "average_expected_improvement": np.mean([r.expected_improvement for r in active_recommendations]) if active_recommendations else 0.0
         }
-    
+
     async def export_recommendations(self, filepath: Path) -> None:
         """Export recommendations to file.
         
@@ -1039,11 +1037,11 @@ class OptimizationEngine:
         """
         try:
             recommendations_data = [rec.to_dict() for rec in self.recommendation_history]
-            
+
             with open(filepath, 'w') as f:
                 json.dump(recommendations_data, f, indent=2, default=str)
-            
+
             logger.info(f"Recommendations exported to {filepath}")
-            
+
         except Exception as e:
             logger.error(f"Failed to export recommendations: {e}")

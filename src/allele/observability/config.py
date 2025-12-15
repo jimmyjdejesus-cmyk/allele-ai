@@ -31,38 +31,39 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, field
 import os
+from dataclasses import dataclass, field
+from typing import List, Optional
+
 from .types import (
-    MonitoringConfig, 
-    DashboardConfig, 
-    MatrixBenchmarkConfig,
-    MLflowConfig,
     AlertRule,
     AlertSeverity,
-    ComponentType
+    ComponentType,
+    DashboardConfig,
+    MatrixBenchmarkConfig,
+    MLflowConfig,
+    MonitoringConfig,
 )
 
 
 @dataclass
 class ObservabilitySettings:
     """Complete observability system configuration."""
-    
+
     # Core monitoring settings
     monitoring: MonitoringConfig = field(default_factory=MonitoringConfig)
     dashboard: DashboardConfig = field(default_factory=DashboardConfig)
     matrix_benchmark: MatrixBenchmarkConfig = field(default_factory=MatrixBenchmarkConfig)
     mlflow: MLflowConfig = field(default_factory=MLflowConfig)
-    
+
     # Default alert rules
     default_alert_rules: List[AlertRule] = field(default_factory=list)
-    
+
     def __post_init__(self):
         """Initialize default settings and validate configuration."""
         self._setup_default_alert_rules()
         self._validate_settings()
-    
+
     def _setup_default_alert_rules(self) -> None:
         """Set up default alert rules for monitoring."""
         if not self.monitoring.alert_rules:
@@ -92,7 +93,7 @@ class ObservabilitySettings:
                     notification_channels=["log"],
                     cooldown_seconds=600
                 ),
-                
+
                 # Kraken LNN alerts
                 AlertRule(
                     rule_id="kraken_memory_high",
@@ -118,7 +119,7 @@ class ObservabilitySettings:
                     notification_channels=["log"],
                     cooldown_seconds=300
                 ),
-                
+
                 # NLP Agent alerts
                 AlertRule(
                     rule_id="agent_latency_high",
@@ -144,7 +145,7 @@ class ObservabilitySettings:
                     notification_channels=["log"],
                     cooldown_seconds=600
                 ),
-                
+
                 # System alerts
                 AlertRule(
                     rule_id="system_memory_high",
@@ -183,25 +184,25 @@ class ObservabilitySettings:
                     cooldown_seconds=600
                 )
             ]
-    
+
     def _validate_settings(self) -> None:
         """Validate configuration settings."""
         # Validate dashboard settings
         if self.dashboard.port <= 0 or self.dashboard.port > 65535:
             raise ValueError(f"Invalid dashboard port: {self.dashboard.port}")
-        
+
         # Validate matrix benchmark settings
         if self.matrix_benchmark.runs_per_config <= 0:
             raise ValueError("runs_per_config must be positive")
-        
+
         if self.matrix_benchmark.timeout_seconds <= 0:
             raise ValueError("timeout_seconds must be positive")
-        
+
         # Validate MLflow settings
         if self.mlflow.enabled:
             if not self.mlflow.tracking_uri:
                 raise ValueError("MLflow tracking URI is required when MLflow is enabled")
-    
+
     @classmethod
     def from_env(cls) -> "ObservabilitySettings":
         """Create settings from environment variables."""

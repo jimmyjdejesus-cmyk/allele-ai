@@ -1,9 +1,8 @@
 """Unit tests for OpenAI streaming functionality with mocked dependencies."""
 
+from unittest.mock import AsyncMock, Mock, patch
+
 import pytest
-import asyncio
-from unittest.mock import Mock, AsyncMock, patch
-from typing import List, AsyncGenerator
 
 from allele.llm_client import LLMConfig
 from allele.llm_openai import OpenAIClient

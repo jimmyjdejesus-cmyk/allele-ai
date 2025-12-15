@@ -1,16 +1,13 @@
 """Unit tests for Ollama LLM client with mocked HTTP dependencies."""
 
-import pytest
-import asyncio
+from unittest.mock import AsyncMock, Mock, patch
+
 import aiohttp
-from unittest.mock import Mock, AsyncMock, patch
-from typing import List, Dict
+import pytest
 
 from allele.llm_client import LLMConfig
+from allele.llm_exceptions import LLMGenerationError, LLMModelNotAvailableError
 from allele.llm_ollama import OllamaClient
-from allele.llm_exceptions import (
-    LLMModelNotAvailableError, LLMGenerationError
-)
 
 
 class TestOllamaClientUnit:

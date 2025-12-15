@@ -1,8 +1,10 @@
 import asyncio
 import sys
+
 sys.path.insert(0, '.')
 from allele.evolution import EvolutionConfig, EvolutionEngine
 from tests.test_utils import generate_fitness_function
+
 
 async def main():
     trials = 200

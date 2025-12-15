@@ -32,62 +32,63 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, field
 import os
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+
 from .types import BenchmarkType, ComponentUnderTest, ParameterSet
 
 
 @dataclass
 class MatrixBenchmarkSettings:
     """Global matrix benchmarking settings."""
-    
+
     # Matrix configuration
     population_sizes: List[int] = field(default_factory=lambda: [50, 100, 200, 500, 1000])
     mutation_rates: List[float] = field(default_factory=lambda: [0.05, 0.1, 0.2, 0.3])
     reservoir_sizes: List[int] = field(default_factory=lambda: [50, 100, 200, 500])
     temperatures: List[float] = field(default_factory=lambda: [0.1, 0.3, 0.7, 1.0])
-    
+
     # LLM providers and models
     llm_providers: List[str] = field(default_factory=lambda: ["openai", "ollama"])
     llm_models: List[str] = field(default_factory=lambda: ["gpt-4", "gpt-3.5-turbo"])
-    
+
     # Test configuration
     runs_per_config: int = 3
     timeout_seconds: int = 300
     warmup_runs: int = 1
     parallel_workers: int = 1
     max_concurrent_tests: int = 4
-    
+
     # Measurement settings
     measure_memory: bool = True
     measure_cpu: bool = True
     measure_gpu: bool = False
     measure_network: bool = False
-    
+
     # Output settings
     save_results: bool = True
     results_path: str = "benchmark_results"
     generate_report: bool = True
     export_format: str = "json"  # json, csv, parquet
-    
+
     # Performance thresholds
     performance_thresholds: Dict[str, float] = field(default_factory=dict)
-    
+
     # Suite settings
     parallel_execution: bool = False
     stop_on_failure: bool = True
     aggregate_results: bool = True
-    
+
     # Regression testing
     regression_testing: bool = True
     regression_baseline_path: str = "regression_baseline.json"
     regression_tolerance_percent: float = 10.0
-    
+
     # MLflow integration
     mlflow_integration: bool = True
     mlflow_experiment_name: str = "allele_matrix_benchmarks"
-    
+
     def get_default_evolution_config(self) -> Dict[str, Any]:
         """Get default evolution benchmark configuration."""
         return {
@@ -118,7 +119,7 @@ class MatrixBenchmarkSettings:
             "measure_memory": self.measure_memory,
             "measure_cpu": self.measure_cpu
         }
-    
+
     def get_default_kraken_config(self) -> Dict[str, Any]:
         """Get default Kraken LNN benchmark configuration."""
         return {
@@ -147,7 +148,7 @@ class MatrixBenchmarkSettings:
             "measure_memory": self.measure_memory,
             "measure_cpu": self.measure_cpu
         }
-    
+
     def get_default_agent_config(self) -> Dict[str, Any]:
         """Get default NLP agent benchmark configuration."""
         return {
@@ -176,7 +177,7 @@ class MatrixBenchmarkSettings:
             "measure_memory": self.measure_memory,
             "measure_cpu": self.measure_cpu
         }
-    
+
     def create_matrix_combinations(self) -> List[Dict[str, Any]]:
         """Create matrix combinations from settings.
         
@@ -184,7 +185,7 @@ class MatrixBenchmarkSettings:
             List of parameter combinations for matrix testing
         """
         combinations = []
-        
+
         # Evolution matrix combinations
         for pop_size in self.population_sizes:
             for mutation_rate in self.mutation_rates:
@@ -197,7 +198,7 @@ class MatrixBenchmarkSettings:
                     "crossover_rate": 0.8,
                     "test_category": "evolution_matrix"
                 })
-        
+
         # Kraken matrix combinations
         for reservoir_size in self.reservoir_sizes:
             for connectivity in [0.1, 0.2, 0.3]:
@@ -209,7 +210,7 @@ class MatrixBenchmarkSettings:
                     "memory_buffer_size": 1000,
                     "test_category": "kraken_matrix"
                 })
-        
+
         # Agent matrix combinations
         for temperature in self.temperatures:
             for provider in self.llm_providers:
@@ -222,9 +223,9 @@ class MatrixBenchmarkSettings:
                     "streaming": True,
                     "test_category": "agent_matrix"
                 })
-        
+
         return combinations
-    
+
     def get_regression_thresholds(self) -> Dict[str, float]:
         """Get default regression testing thresholds."""
         return {
@@ -235,7 +236,7 @@ class MatrixBenchmarkSettings:
             "cpu_usage_percent": 80.0,
             "error_rate": 0.05
         }
-    
+
     @classmethod
     def from_env(cls) -> "MatrixBenchmarkSettings":
         """Create settings from environment variables."""
