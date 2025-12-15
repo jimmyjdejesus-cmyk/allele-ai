@@ -1,7 +1,7 @@
 # ALLELE
 ## Phylogenic AI Agents
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
+[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](LICENSE)
 [![PyPI](https://img.shields.io/badge/PyPI-allele-blue)](https://pypi.org/project/allele/)
 [![Pages Deploy](https://github.com/jimmyjdejesus-cmyk/allele/actions/workflows/pages.yml/badge.svg?branch=main)](https://github.com/jimmyjdejesus-cmyk/allele/actions/workflows/pages.yml)

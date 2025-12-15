@@ -20,7 +20,7 @@ This project follows a [Code of Conduct](CODE_OF_CONDUCT.md) to ensure a welcomi
 3. Create a new branch for your changes: `git checkout -b your-feature-branch`
 
 ## Development Environment
-1. Install Python 3.8 or later.
+1. Install Python 3.9 or later.
 2. Install dependencies: `pip install -e .[dev]`
 3. Set up pre-commit hooks: `pre-commit install`
 
