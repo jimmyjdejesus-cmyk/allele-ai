@@ -32,11 +32,17 @@ except Exception:
     from pydantic import BaseModel, Field
 
 try:
-    # Pydantic v2 uses ConfigDict
-    from pydantic import ConfigDict
-    _HAS_CONFIGDICT = True
-except Exception:
-    _HAS_CONFIGDICT = False
+    # Pydantic v2 settings
+    from pydantic_settings import BaseSettings, SettingsConfigDict
+    _HAS_SETTINGS = True
+except ImportError:
+    # Fallback or older version
+    try:
+        from pydantic import BaseSettings
+        _HAS_SETTINGS = True
+    except ImportError:
+        _HAS_SETTINGS = False
+        from pydantic import BaseModel
 
 # Central configuration definitions using pydantic
 
@@ -91,11 +97,11 @@ class LiquidDynamicsSettings(BaseModel):
     flow_rate: float = 0.5
     turbulence: float = 0.05
 
-class AlleleSettings(BaseModel):
+class AlleleSettings(BaseSettings if _HAS_SETTINGS else BaseModel):
     """Application settings loaded from environment variables or .env files.
 
     Naming convention for env vars is uppercase with underscores; nested fields
-    will be prefixed (e.g., AGENT_MODEL_NAME, EVOLUTION_POPULATION_SIZE).
+    will be prefixed (e.g., AGENT__MODEL_NAME, EVOLUTION__POPULATION_SIZE).
     """
 
     agent: AgentSettings = AgentSettings(model_name="gpt-4")
@@ -104,11 +110,18 @@ class AlleleSettings(BaseModel):
     liquid_dynamics: LiquidDynamicsSettings = LiquidDynamicsSettings()
     default_traits: Dict[str, float] = DEFAULT_TRAITS
 
-    if _HAS_CONFIGDICT:
-        model_config: Any = ConfigDict(env_nested_delimiter="__")  # type: ignore[misc,typeddict-unknown-key]
+    if _HAS_SETTINGS:
+        model_config = SettingsConfigDict(
+            env_nested_delimiter="__",
+            env_file=".env",
+            env_file_encoding="utf-8",
+            extra="ignore"
+        )
     else:
         class Config:
             env_nested_delimiter = "__"
+            env_file = ".env"
+            env_file_encoding = "utf-8"
 
 # Singleton instance to use across the package
 settings = AlleleSettings()

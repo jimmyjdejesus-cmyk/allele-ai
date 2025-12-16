@@ -68,6 +68,9 @@ class LLMConfig:
         if not self.model or not isinstance(self.model, str):
             raise ValueError("model must be a non-empty string")
         # Allow empty API key for local providers like ollama
+        if self.api_key is None:
+            self.api_key = ""
+            
         if not isinstance(self.api_key, str):
             raise ValueError("api_key must be a string")
         if self.api_key == "" and self.provider not in ['ollama']:

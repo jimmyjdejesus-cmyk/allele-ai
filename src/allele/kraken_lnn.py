@@ -362,9 +362,17 @@ class LiquidStateMachine:
         self.connections = self._initialize_connections()
 
         # Initialize adaptive weights
-        self.adaptive_weights = AdaptiveWeightMatrix(
-            weights=self.random_state.randn(reservoir_size, reservoir_size) * 0.1
-        )
+        self.adaptive_weights = self._initialize_weights()
+
+    def _initialize_weights(self) -> AdaptiveWeightMatrix:
+        """Initialize adaptive weights with sparsity and random values."""
+        # Initialize with small random weights
+        initial_weights = self.random_state.randn(self.reservoir_size, self.reservoir_size) * 0.1
+        
+        # Apply sparsity mask from connections
+        initial_weights *= self.connections
+        
+        return AdaptiveWeightMatrix(weights=initial_weights)
 
     def _initialize_connections(self) -> np.ndarray:
         """Initialize connection matrix with specified connectivity."""
@@ -783,7 +791,7 @@ class KrakenLNN:
 
         # Calculate importance scores and create (importance, memory) tuples
         # Use heap to maintain top-k efficiently (O(n log k) vs O(n log n) sorting)
-        keep_count = int(len(memories) * self.temporal_memory.consolidation_threshold)
+        keep_count = max(1, int(len(memories) * self.temporal_memory.consolidation_threshold))
         top_memories: List[tuple[float, Dict[str, Any]]] = []
 
         for memory in memories:

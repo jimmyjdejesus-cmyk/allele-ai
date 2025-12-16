@@ -131,25 +131,25 @@ class TestKrakenEdgeCases:
         zero_sequence = [0.0, 0.0, 0.0]
         output_zeros = lsm.process_sequence(zero_sequence)
 
-        assert isinstance(output_zeros, np.ndarray)
-        assert output_zeros.shape[0] == len(zero_sequence)
-        assert np.all(np.isfinite(output_zeros))
+        assert isinstance(output_zeros, list)
+        assert len(output_zeros) == len(zero_sequence)
+        assert np.all(np.isfinite(np.array(output_zeros)))
 
         # Test with negatives
         negative_sequence = [-0.5, -0.2, -0.8, -0.1]
         output_negatives = lsm.process_sequence(negative_sequence)
 
-        assert isinstance(output_negatives, np.ndarray)
-        assert output_negatives.shape[0] == len(negative_sequence)
-        assert np.all(np.isfinite(output_negatives))
+        assert isinstance(output_negatives, list)
+        assert len(output_negatives) == len(negative_sequence)
+        assert np.all(np.isfinite(np.array(output_negatives)))
 
         # Test mixed zero/negative
         mixed_sequence = [0.0, -0.5, 0.5, -1.0, 1.0]
         output_mixed = lsm.process_sequence(mixed_sequence)
 
-        assert isinstance(output_mixed, np.ndarray)
-        assert output_mixed.shape[0] == len(mixed_sequence)
-        assert np.all(np.isfinite(output_mixed))
+        assert isinstance(output_mixed, list)
+        assert len(output_mixed) == len(mixed_sequence)
+        assert np.all(np.isfinite(np.array(output_mixed)))
 
     @pytest.mark.asyncio
     async def test_empty_sequence_handling(self):
@@ -239,14 +239,14 @@ class TestKrakenEdgeCases:
         seq = generate_test_sequence(5)
         await lnn.process_sequence(seq, memory_consolidation=False)
 
-        assert len(lnn.temporal_memory.memories) == 1
+        assert len(lnn.temporal_memory) == 1
 
         # Consolidate with minimal data
         result = await lnn.process_sequence(seq, memory_consolidation=True)
 
         assert result['success'] is True
         # Should still have at least one memory entry
-        assert len(lnn.temporal_memory.memories) >= 1
+        assert len(lnn.temporal_memory) >= 1
 
     def test_numerical_stability_under_extreme_loads(self):
         """Test numerical stability under extreme computational loads."""

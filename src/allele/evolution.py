@@ -110,13 +110,12 @@ class GeneticOperators:
         # If requested tournament size > population, allow replacement to avoid errors
         replace = actual_size > len(population)
 
-        rng: np.random.RandomState
+        rng: Any
         if seed is not None:
             rng = np.random.RandomState(seed)
             tournament = rng.choice(population, actual_size, replace=replace)
         else:
-            rng = np.random.RandomState()
-            tournament = rng.choice(population, actual_size, replace=replace)
+            tournament = np.random.choice(population, actual_size, replace=replace)
         tournament_genomes: List[ConversationalGenome] = list(tournament)
         return max(tournament_genomes, key=lambda g: g.fitness_score)
 
@@ -164,11 +163,12 @@ class EvolutionEngine:
         >>> best = await engine.evolve(population, fitness_fn)
     """
 
-    def __init__(self, config: EvolutionConfig):
+    def __init__(self, config: EvolutionConfig, seed: Optional[int] = None):
         """Initialize evolution engine.
 
         Args:
             config: Evolution configuration
+            seed: Optional random seed for reproducible evolution
         """
         self.config = config
         # Guard against extremely large populations that could cause memory issues
@@ -181,6 +181,9 @@ class EvolutionEngine:
         # convenience flags
         self.immutable_evolution = getattr(config, "immutable_evolution", False)
         self.hpc_mode = getattr(config, "hpc_mode", True)
+        
+        # Initialize random state
+        self.random = np.random.RandomState(seed)
 
     def initialize_population(
         self,
@@ -193,7 +196,7 @@ class EvolutionEngine:
 
         Args:
             base_traits: Optional base traits to start from
-            seed: Optional random seed for reproducible results
+            seed: Optional random seed for reproducible population initialization
 
         Returns:
             List of initialized genomes
@@ -207,14 +210,14 @@ class EvolutionEngine:
 
         # Set random seed for reproducible population initialization
         if seed is not None:
-            np.random.seed(seed)
+            self.random.seed(seed)
 
         trait_names = list(base_traits.keys())
         base_values = np.array([base_traits[name] for name in trait_names])
 
         # Vectorized generation: create all variations at once
         # Shape: (population_size, num_traits)
-        variations = np.random.uniform(-0.2, 0.2, (self.config.population_size, len(trait_names)))
+        variations = self.random.uniform(-0.2, 0.2, (self.config.population_size, len(trait_names)))
         all_trait_values = np.clip(base_values + variations, 0.0, 1.0)
 
         # Create population efficiently
@@ -294,12 +297,12 @@ class EvolutionEngine:
                     # clone of one of the original sample genomes.
                     original_candidates = [g for g in population if g.genome_id in initial_ids]
                     if original_candidates:
-                        replacement = np.random.choice(original_candidates)
-                        next_gen[int(np.random.randint(0, sample_size))] = replacement
+                        replacement = self.random.choice(original_candidates)
+                        next_gen[int(self.random.randint(0, sample_size))] = replacement
                     elif initial_clones:
-                        clone_dict = initial_clones[int(np.random.randint(0, len(initial_clones)))]
+                        clone_dict = initial_clones[int(self.random.randint(0, len(initial_clones)))]
                         from allele.genome import ConversationalGenome
-                        next_gen[int(np.random.randint(0, sample_size))] = ConversationalGenome.from_dict(clone_dict)
+                        next_gen[int(self.random.randint(0, sample_size))] = ConversationalGenome.from_dict(clone_dict)
 
             population[:] = next_gen
             # If any of the initial sample genomes are present in the early
@@ -310,8 +313,9 @@ class EvolutionEngine:
                 elitism_count = int(self.config.population_size * self.config.selection_pressure)
                 initial_early_indices = [i for i, g in enumerate(population[:sample_size]) if g.genome_id in initial_ids and i >= elitism_count]
                 if initial_early_indices:
-                    idx = int(np.random.choice(initial_early_indices))
-                    GeneticOperators.mutate(population[idx], self.config.mutation_rate)
+                    idx = int(self.random.choice(initial_early_indices))
+                    mut_seed = self.random.randint(0, 2**31 - 1)
+                    GeneticOperators.mutate(population[idx], self.config.mutation_rate, seed=mut_seed)
 
             # Ensure at least one mutation occurs per generation to guarantee
             # evolutionary progress in small test populations.
@@ -320,21 +324,23 @@ class EvolutionEngine:
                 elitism_count = int(self.config.population_size * self.config.selection_pressure)
                 elitism_count = max(0, elitism_count)
                 attempt = 0
-                idx = np.random.randint(0, len(population))
+                idx = self.random.randint(0, len(population))
                 while idx < elitism_count and attempt < 5:
-                    idx = np.random.randint(elitism_count, len(population)) if elitism_count < len(population) else np.random.randint(0, len(population))
+                    idx = self.random.randint(elitism_count, len(population)) if elitism_count < len(population) else self.random.randint(0, len(population))
                     attempt += 1
-                GeneticOperators.mutate(population[idx], self.config.mutation_rate)
+                mut_seed = self.random.randint(0, 2**31 - 1)
+                GeneticOperators.mutate(population[idx], self.config.mutation_rate, seed=mut_seed)
 
             # Also bias mutations toward early population members to increase
             # the chance that sampled genomes (e.g., first 5) show changes
             # in tests that inspect the initial portion of the population.
             if self.config.mutation_rate > 0 and len(population) >= 1:
                 upper = min(5, len(population))
-                sample_idx = np.random.randint(0, upper)
+                sample_idx = self.random.randint(0, upper)
                 # Don't mutate elites
                 if sample_idx >= elitism_count:
-                    GeneticOperators.mutate(population[sample_idx], self.config.mutation_rate)
+                    mut_seed = self.random.randint(0, 2**31 - 1)
+                    GeneticOperators.mutate(population[sample_idx], self.config.mutation_rate, seed=mut_seed)
 
             # If any of the original population genomes still exist in the
             # current population, ensure at least one of them is mutated to
@@ -343,8 +349,9 @@ class EvolutionEngine:
             if original_candidates:
                 # Prefer non-elite original candidates
                 non_elite_candidates = [g for g in original_candidates if g not in population[:elitism_count]]
-                candidate = np.random.choice(non_elite_candidates) if non_elite_candidates else np.random.choice(original_candidates)
-                GeneticOperators.mutate(candidate, self.config.mutation_rate)
+                candidate = self.random.choice(non_elite_candidates) if non_elite_candidates else self.random.choice(original_candidates)
+                mut_seed = self.random.randint(0, 2**31 - 1)
+                GeneticOperators.mutate(candidate, self.config.mutation_rate, seed=mut_seed)
 
             self.generation += 1
 
@@ -367,8 +374,9 @@ class EvolutionEngine:
                 # Try to mutate a non-elite initial-sample genome in the early slice
                 candidates = [i for i, g in enumerate(population[:sample_size]) if g.genome_id in initial_sample and i >= elitism_count]
                 if candidates:
-                    idx = int(np.random.choice(candidates))
-                    GeneticOperators.mutate(population[idx], self.config.mutation_rate)
+                    idx = int(self.random.choice(candidates))
+                    mut_seed = self.random.randint(0, 2**31 - 1)
+                    GeneticOperators.mutate(population[idx], self.config.mutation_rate, seed=mut_seed)
                 else:
                     # If none are available (e.g., elites occupy the early slots or
                     # initial IDs were displaced), insert a clone (non-elite slot)
@@ -385,7 +393,8 @@ class EvolutionEngine:
                         if fallback_clone:
                             from allele.genome import ConversationalGenome
                             population[non_elite_slot] = ConversationalGenome.from_dict(fallback_clone)
-                            GeneticOperators.mutate(population[non_elite_slot], self.config.mutation_rate)
+                            mut_seed = self.random.randint(0, 2**31 - 1)
+                            GeneticOperators.mutate(population[non_elite_slot], self.config.mutation_rate, seed=mut_seed)
 
         best: ConversationalGenome
         if self.best_genome is None:
@@ -425,17 +434,23 @@ class EvolutionEngine:
         mutated_in_generation = False
 
         while len(next_generation) < self.config.population_size:
+            # Generate seeds for operations
+            sel_seed1 = self.random.randint(0, 2**31 - 1)
+            sel_seed2 = self.random.randint(0, 2**31 - 1)
+            cross_seed = self.random.randint(0, 2**31 - 1)
+            mut_seed = self.random.randint(0, 2**31 - 1)
+
             # Select parents
             parent1 = GeneticOperators.tournament_selection(
-                population, self.config.tournament_size
+                population, self.config.tournament_size, seed=sel_seed1
             )
             parent2 = GeneticOperators.tournament_selection(
-                population, self.config.tournament_size
+                population, self.config.tournament_size, seed=sel_seed2
             )
 
             # Decide whether to crossover or clone
-            if np.random.random() < self.config.crossover_rate:
-                child = GeneticOperators.crossover(parent1, parent2)
+            if self.random.random_sample() < self.config.crossover_rate:
+                child = GeneticOperators.crossover(parent1, parent2, seed=cross_seed)
                 if self.immutable_evolution:
                     # Use newly created child as offspring (no mutation of existing objects)
                     offspring = child
@@ -451,13 +466,13 @@ class EvolutionEngine:
                     # Clone parent into a new object and mutate the clone
                     offspring = ConversationalGenome.from_dict(parent1.to_dict())
                     # Update ID to avoid duplicate IDs in population
-                    offspring.genome_id = f"clone_{offspring.genome_id}_{np.random.randint(1_000_000)}"
+                    offspring.genome_id = f"clone_{offspring.genome_id}_{self.random.randint(1_000_000)}"
                 else:
                     # Clone behavior (HPC): reuse parent1 object and mutate in place
                     offspring = parent1
 
             # Mutation (may be in-place or applied to clone/new object depending on immutability)
-            GeneticOperators.mutate(offspring, self.config.mutation_rate)
+            GeneticOperators.mutate(offspring, self.config.mutation_rate, seed=mut_seed)
             mutated_in_generation = True
 
             next_generation.append(offspring)
@@ -466,8 +481,9 @@ class EvolutionEngine:
         if not mutated_in_generation and self.config.mutation_rate > 0.0:
             # Choose a random genome (including elites) to mutate to guarantee progress
             if next_generation:
-                idx = np.random.randint(0, len(next_generation))
-                GeneticOperators.mutate(next_generation[idx], self.config.mutation_rate)
+                idx = self.random.randint(0, len(next_generation))
+                mut_seed = self.random.randint(0, 2**31 - 1)
+                GeneticOperators.mutate(next_generation[idx], self.config.mutation_rate, seed=mut_seed)
 
         return next_generation[:self.config.population_size]
 

@@ -215,7 +215,7 @@ OpenSpec requires Node.js >= 20.19.0.
 - **Crossover**: <5ms (breeding is cheap)
 - **LNN Processing**: <10ms (temporal coherence)
 - **Memory**: ~2KB per genome
-- **Code Quality**: 8.83/10, 95.5% tests passing (42/44 tests passing)
+- **Code Quality**: 8.83/10, 95.5% tests passing (42/44 tests)
 - **Kraken Determinism**: 100% determinism test suite success (12/12 tests)
 - **Biological Realism**: Enhanced liquid neural network accuracy preserved
 
@@ -271,11 +271,11 @@ For academic/research use, the AGPL v3 terms are automatically satisfied without
 
 ## Links
 
-- **Homepage**: [allele.ai](https://allele-ai.github.io/allele/)
-- **Documentation**: [docs.allele.ai](https://allele.readthedocs.io/)
-- **GitHub**: [github.com/allele-ai/allele](https://github.com/allele-ai/allele)
+- **Homepage**: [jimmyjdejesus-cmyk.github.io/allele-ai](https://jimmyjdejesus-cmyk.github.io/allele-ai/)
+- **Documentation**: [jimmyjdejesus-cmyk.github.io/allele-ai](https://jimmyjdejesus-cmyk.github.io/allele-ai/)
+- **GitHub**: [github.com/jimmyjdejesus-cmyk/allele-ai](https://github.com/jimmyjdejesus-cmyk/allele-ai)
 - **PyPI**: [pypi.org/project/allele](https://pypi.org/project/allele/)
-- **Issues**: [github.com/allele-ai/allele/issues](https://github.com/allele-ai/allele/issues)
+- **Issues**: [github.com/jimmyjdejesus-cmyk/allele-ai/issues](https://github.com/jimmyjdejesus-cmyk/allele-ai/issues)
 
 ---
 

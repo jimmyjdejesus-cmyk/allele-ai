@@ -1,9 +1,9 @@
 # Allele: Genome-Based Conversational AI Agents with Evolutionary Optimization and Liquid Neural Networks
 
-**Authors:** Jimmy De Jesus, Bravetto AI Systems  
+**Authors:** Jimmy De Jesus  
 **Version:** 1.0.2
 **Date:** December 2025
-**License:** MIT (Updated technical implementation)
+**License:** AGPL v3
 
 ---
 
@@ -445,5 +445,5 @@ Complete API documentation: `docs/api.md`.
 ---
 
 **Correspondence**: jimmydejesus1129@gmail.com  
-**Repository**: https://github.com/bravetto/allele  
-**License**: MIT
+**Repository**: https://github.com/jimmyjdejesus-cmyk/allele-ai  
+**License**: AGPL v3

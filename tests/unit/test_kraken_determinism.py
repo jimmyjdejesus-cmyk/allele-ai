@@ -78,11 +78,9 @@ class TestKrakenDeterminism:
 
     def test_lsm_deterministic_outputs_different_seed(self):
         """Test that LiquidStateMachine produces different outputs with different seeds."""
-        np.random.seed(42)
-        lsm1 = LiquidStateMachine(reservoir_size=50, connectivity=0.1)
-
-        np.random.seed(43)
-        lsm2 = LiquidStateMachine(reservoir_size=50, connectivity=0.1)
+        # Use different instance names to ensure different DeterministicRandom instances
+        lsm1 = LiquidStateMachine(reservoir_size=50, connectivity=0.1, instance_name="lsm_seed_42")
+        lsm2 = LiquidStateMachine(reservoir_size=50, connectivity=0.1, instance_name="lsm_seed_43")
 
         sequence = [0.5, 0.3, 0.8, 0.2, 0.9]
 
@@ -161,16 +159,20 @@ class TestKrakenDeterminism:
         memory_states = []
         for seq in sequences:
             await deterministic_lnn.process_sequence(seq, memory_consolidation=False)
-            memory_states.append(deterministic_lnn.temporal_memory.memories.copy())
+            # Store count of valid memories
+            memory_states.append(len(deterministic_lnn.temporal_memory))
 
-        # Reset and process again
-        deterministic_lnn.temporal_memory.memories.clear()
+        # Reset memory properly
+        deterministic_lnn.temporal_memory.memories = [None] * deterministic_lnn.temporal_memory.buffer_size
+        deterministic_lnn.temporal_memory._head = 0
+        deterministic_lnn.temporal_memory._count = 0
+        
         np.random.seed(123)  # Reset seed
 
         for i, seq in enumerate(sequences):
             await deterministic_lnn.process_sequence(seq, memory_consolidation=False)
-            # Memory should match previous run
-            assert len(memory_states[i]) == len(deterministic_lnn.temporal_memory.memories)
+            # Memory count should match previous run
+            assert memory_states[i] == len(deterministic_lnn.temporal_memory)
 
     def test_lsm_reproducibility_across_initializations(self):
         """Test LSM reproducibility across multiple initializations with same seed."""
@@ -178,8 +180,8 @@ class TestKrakenDeterminism:
 
         results = []
         for _i in range(3):
-            DeterministicRandom.reset()
-            DeterministicRandom.seed(100)
+            DeterministicRandom.reset(name='lsm_default')
+            DeterministicRandom.seed(100, name='lsm_default')
             lsm = LiquidStateMachine(reservoir_size=50, connectivity=0.1)
             output = lsm.process_sequence(sequence)
             results.append(output)
@@ -197,8 +199,8 @@ class TestKrakenDeterminism:
 
     def test_reservoir_state_deterministic_evolution(self):
         """Test that reservoir state evolves deterministically."""
-        DeterministicRandom.reset()
-        DeterministicRandom.seed(200)
+        DeterministicRandom.reset(name='lsm_default')
+        DeterministicRandom.seed(200, name='lsm_default')
         lsm = LiquidStateMachine(reservoir_size=30, connectivity=0.15)
 
         # Record state evolution
@@ -210,8 +212,8 @@ class TestKrakenDeterminism:
             lsm.process_input(value)
 
         # Reset and repeat
-        DeterministicRandom.reset()
-        DeterministicRandom.seed(200)
+        DeterministicRandom.reset(name='lsm_default')
+        DeterministicRandom.seed(200, name='lsm_default')
         lsm2 = LiquidStateMachine(reservoir_size=30, connectivity=0.15)
         states2 = []
 
@@ -246,10 +248,10 @@ class TestKrakenDeterminism:
 
     def test_adaptive_weights_deterministic_updates(self):
         """Test that adaptive weight updates are deterministic."""
-        DeterministicRandom.seed(300)
+        DeterministicRandom.seed(300, name='lsm_default')
         lsm1 = LiquidStateMachine(reservoir_size=40, connectivity=0.1)
 
-        DeterministicRandom.seed(300)
+        DeterministicRandom.seed(300, name='lsm_default')
         lsm2 = LiquidStateMachine(reservoir_size=40, connectivity=0.1)
 
         sequence = [0.4, 0.7, 0.2, 0.8, 0.5]

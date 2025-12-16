@@ -153,6 +153,12 @@ class TimeSeriesForecaster:
             # Calculate training metrics (simplified)
             predictions = fitted_model.fittedvalues
             actual_values = differenced_values[len(predictions):]
+            
+            # Initialize metrics with default values
+            mae = 0.0
+            mse = 0.0
+            accuracy = 0.8
+
             if len(actual_values) > 0:
                 mae = np.mean(np.abs(actual_values - predictions[-len(actual_values):]))
                 mse = np.mean((actual_values - predictions[-len(actual_values):])**2)
@@ -164,9 +170,7 @@ class TimeSeriesForecaster:
                 else:
                     # Handle constant time series (all zeros) with fallback accuracy
                     accuracy = 0.5  # Conservative accuracy for constant data
-            else:
-                accuracy = 0.8  # Default for new models
-
+            
             metrics = ModelMetrics(
                 model_name=f"ARIMA-{component_type}",
                 model_version="1.0.0",
@@ -174,7 +178,7 @@ class TimeSeriesForecaster:
                 training_samples=len(values),
                 last_training_time=self.last_training_time[component_type],
                 accuracy=accuracy,
-                precision=max(0.0, min(1.0, 1.0 - mse / np.var(values))),
+                precision=max(0.0, min(1.0, 1.0 - mse / np.var(values))) if np.var(values) > 0 else 0.0,
                 total_predictions=0,
                 successful_predictions=0
             )

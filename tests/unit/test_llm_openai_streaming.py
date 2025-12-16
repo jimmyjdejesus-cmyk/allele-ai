@@ -1,6 +1,6 @@
 """Unit tests for OpenAI streaming functionality with mocked dependencies."""
 
-from unittest.mock import AsyncMock, Mock, patch
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
 import pytest
 
@@ -48,14 +48,15 @@ class TestOpenAIStreamingUnit:
         # Mock streaming response with multiple chunks
         async def mock_stream():
             chunks = [
-                Mock(choices=[Mock(delta=Mock(content="Hello"))]),
-                Mock(choices=[Mock(delta=Mock(content=" world"))]),
-                Mock(choices=[Mock(delta=Mock(content="!"))])
+                MagicMock(choices=[MagicMock(delta=MagicMock(content="Hello"))]),
+                MagicMock(choices=[MagicMock(delta=MagicMock(content=" world"))]),
+                MagicMock(choices=[MagicMock(delta=MagicMock(content="!"))])
             ]
             for chunk in chunks:
                 yield chunk
             # Final chunk with usage
-            final_chunk = Mock(usage=Mock(total_tokens=50))
+            final_chunk = MagicMock(usage=MagicMock(total_tokens=50))
+            final_chunk.choices = []
             yield final_chunk
 
         mock_openai_client.chat.completions.create.return_value = mock_stream()
@@ -157,7 +158,8 @@ class TestOpenAIStreamingUnit:
 
         # Mock empty stream
         async def mock_stream():
-            final_chunk = Mock(usage=Mock(total_tokens=25))
+            final_chunk = MagicMock(usage=MagicMock(total_tokens=25))
+            final_chunk.choices = []
             yield final_chunk
 
         mock_openai_client.chat.completions.create.return_value = mock_stream()
@@ -186,9 +188,11 @@ class TestOpenAIStreamingUnit:
 
         async def mock_stream():
             for i in range(3):
-                yield Mock(choices=[Mock(delta=Mock(content=f"Chunk{i}"))])
+                yield MagicMock(choices=[MagicMock(delta=MagicMock(content=f"Chunk{i}"))])
             # Final usage chunk
-            yield Mock(usage=Mock(total_tokens=150, prompt_tokens=50, completion_tokens=100))
+            final_chunk = MagicMock(usage=MagicMock(total_tokens=150, prompt_tokens=50, completion_tokens=100))
+            final_chunk.choices = []
+            yield final_chunk
 
         mock_openai_client.chat.completions.create.return_value = mock_stream()
 

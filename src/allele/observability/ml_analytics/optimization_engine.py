@@ -298,6 +298,25 @@ class PerformanceOptimizer:
 
         component_rules = self.optimization_rules.get("component_specific_rules", {})
         if component_type not in component_rules:
+            # Generate generic recommendations if no specific rules exist
+            if metrics:
+                avg_latency = sum(m.value for m in metrics if m.name == "latency") / len(metrics)
+                if avg_latency > 100:  # Generic threshold
+                    recommendations.append(OptimizationRecommendation(
+                        recommendation_id=f"{component_type}_generic_latency",
+                        category=OptimizationCategory.PERFORMANCE_TUNING,
+                        title=f"High Latency Detected: {component_type}",
+                        description=f"Average latency {avg_latency:.1f}ms exceeds generic threshold",
+                        current_value=avg_latency,
+                        recommended_value=100.0,
+                        expected_improvement=20.0,
+                        confidence=0.6,
+                        implementation_steps=["Investigate performance bottlenecks"],
+                        estimated_effort="medium",
+                        risk_level="low",
+                        component_type=ComponentType(component_type),
+                        priority=2
+                    ))
             return recommendations
 
         component_rules[component_type]

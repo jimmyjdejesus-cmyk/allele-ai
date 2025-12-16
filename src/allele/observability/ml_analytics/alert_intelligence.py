@@ -331,27 +331,27 @@ class AlertCorrelator:
                 AlertSeverity.WARNING.value: 2,
                 AlertSeverity.INFO.value: 1
             }
-            feature_vector.append(severity_map.get(alert.get('severity', AlertSeverity.INFO.value), 1))
+            feature_vector.append(float(severity_map.get(alert.get('severity', AlertSeverity.INFO.value), 1)))
 
             # Component type (stable encoding)
             component_type = alert.get('component_type', 'unknown')
-            feature_vector.append(self.component_type_encoding.get(component_type, 0))
+            feature_vector.append(float(self.component_type_encoding.get(component_type, 0)))
 
             # Anomaly score (if available)
             anomaly_score = alert.get('anomaly_score', 0.0)
-            feature_vector.append(anomaly_score)
+            feature_vector.append(float(anomaly_score))
 
             # Timestamp (hour of day)
             timestamp_str = alert.get('timestamp', datetime.now(timezone.utc).isoformat())
             try:
                 timestamp = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
-                feature_vector.append(timestamp.hour)
+                feature_vector.append(float(timestamp.hour))
             except Exception:
-                feature_vector.append(12)  # Default to noon
+                feature_vector.append(12.0)  # Default to noon
 
             # Confidence (if available)
             confidence = alert.get('confidence', 0.5)
-            feature_vector.append(confidence)
+            feature_vector.append(float(confidence))
 
             features.append(feature_vector)
 

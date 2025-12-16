@@ -348,11 +348,11 @@ class ConversationalGenome(GenomeBase):
             mutation_rate: Probability of each trait mutating
             seed: Random seed for deterministic results
         """
-        rng: np.random.RandomState
+        rng: Any
         if seed is not None:
             rng = np.random.RandomState(seed)
         else:
-            rng = np.random.RandomState()
+            rng = np.random
 
         mutated = False
         trait_names = list(self.traits.keys())
@@ -379,11 +379,11 @@ class ConversationalGenome(GenomeBase):
         Returns:
             A new genome resulting from the crossover operation
         """
-        rng: np.random.RandomState
+        rng: Any
         if seed is not None:
             rng = np.random.RandomState(seed)
         else:
-            rng = np.random.RandomState()
+            rng = np.random
 
         # Blend traits from both parents
         child_traits = {}

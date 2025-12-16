@@ -74,7 +74,8 @@ class OllamaClient(LLMClient):
             # Auto-configure authentication for Ollama Cloud
             headers = self._headers.copy()
             if 'ollama.com' in self._base_url:
-                api_key = os.getenv('OLLAMA_API_KEY')
+                # Check config first, then env var
+                api_key = self.config.api_key or os.getenv('OLLAMA_API_KEY')
                 if api_key:
                     headers['Authorization'] = f'Bearer {api_key}'
                     self.logger.debug("Using Ollama Cloud authentication")
@@ -282,3 +283,13 @@ class OllamaClient(LLMClient):
             finally:
                 self._http_client = None
                 self._initialized = False
+
+    async def __aenter__(self):
+        """Async context manager entry."""
+        await self.initialize()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Async context manager exit."""
+        await self.close()
+
