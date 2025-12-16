@@ -770,9 +770,9 @@ class ConfigurationRecommender:
         """
         recommendations = []
 
-        # Analyze fitness metrics
-        if "fitness" in baseline:
-            fitness_baseline = baseline["fitness"]
+        # Analyze fitness metrics (check for both "fitness" and "fitness_score")
+        fitness_baseline = baseline.get("fitness") or baseline.get("fitness_score")
+        if fitness_baseline:
 
             # Low average fitness
             if fitness_baseline["mean"] < 0.5:
@@ -792,6 +792,7 @@ class ConfigurationRecommender:
                     ],
                     estimated_effort="low",
                     risk_level="low",
+                    component_type=ComponentType.EVOLUTION_ENGINE,
                     priority=2
                 ))
 
@@ -813,6 +814,7 @@ class ConfigurationRecommender:
                     ],
                     estimated_effort="low",
                     risk_level="medium",
+                    component_type=ComponentType.EVOLUTION_ENGINE,
                     priority=1
                 ))
 

@@ -817,18 +817,23 @@ class TestOptimizationEngine:
         ))
 
         # Export to temporary file
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tmp_file:
-            asyncio.run(engine.export_recommendations(Path(tmp_file.name)))
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False)
+        tmp_path = Path(tmp_file.name)
+        tmp_file.close()  # Close before writing on Windows
+
+        try:
+            asyncio.run(engine.export_recommendations(tmp_path))
 
             # Verify file was created and contains valid JSON
-            assert Path(tmp_file.name).exists()
+            assert tmp_path.exists()
 
-            with open(tmp_file.name) as f:
+            with open(tmp_path) as f:
                 data = json.load(f)
                 assert isinstance(data, list)
-
+        finally:
             # Clean up
-            Path(tmp_file.name).unlink()
+            if tmp_path.exists():
+                tmp_path.unlink()
 
 
 class TestMLAnalyticsIntegration:

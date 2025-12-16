@@ -471,8 +471,19 @@ class AlertCorrelator:
         # Find common values
         for key in all_keys:
             values = [alert.get(key) for alert in alerts if key in alert]
-            if len(set(values)) == 1:  # All same value
-                common[key] = values[0]
+            # Convert unhashable types (lists, dicts) to strings for comparison
+            try:
+                hashable_values = [
+                    tuple(v) if isinstance(v, list) else (
+                        frozenset(v.items()) if isinstance(v, dict) else v
+                    )
+                    for v in values
+                ]
+                if len(set(hashable_values)) == 1:  # All same value
+                    common[key] = values[0]
+            except (TypeError, AttributeError):
+                # Skip unhashable values that can't be converted
+                continue
 
         return common
 
