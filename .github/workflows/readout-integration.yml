@@ -33,6 +33,7 @@ jobs:
           python -m pip install pytest numpy pytest-asyncio
           python -m pip install pytest-cov
           python -m pip install aiohttp
+          python -m pip install psutil
           python -m pip install -e .
       - name: Run unit tests
         env:
@@ -64,6 +65,7 @@ jobs:
           python -m pip install pytest numpy
           python -m pip install pytest-cov
           python -m pip install aiohttp
+          python -m pip install psutil
           python -m pip install -e .
       - name: Run readout smoke tests
         env:
@@ -90,6 +92,7 @@ jobs:
           python -m pip install pytest numpy pytest-asyncio
           python -m pip install pytest-cov
           python -m pip install aiohttp
+          python -m pip install psutil
           python -m pip install -e .
       - name: Optionally install scikit-learn
         if: matrix.sklearn == 'true'
