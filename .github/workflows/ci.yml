@@ -11,7 +11,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false # TEMP DEBUG: gather logs from all matrix entries
+      fail-fast: false
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
 
@@ -41,45 +41,12 @@ jobs:
           ${{ runner.os }}-pip-${{ matrix.python-version }}-
           ${{ runner.os }}-pip-
 
-    - name: Enable action debug output (TEMP DEBUG)
-      env:
-        ACTIONS_STEP_DEBUG: true
-        ACTIONS_RUNNER_DEBUG: true
-      run: echo "Enabled ACTIONS_STEP_DEBUG and ACTIONS_RUNNER_DEBUG"
-
-    - name: Install dependencies (verbose, capture logs) # TEMP DEBUG
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -v -e .[dev,docs,all] 2>&1 | tee pip-install-${{ matrix.python-version }}.log
+        pip install -e .[dev,docs,all]
         # Install available typing stubs for third-party packages (best-effort)
-        # Use || true to avoid failing the job if a stub package is unavailable
-        python -m pip install types-tensorflow || true
-        python -m pip install types-tiktoken || true
-        python -m pip install types-scipy || true
-        python -m pip install types-scikit-learn || true
-        python -m pip install types-psutil || true
-        python -m pip install types-pandas || true
-
-    - name: Upload pip install logs (TEMP DEBUG)
-      uses: actions/upload-artifact@v4
-      with:
-        name: pip-install-log-${{ matrix.python-version }}
-        path: pip-install-${{ matrix.python-version }}.log
-
-    - name: TEMP - Run mypy and save full output to file (keep for diagnosis)
-      shell: bash
-      run: |
-        # TEMP: capture mypy stdout & stderr to file and exit with mypy's exit code
-        mypy src/ 2>&1 | tee mypy-output-${{ matrix.python-version }}.log
-        rc=${PIPESTATUS[0]}
-        exit $rc
-
-    - name: TEMP - Upload mypy logs (remove after diagnosis)
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: mypy-output-${{ matrix.python-version }}
-        path: mypy-output-${{ matrix.python-version }}.log
+        python -m pip install types-tensorflow types-tiktoken types-scipy types-scikit-learn types-psutil types-pandas || true
 
     - name: Lint with ruff
       run: ruff check src/ tests/
