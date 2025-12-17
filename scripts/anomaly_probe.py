@@ -1,11 +1,13 @@
-from datetime import datetime, timezone, timedelta
+import asyncio
+from datetime import datetime, timedelta, timezone
+
 import numpy as np
-from phylogenic.observability.ml_analytics.ml_config import AnomalyDetectionConfig
+
 from phylogenic.observability.ml_analytics.anomaly_detection import (
     IsolationForestDetector,
 )
-from phylogenic.observability.ml_analytics.types import MLMetric, ComponentType
-import asyncio
+from phylogenic.observability.ml_analytics.ml_config import AnomalyDetectionConfig
+from phylogenic.observability.ml_analytics.types import ComponentType, MLMetric
 
 base_time = datetime.now(timezone.utc)
 metrics = []

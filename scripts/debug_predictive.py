@@ -1,5 +1,5 @@
-from datetime import datetime, timezone, timedelta
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 # Ensure script is runnable from repository root by adding src/ to PYTHONPATH
@@ -7,18 +7,20 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 def main() -> None:
-    from phylogenic.observability.ml_analytics.predictive_analytics import (
-        TimeSeriesForecaster,
-    )
+    import asyncio
+
+    import numpy as np
+
     from phylogenic.observability.ml_analytics.ml_config import (
         PredictiveAnalyticsConfig,
     )
-    from phylogenic.observability.ml_analytics.types import (
-        TimeSeriesData,
-        ComponentType,
+    from phylogenic.observability.ml_analytics.predictive_analytics import (
+        TimeSeriesForecaster,
     )
-    import numpy as np
-    import asyncio
+    from phylogenic.observability.ml_analytics.types import (
+        ComponentType,
+        TimeSeriesData,
+    )
 
     config = PredictiveAnalyticsConfig(min_training_samples=50)
     forecaster = TimeSeriesForecaster(config)

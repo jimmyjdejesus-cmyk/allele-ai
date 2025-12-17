@@ -572,7 +572,8 @@ class LiquidStateMachine:
         if self.readout_weights is None:
             raise ValueError("Readout model is not trained")
 
-        s = state if state is not None else self.liquid_reservoir.get_state()
+        # Use local state if provided, otherwise use this reservoir's state
+        s = state if state is not None else self.get_state()
         s = np.asarray(s)
         if s.shape[0] != self.reservoir_size:
             raise ValueError("State dimension does not match reservoir size")
@@ -602,7 +603,7 @@ class LiquidStateMachine:
         # Append bias column for closed-form solution convenience
         if method == "ridge":
             try:
-                from sklearn.linear_model import Ridge
+                from sklearn.linear_model import Ridge  # type: ignore[import-untyped]
 
                 model = Ridge(alpha=alpha, fit_intercept=True)
                 model.fit(X, y)
@@ -639,12 +640,17 @@ class LiquidStateMachine:
         self,
         label_extractor: Callable[[Dict[str, Any]], float],
         min_samples: int = 10,
-        **kwargs,
+        **kwargs: Any,
     ) -> Dict[str, Any]:
         """Collect states and labels from temporal memory and train readout.
 
         label_extractor: function that takes a memory entry and returns a numeric label
         """
+        # LiquidStateMachine does not own a temporal memory by default.
+        # Require the caller to provide a 'memories' attribute or raise.
+        if not hasattr(self, "temporal_memory"):
+            raise ValueError("No temporal memory available to train readout")
+
         memories = list(self.temporal_memory)
         if not memories or len(memories) < min_samples:
             raise ValueError("Not enough memory samples to train readout")
@@ -796,7 +802,7 @@ class KrakenLNN:
         return res
 
     def train_readout_from_memory(
-        self, label_extractor, min_samples: int = 10, **kwargs
+        self, label_extractor: Callable[[Dict[str, Any]], float], min_samples: int = 10, **kwargs: Any
     ) -> Dict[str, Any]:
         """Train readout using samples stored in the temporal memory."""
         memories = list(self.temporal_memory)

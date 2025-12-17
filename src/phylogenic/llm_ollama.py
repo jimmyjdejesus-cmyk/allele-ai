@@ -26,7 +26,8 @@
 
 import json
 import os
-from typing import AsyncGenerator, Dict, List, Optional
+from types import TracebackType
+from typing import AsyncGenerator, Dict, List, Optional, Type
 
 import httpx
 import structlog
@@ -296,11 +297,13 @@ class OllamaClient(LLMClient):
                 self._http_client = None
                 self._initialized = False
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> "OllamaClient":
         """Async context manager entry."""
         await self.initialize()
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
+    async def __aexit__(
+        self, exc_type: Optional[Type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
+    ) -> None:
         """Async context manager exit."""
         await self.close()

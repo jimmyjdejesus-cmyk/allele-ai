@@ -271,7 +271,7 @@ class AnomalyDetector:
         if self.scaler is None:
             # Create and fit scaler; fall back to a simple scaler if sklearn missing
             try:
-                from sklearn.preprocessing import StandardScaler
+                from sklearn.preprocessing import StandardScaler  # type: ignore[import-untyped]
 
                 self.scaler = StandardScaler()
             except Exception:
@@ -406,7 +406,7 @@ class IsolationForestDetector(AnomalyDetector):
         try:
             # Check if scikit-learn is available
             try:
-                from sklearn.ensemble import IsolationForest
+                from sklearn.ensemble import IsolationForest  # type: ignore[import-untyped]
             except Exception:
                 IsolationForest = _SimpleIsolationForest
 
@@ -471,8 +471,8 @@ class IsolationForestDetector(AnomalyDetector):
 
             # Store threshold on the model for use during detection
             try:
-                setattr(self.model, "_detection_threshold", detection_threshold)
-                setattr(self.model, "_training_anomaly_scores", anomaly_scores)
+                self.model._detection_threshold = detection_threshold
+                self.model._training_anomaly_scores = anomaly_scores
             except Exception:
                 pass
 
@@ -689,10 +689,10 @@ class IsolationForestDetector(AnomalyDetector):
         # Component-specific recommendations
         if metric.component_type.value == "evolution_engine":
             recommendations.append(
-                (
+
                     "Consider adjusting evolution parameters (population size, "
                     "mutation rate)"
-                )
+
             )
             recommendations.append("Review fitness function effectiveness")
 
@@ -744,7 +744,7 @@ class OneClassSVMDetector(AnomalyDetector):
         try:
             # Check if scikit-learn is available
             try:
-                from sklearn.svm import OneClassSVM
+                from sklearn.svm import OneClassSVM  # type: ignore[import-untyped]
             except Exception:
                 OneClassSVM = _SimpleOneClassSVM
 

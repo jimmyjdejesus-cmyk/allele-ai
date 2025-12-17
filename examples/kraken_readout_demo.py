@@ -15,8 +15,9 @@ The task is a simple synthetic regression: y = sum(input_window) + noise.
 
 import asyncio
 import logging
-import tempfile
 import os
+import tempfile
+
 import numpy as np
 
 from phylogenic.kraken_lnn import KrakenLNN

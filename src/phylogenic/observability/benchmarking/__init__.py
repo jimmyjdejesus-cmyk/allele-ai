@@ -31,11 +31,42 @@ Author: Bravetto AI Systems
 Version: 1.0.0
 """
 
-from .comparator import BenchmarkComparator
+from typing import Any
+
+try:
+    # Optional benchmarking components; import if available at runtime
+    import importlib
+
+    _mod = importlib.import_module(__name__ + ".comparator")
+    BenchmarkComparator = _mod.BenchmarkComparator
+except Exception:  # pragma: no cover - optional
+    BenchmarkComparator = Any
+
 from .config import MatrixBenchmarkSettings
-from .integration import PytestBenchmarkIntegration
-from .matrix_runner import MatrixBenchmarkRunner
-from .profiler import PerformanceProfiler
+
+try:
+    import importlib
+
+    _mod = importlib.import_module(__name__ + ".integration")
+    PytestBenchmarkIntegration = _mod.PytestBenchmarkIntegration
+except Exception:  # pragma: no cover - optional
+    PytestBenchmarkIntegration = Any
+
+try:
+    import importlib
+
+    _mod = importlib.import_module(__name__ + ".matrix_runner")
+    MatrixBenchmarkRunner = _mod.MatrixBenchmarkRunner
+except Exception:  # pragma: no cover - optional
+    MatrixBenchmarkRunner = Any
+
+try:
+    import importlib
+
+    _mod = importlib.import_module(__name__ + ".profiler")
+    PerformanceProfiler = _mod.PerformanceProfiler
+except Exception:  # pragma: no cover - optional
+    PerformanceProfiler = Any
 from .types import BenchmarkConfig, BenchmarkResult, PerformanceProfile
 
 __all__ = [

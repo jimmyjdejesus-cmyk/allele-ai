@@ -36,7 +36,7 @@ import logging
 from collections import defaultdict, deque
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Deque, cast
+from typing import Any, Deque, Dict, List, cast
 
 import numpy as np
 
@@ -248,7 +248,6 @@ class PerformanceOptimizer:
             values = [m.value for m in metric_list]
             avg_value: float = float(np.mean(values))
             max_value: float = float(np.max(values))
-            std_value: float = float(np.std(values))
 
             # Check if metric exceeds thresholds
             threshold_key = metric_name.lower().replace(" ", "_")

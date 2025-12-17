@@ -1,6 +1,7 @@
 """Deterministic tests for evolution mutation and elitism with seeded RNG."""
 
 import copy
+
 import numpy as np
 import pytest
 

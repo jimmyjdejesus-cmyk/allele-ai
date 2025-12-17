@@ -1,4 +1,5 @@
 import builtins
+
 import numpy as np
 
 from phylogenic.kraken_lnn import KrakenLNN

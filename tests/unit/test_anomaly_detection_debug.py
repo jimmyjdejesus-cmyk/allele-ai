@@ -1,11 +1,12 @@
-import numpy as np
 from datetime import datetime, timedelta, timezone
 
-from phylogenic.observability.ml_analytics.ml_config import AnomalyDetectionConfig
-from phylogenic.observability.ml_analytics.types import MLMetric, ComponentType
+import numpy as np
+
 from phylogenic.observability.ml_analytics.anomaly_detection import (
     IsolationForestDetector,
 )
+from phylogenic.observability.ml_analytics.ml_config import AnomalyDetectionConfig
+from phylogenic.observability.ml_analytics.types import ComponentType, MLMetric
 
 
 def test_anomaly_detection_training_debug():

@@ -162,6 +162,7 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 strict_equality = true
+mypy_path = ["src"]
 
 [[tool.mypy.overrides]]
 module = "numpy.*"
@@ -173,4 +174,18 @@ ignore_missing_imports = true
 # keeps the change small; remove this override once observability is
 # fully typed.
 module = "allele.observability.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+# Ignore test files to avoid enforcing strict typing rules on tests.
+module = "tests.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+# Ignore bench and other non-source top-level test-like modules.
+module = "bench.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "tests.bench.*"
 ignore_errors = true

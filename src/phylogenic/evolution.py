@@ -190,7 +190,11 @@ class EvolutionEngine:
         self.immutable_evolution = getattr(config, "immutable_evolution", False)
         self.hpc_mode = getattr(config, "hpc_mode", True)
 
-        # Initialize random state
+        # Initialize random state. If no explicit seed is provided, derive
+        # one deterministically from the global numpy RNG so tests that set
+        # `np.random.seed(...)` remain deterministic.
+        if seed is None:
+            seed = int(np.random.randint(0, 2 ** 31 - 1))
         self.random = np.random.RandomState(seed)
 
     def initialize_population(

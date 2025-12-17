@@ -33,7 +33,6 @@ Version: 1.0.0
 
 import logging
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
 from typing import Any, Dict, List, Optional, cast
 
 import numpy as np
@@ -94,10 +93,10 @@ class TimeSeriesForecaster:
                     arima_metrics = await self._train_arima(component_type, ts_data)
                 except Exception as e:
                     logger.warning(
-                        (
+
                             f"ARIMA training failed for {component_type}: {e}. "
                             "Using fallback metrics."
-                        )
+
                     )
                     # Populate a fallback model entry so forecasting can proceed
                     self.models[component_type] = {
@@ -125,10 +124,10 @@ class TimeSeriesForecaster:
                 # Defensive: ensure arima_metrics is always a ModelMetrics instance
                 if arima_metrics is None:
                     logger.warning(
-                        (
+
                             f"ARIMA returned None for {component_type}; "
                             "using fallback metrics."
-                        )
+
                     )
                     self.models[component_type] = {
                         "type": "arima",
@@ -358,10 +357,10 @@ class TimeSeriesForecaster:
         try:
             if importlib.util.find_spec("tensorflow") is None:
                 raise ImportError(
-                    (
+
                         "TensorFlow is required for LSTM forecasting. "
                         "Install with: pip install tensorflow"
-                    )
+
                 )
 
             from sklearn.preprocessing import MinMaxScaler  # type: ignore[import-untyped]

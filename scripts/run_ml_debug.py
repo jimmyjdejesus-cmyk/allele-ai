@@ -1,21 +1,22 @@
-from datetime import datetime, timezone, timedelta
-import numpy as np
 import asyncio
+from datetime import datetime, timedelta, timezone
 
+import numpy as np
+
+from phylogenic.observability.ml_analytics.anomaly_detection import (
+    IsolationForestDetector,
+)
 from phylogenic.observability.ml_analytics.ml_config import (
     AnomalyDetectionConfig,
     PredictiveAnalyticsConfig,
 )
-from phylogenic.observability.ml_analytics.anomaly_detection import (
-    IsolationForestDetector,
-)
-from phylogenic.observability.ml_analytics.types import (
-    MLMetric,
-    ComponentType,
-    TimeSeriesData,
-)
 from phylogenic.observability.ml_analytics.predictive_analytics import (
     TimeSeriesForecaster,
+)
+from phylogenic.observability.ml_analytics.types import (
+    ComponentType,
+    MLMetric,
+    TimeSeriesData,
 )
 
 # Create sample metrics

@@ -36,13 +36,13 @@ import time
 import uuid
 from typing import Any, AsyncGenerator, Callable, Dict, List, Optional
 
-import psutil
+import psutil  # type: ignore[import-untyped]
 import structlog
 
 from ..agent import AgentConfig, NLPAgent
 from ..evolution import EvolutionConfig, EvolutionEngine
 from ..genome import ConversationalGenome
-from ..kraken_lnn import KrakenLNN
+from ..kraken_lnn import KrakenLNN, LiquidDynamics
 from .engine import get_observability_engine
 
 logger = structlog.get_logger(__name__)
@@ -390,7 +390,7 @@ class ObservableKrakenLNN(KrakenLNN):
         reservoir_size: int = 100,
         connectivity: float = 0.1,
         memory_buffer_size: int = 1000,
-        dynamics=None,
+        dynamics: Optional[LiquidDynamics] = None,
         component_id: Optional[str] = None,
     ):
         """Initialize observable Kraken LNN.
@@ -908,7 +908,7 @@ def create_observable_kraken_lnn(
     reservoir_size: int = 100,
     connectivity: float = 0.1,
     memory_buffer_size: int = 1000,
-    dynamics=None,
+    dynamics: Optional[LiquidDynamics] = None,
 ) -> ObservableKrakenLNN:
     """Create an observable Kraken LNN.
 

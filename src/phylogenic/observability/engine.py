@@ -39,10 +39,8 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from .config import ObservabilitySettings
-
 from .collector import ComponentMetricsCollector, MetricsCollector
-from .config import get_observability_settings
+from .config import ObservabilitySettings, get_observability_settings
 from .types import Alert, ComponentMetrics, ComponentType, SystemMetrics
 
 logger = logging.getLogger(__name__)
@@ -225,7 +223,7 @@ class ObservabilityEngine:
     ) -> None:
         """Collect system resource metrics."""
         try:
-            import psutil
+            import psutil  # type: ignore[import-untyped]
 
             # CPU usage
             cpu_percent = psutil.cpu_percent(interval=None)
@@ -238,7 +236,7 @@ class ObservabilityEngine:
 
             # GPU usage (if available)
             try:
-                import GPUtil
+                import GPUtil  # type: ignore[import-untyped]
 
                 gpus = GPUtil.getGPUs()
                 if gpus:

@@ -34,15 +34,14 @@ Version: 1.0.0
 import logging
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List, Optional, Set, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List, Set
 
 import numpy as np
 from numpy.typing import NDArray
+
 if TYPE_CHECKING:
     # Import cluster classes for typing only (silence missing-stub warnings at runtime)
-    from sklearn.cluster import DBSCAN  # type: ignore[import-untyped]
-    from sklearn.cluster import KMeans
-    from sklearn.cluster import AgglomerativeClustering
+    pass
 
 from .ml_config import AlertIntelligenceConfig
 from .types import AlertCluster, AlertSeverity, AnomalyResult, ComponentType
@@ -150,7 +149,7 @@ class AlertCorrelator:
             List of alert clusters
         """
         try:
-            from sklearn.cluster import DBSCAN
+            from sklearn.cluster import DBSCAN  # type: ignore[import-untyped]
 
             if len(alerts) < 2:
                 return []

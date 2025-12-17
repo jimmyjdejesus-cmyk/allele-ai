@@ -37,9 +37,9 @@ from openai import (
 
 from .llm_client import LLMClient, LLMConfig
 from .llm_exceptions import (
-    LLMError,
     LLMAuthenticationError,
     LLMContentFilterError,
+    LLMError,
     LLMGenerationError,
     LLMInitializationError,
     LLMModelNotAvailableError,
@@ -337,7 +337,7 @@ class OpenAIClient(LLMClient):
             return 0
 
         try:
-            import tiktoken  # type: ignore[import-not-found]
+            import tiktoken
 
             # Use the appropriate encoding for the model
             # For GPT-4 and newer models, use cl100k_base

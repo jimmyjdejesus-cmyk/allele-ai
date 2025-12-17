@@ -175,7 +175,7 @@ class PerformanceProfile:
     average_cpu_percent: float = 0.0
 
     # Throughput metrics
-    operations_per_second: float
+    operations_per_second: float = 0.0
     throughput_mb_per_second: float = 0.0
 
     # Quality metrics
@@ -299,7 +299,7 @@ class BenchmarkComparison:
     confidence_level: float = 0.05
 
     # Summary
-    improvement_summary: str
+    improvement_summary: str = ""
     recommendations: List[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
@@ -340,7 +340,7 @@ class BenchmarkComparison:
 
         # Statistical test (simplified)
         try:
-            from scipy import stats
+            from scipy import stats  # type: ignore[import-untyped]
 
             t_stat, p_val = stats.ttest_ind(
                 self.baseline_result.execution_times,
@@ -412,10 +412,10 @@ class BenchmarkComparison:
 
         if not self.is_significant and abs(self.time_improvement) > 5:
             recommendations.append(
-                (
+
                     "Performance change detected but not statistically"
                     " significant - increase sample size"
-                )
+
             )
 
         self.recommendations = recommendations

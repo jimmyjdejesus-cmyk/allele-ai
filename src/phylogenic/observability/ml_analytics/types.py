@@ -35,9 +35,9 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-from numpy.typing import NDArray
 
 import numpy as np
+from numpy.typing import NDArray
 
 from ..types import AlertSeverity, ComponentType
 
@@ -177,7 +177,7 @@ class AnomalyResult:
             "anomaly_type": self.anomaly_type.value,
             "anomaly_score": self.anomaly_score,
             "confidence": self.confidence,
-            "severity": self.severity.value,
+            "severity": self.severity.value if self.severity is not None else AlertSeverity.INFO.value,
             "actual_value": self.actual_value,
             "expected_value": self.expected_value,
             "deviation": self.deviation,
