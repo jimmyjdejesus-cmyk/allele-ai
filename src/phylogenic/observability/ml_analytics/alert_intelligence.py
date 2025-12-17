@@ -34,9 +34,15 @@ Version: 1.0.0
 import logging
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional, Set, TYPE_CHECKING
 
 import numpy as np
+from numpy.typing import NDArray
+if TYPE_CHECKING:
+    # Import cluster classes for typing only (silence missing-stub warnings at runtime)
+    from sklearn.cluster import DBSCAN  # type: ignore[import-untyped]
+    from sklearn.cluster import KMeans
+    from sklearn.cluster import AgglomerativeClustering
 
 from .ml_config import AlertIntelligenceConfig
 from .types import AlertCluster, AlertSeverity, AnomalyResult, ComponentType
@@ -54,9 +60,9 @@ class AlertCorrelator:
             config: Alert intelligence configuration
         """
         self.config = config
-        self.alert_clusters = {}  # cluster_id -> AlertCluster
-        self.alert_history = []  # Recent alerts for correlation
-        self.correlation_cache = {}
+        self.alert_clusters: Dict[str, AlertCluster] = {}  # cluster_id -> AlertCluster
+        self.alert_history: List[Dict[str, Any]] = []  # Recent alerts for correlation
+        self.correlation_cache: Dict[str, float] = {}
         self.similarity_threshold = config.similarity_threshold
 
         # Stable component type encoding to ensure reproducible ML features
@@ -336,7 +342,7 @@ class AlertCorrelator:
 
         return clusters
 
-    def _extract_alert_features(self, alerts: List[Dict[str, Any]]) -> np.ndarray:
+    def _extract_alert_features(self, alerts: List[Dict[str, Any]]) -> NDArray[Any]:
         """Extract numerical features from alerts for clustering.
 
         Args:
@@ -510,7 +516,7 @@ class AlertCorrelator:
             return {}
 
         common = {}
-        all_keys = set()
+        all_keys: Set[str] = set()
 
         # Collect all keys
         for alert in alerts:
@@ -646,7 +652,9 @@ class AlertCorrelator:
                 timestamps.append(ts)
             except Exception as e:
                 # Skip invalid timestamps but keep a debug log for diagnostics
-                logger.debug(f"Failed to parse alert timestamp: {e}", alert=alert)
+                logger.debug(
+                    f"Failed to parse alert timestamp: {e} for alert_id={alert.get('alert_id')}"
+                )
 
         if len(timestamps) > 1:
             timestamps.sort()
@@ -750,9 +758,9 @@ class IntelligentAlertManager:
         """
         self.config = config
         self.correlator = AlertCorrelator(config)
-        self.deduplication_cache = {}
-        self.alert_priorities = {}
-        self.escalation_timers = {}
+        self.deduplication_cache: Dict[str, Dict[str, Any]] = {}
+        self.alert_priorities: Dict[str, float] = {}
+        self.escalation_timers: Dict[str, datetime] = {}
 
     async def process_alerts(
         self, anomalies: List[AnomalyResult]
@@ -1098,7 +1106,7 @@ class IntelligentAlertManager:
             base_priority + anomaly_boost + confidence_boost + component_boost
         )
 
-        return min(total_priority, 1.0)
+        return float(min(total_priority, 1.0))
 
     def _get_cluster_info(
         self, alert: Dict[str, Any], clusters: List[AlertCluster]
@@ -1140,7 +1148,9 @@ class IntelligentAlertManager:
                 escalation_time = current_time + timedelta(
                     minutes=self.config.escalation_time_minutes
                 )
-                self.escalation_timers[alert.get("alert_id")] = escalation_time
+                alert_id = alert.get("alert_id")
+                if alert_id:
+                    self.escalation_timers[alert_id] = escalation_time
 
     async def check_escalations(self) -> List[Dict[str, Any]]:
         """Check for alerts that need escalation.
