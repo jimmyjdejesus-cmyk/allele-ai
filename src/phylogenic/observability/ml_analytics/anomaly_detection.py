@@ -35,7 +35,7 @@ import logging
 import pickle
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, List, Optional, cast
 
 import numpy as np
 from numpy.typing import NDArray
@@ -121,14 +121,15 @@ class _SimpleOneClassSVM:
             raise ValueError("Model not trained")
         dists = np.linalg.norm(X - self._center, axis=1)
         # Higher values indicate more inlier-ness; invert for anomaly scoring
-        return -(dists / (np.mean(dists) + np.std(dists) + 1e-6))
+        # Mypy can't reliably type numpy ops here; ignore no-any-return
+        return cast(NDArray[Any], -(dists / (np.mean(dists) + np.std(dists) + 1e-6)))  # type: ignore[no-any-return]
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         # Predict returns 1 for inliers and -1 for outliers
         df = self.decision_function(X)
         # Use median as a threshold for a simple deterministic cutoff
         thresh = np.median(df)
-        return np.where(df >= thresh, 1, -1)
+        return cast(NDArray[Any], np.where(df >= thresh, 1, -1))  # type: ignore[no-any-return]
 
 
 class AnomalyDetector:
@@ -149,7 +150,7 @@ class AnomalyDetector:
         # Reference timestamp used to convert absolute timestamps into
         # relative values during feature preparation. Set during training
         # to make timestamp features robust to large epoch magnitudes.
-        self._timestamp_ref = None
+        self._timestamp_ref: Optional[float] = None
 
     async def train(self, training_data: List[MLMetric]) -> ModelMetrics:
         """Train the anomaly detection model.
@@ -292,22 +293,27 @@ class AnomalyDetector:
         # If using the simple fallback IsolationForest implementation,
         # compute a robust normalized anomaly score where higher values
         # indicate more anomalous samples (bounded between 0 and 1).
-        if isinstance(self.model, _SimpleIsolationForest):
+        model = self.model
+        if isinstance(model, _SimpleIsolationForest):
             # Prioritize the metric value (first feature) when computing
             # anomaly scores for the simple fallback to make detectors
             # sensitive to changes in metric value despite large
             # timestamp or hashed feature scales.
             try:
-                val_center = self.model._center[0]
+                if model._center is None:
+                    raise AttributeError("Center not set")
+                val_center = model._center[0]
                 dists_val = np.abs(features[:, 0] - val_center)
-                mad_val = np.median(np.abs(dists_val - np.median(dists_val)))
+                mad_val = float(np.median(np.abs(dists_val - np.median(dists_val))))
                 if mad_val == 0:
-                    mad_val = np.mean(dists_val) if np.mean(dists_val) > 0 else 1.0
+                    mad_val = float(np.mean(dists_val)) if float(np.mean(dists_val)) > 0 else 1.0
 
                 normalized = dists_val / mad_val
             except Exception:
                 # Fallback to full-feature distance if something unexpected
-                dists = np.linalg.norm(features - self.model._center, axis=1)
+                if model._center is None:
+                    raise
+                dists = np.linalg.norm(features - model._center, axis=1)
                 mad = float(np.median(np.abs(dists - np.median(dists))))
                 if mad == 0:
                     mad = float(np.mean(dists)) if float(np.mean(dists)) > 0 else 1.0
@@ -315,15 +321,18 @@ class AnomalyDetector:
 
             # Map to (0,1) with saturation: large normalized -> score ~1.0
             anomaly_scores = normalized / (1.0 + normalized)
-            return anomaly_scores
+            return cast(NDArray[Any], anomaly_scores)
 
-        if hasattr(self.model, "decision_function"):
+        if model is None:
+            raise ValueError("Model not set")
+
+        if hasattr(model, "decision_function"):
             # For One-Class SVM, decision_function gives larger values for inliers
-            scores = self.model.decision_function(features)
+            scores = model.decision_function(features)
             raw = -scores  # Negative -> positive anomalies
-        elif hasattr(self.model, "score_samples"):
+        elif hasattr(model, "score_samples"):
             # For Isolation Forest (sklearn), lower score_samples indicate anomalies
-            scores = self.model.score_samples(features)
+            scores = model.score_samples(features)
             raw = -scores
         else:
             raise ValueError("Model does not support anomaly scoring")
@@ -335,7 +344,7 @@ class AnomalyDetector:
                 min_ts = float(np.min(training_scores))
                 max_ts = float(np.max(training_scores))
                 normed = (raw - min_ts) / (max_ts - min_ts)
-                return normed
+                return cast(NDArray[Any], normed)
         except Exception:
             pass
 
@@ -435,7 +444,7 @@ class IsolationForestDetector(AnomalyDetector):
 
             # Calculate training metrics
             anomaly_scores = self._calculate_anomaly_scores(scaled_features)
-            anomaly_count = np.sum(anomaly_scores > 0)
+            anomaly_count: int = int(np.sum(anomaly_scores > 0))
 
             # Determine dynamic detection threshold based on contamination
             try:
@@ -453,7 +462,7 @@ class IsolationForestDetector(AnomalyDetector):
             # settings while still guarding against noisy small-variance
             # training sets.
             component_key = (
-                training_data[0].component_type.value if training_data else None
+                training_data[0].component_type.value if training_data else "unknown"
             )
             component_thr = self.config.component_thresholds.get(
                 component_key, self.config.anomaly_threshold
@@ -516,7 +525,7 @@ class IsolationForestDetector(AnomalyDetector):
             scaled_features = self._scale_features(features)
 
             # Get anomaly score
-            anomaly_score = self._calculate_anomaly_score(scaled_features)[0]
+            anomaly_score = float(self._calculate_anomaly_score(scaled_features)[0])
 
             # Check if anomaly
             component_threshold = self.config.component_thresholds.get(
@@ -626,7 +635,8 @@ class IsolationForestDetector(AnomalyDetector):
         Returns:
             Anomaly scores
         """
-        return self._calculate_anomaly_score(features)
+        # Mypy may treat numpy operations as Any; ignore the specific no-any-return
+        return cast(NDArray[Any], self._calculate_anomaly_score(features))  # type: ignore[no-any-return]
 
     def _calculate_expected_value(self, metric: MLMetric) -> float:
         """Calculate expected value for metric based on recent data.
@@ -769,7 +779,7 @@ class OneClassSVMDetector(AnomalyDetector):
 
             # Calculate training metrics
             predictions = self.model.predict(scaled_features)
-            anomaly_count = np.sum(predictions == -1)
+            anomaly_count: int = int(np.sum(predictions == -1))
 
             training_metrics = ModelMetrics(
                 model_name=self.model_name,
@@ -817,8 +827,11 @@ class OneClassSVMDetector(AnomalyDetector):
             scaled_features = self._scale_features(features)
 
             # Get prediction and score
-            prediction = self.model.predict(scaled_features)[0]
-            anomaly_score = self._calculate_anomaly_score(scaled_features)[0]
+            model = self.model
+            if model is None:
+                return None
+            prediction = model.predict(scaled_features)[0]
+            anomaly_score = float(self._calculate_anomaly_score(scaled_features)[0])
 
             # Check if anomaly (SVM returns -1 for anomalies)
             if prediction == -1:
@@ -941,14 +954,16 @@ class EnsembleAnomalyDetector(AnomalyDetector):
                 metrics = await detector.train(training_data)
                 training_metrics.append(metrics)
             except Exception as e:
-                logger.warning(f"Failed to train detector {detector.model_name}: {e}")
+                logger.warning(
+                    f"Failed to train detector {getattr(detector, 'model_name', '<unknown>')}: {e}"
+                )
 
         # Return metrics from first successful detector
         if training_metrics:
-            metrics = training_metrics[0].__dict__.copy()
-            metrics["model_name"] = self.model_name
-            metrics["model_version"] = self.model_version
-            return ModelMetrics(**metrics)
+            metrics_dict = training_metrics[0].__dict__.copy()
+            metrics_dict["model_name"] = self.model_name
+            metrics_dict["model_version"] = self.model_version
+            return ModelMetrics(**metrics_dict)
         else:
             raise ValueError("No detectors could be trained successfully")
 
@@ -972,18 +987,18 @@ class EnsembleAnomalyDetector(AnomalyDetector):
                     anomaly_results.append(result)
                     anomaly_scores.append(result.anomaly_score)
             except Exception as e:
-                logger.warning(f"Detector {detector.model_name} failed: {e}")
+                logger.warning(f"Detector {getattr(detector, 'model_name', '<unknown>')} failed: {e}")
 
         # If multiple detectors agree, it's more likely a real anomaly
         if len(anomaly_scores) >= 2:
-            avg_score = np.mean(anomaly_scores)
+            avg_score = float(np.mean(anomaly_scores))
             confidence = len(anomaly_scores) / len(self.detectors)
 
             # Use the result with highest confidence
             best_result = max(anomaly_results, key=lambda r: r.confidence)
 
             # Update with ensemble statistics
-            best_result.anomaly_score = avg_score
+            best_result.anomaly_score = float(avg_score)
             best_result.confidence = confidence
             best_result.model_name = self.model_name
 

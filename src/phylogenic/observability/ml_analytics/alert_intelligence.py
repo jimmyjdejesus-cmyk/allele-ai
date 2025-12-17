@@ -818,7 +818,7 @@ class IntelligentAlertManager:
             "component_type": anomaly.component_type.value,
             "component_id": anomaly.component_id,
             "metric_name": anomaly.metric_name,
-            "severity": anomaly.severity.value,
+            "severity": anomaly.severity.value if anomaly.severity is not None else AlertSeverity.INFO.value,
             "anomaly_type": anomaly.anomaly_type.value,
             "anomaly_score": anomaly.anomaly_score,
             "confidence": anomaly.confidence,

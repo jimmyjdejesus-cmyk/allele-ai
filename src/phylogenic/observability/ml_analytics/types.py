@@ -132,7 +132,7 @@ class AnomalyResult:
     anomaly_type: AnomalyType
     anomaly_score: float
     confidence: float
-    severity: AlertSeverity
+    severity: Optional[AlertSeverity]
 
     # Anomaly details
     actual_value: float
@@ -151,7 +151,8 @@ class AnomalyResult:
     def __post_init__(self) -> None:
         """Calculate derived fields."""
         self.deviation = self.actual_value - self.expected_value
-        self.severity = self._calculate_severity()
+        if self.severity is None:
+            self.severity = self._calculate_severity()
 
     def _calculate_severity(self) -> AlertSeverity:
         """Calculate alert severity based on anomaly score and confidence."""
