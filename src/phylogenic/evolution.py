@@ -117,9 +117,9 @@ class GeneticOperators:
         rng: Any
         if seed is not None:
             rng = np.random.RandomState(seed)
-            tournament = rng.choice(population, actual_size, replace=replace)  # type: ignore[arg-type]
+            tournament = rng.choice(population, actual_size, replace=replace)
         else:
-            tournament = np.random.choice(population, actual_size, replace=replace)  # type: ignore[arg-type]
+            tournament = np.random.choice(population, actual_size, replace=replace)
         tournament_genomes: List[ConversationalGenome] = list(tournament)
         return max(tournament_genomes, key=lambda g: g.fitness_score)
 
@@ -317,7 +317,7 @@ class EvolutionEngine:
                         g for g in population if g.genome_id in initial_ids
                     ]
                     if original_candidates:
-                        replacement = self.random.choice(original_candidates)  # type: ignore[arg-type]
+                        replacement = self.random.choice(original_candidates)
                         next_gen[int(self.random.randint(0, sample_size))] = replacement
                     elif initial_clones:
                         clone_dict = initial_clones[
@@ -344,7 +344,7 @@ class EvolutionEngine:
                     if g.genome_id in initial_ids and i >= elitism_count
                 ]
                 if initial_early_indices:
-                    idx = int(self.random.choice(initial_early_indices))  # type: ignore[arg-type]
+                    idx = int(self.random.choice(initial_early_indices))
                     mut_seed = self.random.randint(0, 2**31 - 1)
                     GeneticOperators.mutate(
                         population[idx], self.config.mutation_rate, seed=mut_seed
@@ -391,7 +391,7 @@ class EvolutionEngine:
             if self.config.mutation_rate > 0 and len(population) > 0:
                 non_elite_indices = list(range(elitism_count, len(population)))
                 if non_elite_indices:
-                    extra_idx = int(self.random.choice(non_elite_indices))  # type: ignore[arg-type]
+                    extra_idx = int(self.random.choice(non_elite_indices))
                     extra_seed = self.random.randint(0, 2**31 - 1)
                     GeneticOperators.mutate(
                         population[extra_idx],
@@ -411,9 +411,9 @@ class EvolutionEngine:
                     if g not in population[:elitism_count]
                 ]
                 candidate = (
-                    self.random.choice(non_elite_candidates)  # type: ignore[arg-type]
+                    self.random.choice(non_elite_candidates)
                     if non_elite_candidates
-                    else self.random.choice(original_candidates)  # type: ignore[arg-type]
+                    else self.random.choice(original_candidates)
                 )
                 mut_seed = self.random.randint(0, 2**31 - 1)
                 GeneticOperators.mutate(

@@ -337,7 +337,7 @@ class OpenAIClient(LLMClient):
             return 0
 
         try:
-            import tiktoken  # type: ignore[import]
+            import tiktoken  # type: ignore[import-not-found]
 
             # Use the appropriate encoding for the model
             # For GPT-4 and newer models, use cl100k_base
