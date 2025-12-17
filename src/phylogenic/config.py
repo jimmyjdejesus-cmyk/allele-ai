@@ -22,6 +22,7 @@
 # from: https://gumroad.com/l/[YOUR_LINK]
 # =============================================================================
 
+import importlib
 from typing import Any, Dict
 
 # Alias used to import a BaseSettings implementation (pydantic v2/v1)
@@ -113,15 +114,14 @@ class LiquidDynamicsSettings(BaseModel):
 # available pydantic BaseSettings implementation when present, otherwise
 # fall back to BaseModel. Defining it once avoids duplicate-definition
 # errors from mypy while preserving runtime behavior.
-import importlib
 
 _PydanticRuntimeBase: type
 if importlib.util.find_spec("pydantic_settings") is not None:
     _mod = importlib.import_module("pydantic_settings")
-    _PydanticRuntimeBase = getattr(_mod, "BaseSettings")
+    _PydanticRuntimeBase = _mod.BaseSettings
 elif importlib.util.find_spec("pydantic") is not None:
     _mod = importlib.import_module("pydantic")
-    _PydanticRuntimeBase = getattr(_mod, "BaseSettings")
+    _PydanticRuntimeBase = _mod.BaseSettings
 else:
     _PydanticRuntimeBase = BaseModel
 
