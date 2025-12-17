@@ -37,7 +37,7 @@ jobs:
       - name: Run unit tests
         run: |
           mkdir -p reports
-          pytest -q tests/unit --junitxml=reports/unit.xml
+          PYTHONPATH=$PWD pytest -q tests/unit --junitxml=reports/unit.xml
       - name: Upload unit test reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -64,7 +64,7 @@ jobs:
           python -m pip install aiohttp
           python -m pip install -e .
       - name: Run readout smoke tests
-        run: pytest -q tests/unit/test_kraken_readout_fallback.py tests/integration/test_readout_pipeline.py -q --maxfail=1
+        run: PYTHONPATH=$PWD pytest -q tests/unit/test_kraken_readout_fallback.py tests/integration/test_readout_pipeline.py -q --maxfail=1
 
   integration:
     runs-on: ubuntu-latest
