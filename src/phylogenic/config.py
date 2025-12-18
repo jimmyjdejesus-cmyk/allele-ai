@@ -23,7 +23,6 @@
 # =============================================================================
 
 import importlib
-import importlib.util
 from typing import Any, Dict
 
 # Alias used to import a BaseSettings implementation (pydantic v2/v1)

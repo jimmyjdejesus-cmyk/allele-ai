@@ -11,7 +11,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: false # TEMP DEBUG: gather logs from all matrix entries
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
 
@@ -32,36 +32,48 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install UV package manager
-      run: |
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-
-    - name: Cache UV dependencies
+    - name: Cache pip
       uses: actions/cache@v4
       with:
-        path: |
-          ~/.cache/uv
-          .venv
-        key: ${{ runner.os }}-uv-${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
         restore-keys: |
-          ${{ runner.os }}-uv-${{ matrix.python-version }}-
-          ${{ runner.os }}-uv-
+          ${{ runner.os }}-pip-${{ matrix.python-version }}-
+          ${{ runner.os }}-pip-
 
-    - name: Install dependencies with UV
+    - name: Enable action debug output (TEMP DEBUG)
+      env:
+        ACTIONS_STEP_DEBUG: true
+        ACTIONS_RUNNER_DEBUG: true
+      run: echo "Enabled ACTIONS_STEP_DEBUG and ACTIONS_RUNNER_DEBUG"
+
+    - name: Install dependencies (verbose, capture logs) # TEMP DEBUG
       run: |
-        uv pip install --python ${{ matrix.python-version }} --system -e .[dev,docs,all]
+        python -m pip install --upgrade pip
+        pip install -v -e .[dev,docs,all] 2>&1 | tee pip-install-${{ matrix.python-version }}.log
         # Install available typing stubs for third-party packages (best-effort)
-        uv pip install --python ${{ matrix.python-version }} types-tensorflow types-tiktoken types-scipy types-scikit-learn types-psutil types-pandas || true
+        # Use || true to avoid failing the job if a stub package is unavailable
+        python -m pip install types-tensorflow || true
+        python -m pip install types-tiktoken || true
+        python -m pip install types-scipy || true
+        python -m pip install types-scikit-learn || true
+        python -m pip install types-psutil || true
+        python -m pip install types-pandas || true
+
+    - name: Upload pip install logs (TEMP DEBUG)
+      uses: actions/upload-artifact@v4
+      with:
+        name: pip-install-log-${{ matrix.python-version }}
+        path: pip-install-${{ matrix.python-version }}.log
 
     - name: Lint with ruff
-      run: uv run --python ${{ matrix.python-version }} ruff check src/ tests/
+      run: ruff check src/ tests/
 
     - name: Type check with mypy
-      run: uv run --python ${{ matrix.python-version }} mypy src/
+      run: mypy src/
 
     - name: Run tests
-      run: uv run --python ${{ matrix.python-version }} pytest --cov=allele --cov-report=xml
+      run: pytest --cov=allele --cov-report=xml
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
