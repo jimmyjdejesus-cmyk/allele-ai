@@ -1,14 +1,14 @@
-# ALLELE
-## Advanced AI Agents with ML Analytics
+# Phylogenic-AI-Agents
+## Beyond Prompt Engineering: Genetically Optimized AI Personalities with Liquid Memory
 
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg)](#testing)
 [![ML Analytics](https://img.shields.io/badge/ML%20Analytics-Enabled-orange.svg)](docs/ml_analytics.md)
 
-**[Documentation](docs/) | [API Reference](docs/api.md) | [GitHub](https://github.com/jimmyjdejesus-cmyk/allele-ai)**
+**[Documentation](https://jimmyjdejesus-cmyk.github.io/Phylogenic-AI-Agents/) | [API Reference](docs/api.md) | [GitHub](https://github.com/jimmyjdejesus-cmyk/Phylogenic-AI-Agents)**
 
-**Advanced AI Agents with Genetic Evolution, Liquid Neural Networks, and Machine Learning Analytics for Production Monitoring.**
+**Phylogenic AI Agents with Genetic Evolution, Liquid Neural Networks, and Machine Learning Analytics for Production Monitoring.**
 
 ---
 
@@ -16,7 +16,7 @@
 
 Traditional AI agents lack intelligence about their own performance and cannot optimize themselves.
 
-**Allele provides the complete solution.**
+**Phylogenic-AI-Agents provides the complete solution.**
 
 We combine **genetic evolution**, **liquid neural networks**, and **machine learning analytics** for truly intelligent, self-monitoring agents.
 
@@ -34,7 +34,7 @@ We combine **genetic evolution**, **liquid neural networks**, and **machine lear
 
 ## The Solution
 
-**Allele agents monitor, analyze, and optimize themselves.**
+**Phylogenic-AI-Agents monitor, analyze, and optimize themselves.**
 
 ```python
 from src.allele.observability.ml_analytics import (
