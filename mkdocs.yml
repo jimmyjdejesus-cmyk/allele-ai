@@ -1,10 +1,10 @@
 site_name: Phylogenic Documentation
 site_description: Genome-Based Conversational AI Agents with Evolutionary Optimization
 site_author: Jimmy De Jesus, Phylogenic AI Labs
-site_url: https://jimmyjdejesus-cmyk.github.io/phylogenic-ai/
+site_url: https://jimmyjdejesus-cmyk.github.io/Phylogenic-AI-Agents/
 
-repo_name: jimmyjdejesus-cmyk/phylogenic
-repo_url: https://github.com/jimmyjdejesus-cmyk/phylogenic
+repo_name: jimmyjdejesus-cmyk/Phylogenic-AI-Agents
+repo_url: https://github.com/jimmyjdejesus-cmyk/Phylogenic-AI-Agents
 edit_uri: edit/main/docs/
 
 nav:
@@ -62,8 +62,8 @@ markdown_extensions:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/allele-ai/allele
+      link: https://github.com/jimmyjdejesus-cmyk/Phylogenic-AI-Agents
     - icon: fontawesome/brands/python
-      link: https://pypi.org/project/allele/
+      link: https://pypi.org/project/phylogenic/
 
-copyright: Copyright &copy; 2025 Allele - MIT License
+copyright: Copyright &copy; 2025 Phylogenic AI Agents - MIT License
