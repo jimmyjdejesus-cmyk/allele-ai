@@ -1,6 +1,9 @@
 """
 MMLU (Massive Multitask Language Understanding) Benchmark Implementation.
 
+DEPRECATED: This custom implementation is deprecated in favor of the official lm-eval harness.
+Please use `scripts/run_lm_eval_mass.py` for standard benchmarking.
+
 This module implements the MMLU benchmark for evaluating knowledge-based reasoning
 across 57 academic subjects including STEM, humanities, and social sciences.
 """

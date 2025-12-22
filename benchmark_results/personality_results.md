@@ -1,18 +1,18 @@
 
 ## Personality A/B Benchmark Results
 
-**Model**: `tinyllama:latest`  
-**Date**: 2025-12-19
+**Model**: `qwen2.5:0.5b`  
+**Date**: 2025-12-22
 
 ### Performance by Personality Archetype
 
 | Personality | MMLU | GSM8K | Reasoning | Average | vs Baseline |
 |-------------|------|-------|-----------|---------|-------------|
-| **baseline** | 26.7% | 40.0% | 0.0% | 22.2% | +0.0% [=] |
-| **technical_expert** | 13.3% | 20.0% | 20.0% | 17.8% | -4.4% [-] |
-| **creative_thinker** | 26.7% | 40.0% | 40.0% | 35.6% | +13.3% [+] |
-| **concise_analyst** | 13.3% | 40.0% | 0.0% | 17.8% | -4.4% [-] |
-| **balanced** | 20.0% | 40.0% | 0.0% | 20.0% | -2.2% [-] |
-| **high_context** | 20.0% | 40.0% | 0.0% | 20.0% | -2.2% [-] |
+| **baseline** | 80.0% | 90.0% | 80.0% | 83.3% | +0.0% [=] |
+| **technical_expert** | 85.0% | 90.0% | 90.0% | 88.3% | +5.0% [+] |
+| **creative_thinker** | 85.0% | 90.0% | 90.0% | 88.3% | +5.0% [+] |
+| **concise_analyst** | 80.0% | 90.0% | 100.0% | 90.0% | +6.7% [+] |
+| **balanced** | 85.0% | 90.0% | 80.0% | 85.0% | +1.7% [=] |
+| **high_context** | 90.0% | 90.0% | 80.0% | 86.7% | +3.3% [+] |
 
-> **Best performing personality**: `creative_thinker` with 35.6% average
+> **Best performing personality**: `concise_analyst` with 90.0% average

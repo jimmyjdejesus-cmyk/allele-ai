@@ -388,12 +388,13 @@ async def run_personality_benchmark(model_name: str, max_samples: int = 30):
     readme_path = Path("README.md")
     if readme_path.exists():
         content = readme_path.read_text(encoding='utf-8')
-        marker_start = "<!-- BENCHMARK_RESULTS_START -->"
-        marker_end = "<!-- BENCHMARK_RESULTS_END -->"
+        marker_start = "<!-- PERSONALITY_RESULTS_START -->"
+        marker_end = "<!-- PERSONALITY_RESULTS_END -->"
         
         if marker_start in content:
             import re
             pattern = f"{marker_start}.*?{marker_end}"
+            md += f"\nRun benchmarks: `python scripts/run_personality_benchmark.py --model {model_name} --samples {max_samples}`"
             replacement = f"{marker_start}\n{md}\n{marker_end}"
             content = re.sub(pattern, replacement, content, flags=re.DOTALL)
             readme_path.write_text(content, encoding='utf-8')

@@ -300,27 +300,43 @@ pytest --cov=src/allele --cov-report=html
 
 ---
 
-<!-- BENCHMARK_RESULTS_START -->
+<!-- LM_EVAL_RESULTS_START -->
+## LM-Eval Benchmark Results
 
+**Evaluation Harness**: lm-eval v0.4+  
+**Hardware**: M1 Mac Mini  
+**Run Mode**: Local Ollama Inference
+
+### Performance Comparison
+
+| Model | MMLU | HellaSwag | GSM8K | ARC-E | TruthfulQA | Average |
+|-------|------|-----------|-------|-------|------------|---------|
+| gemma3:1b | TBD | TBD | TBD | TBD | TBD | TBD |
+| qwen2.5:0.5b | TBD | TBD | TBD | TBD | TBD | TBD |
+
+Run benchmarks: `python scripts/run_lm_eval_mass.py --mode quick`
+
+[Full Results →](benchmark_results/lm_eval/COMPARISON.md)
+<!-- LM_EVAL_RESULTS_END -->
+
+<!-- PERSONALITY_RESULTS_START -->
 ## Personality A/B Benchmark Results
 
-**Model**: `tinyllama:latest`  
-**Date**: 2025-12-19
-
-### Performance by Personality Archetype
+**Model**: `qwen2.5:0.5b` | **Date**: 2025-12-22
 
 | Personality | MMLU | GSM8K | Reasoning | Average | vs Baseline |
 |-------------|------|-------|-----------|---------|-------------|
-| **baseline** | 26.7% | 40.0% | 0.0% | 22.2% | +0.0% [=] |
-| **technical_expert** | 13.3% | 20.0% | 20.0% | 17.8% | -4.4% [-] |
-| **creative_thinker** | 26.7% | 40.0% | 40.0% | 35.6% | +13.3% [+] |
-| **concise_analyst** | 13.3% | 40.0% | 0.0% | 17.8% | -4.4% [-] |
-| **balanced** | 20.0% | 40.0% | 0.0% | 20.0% | -2.2% [-] |
-| **high_context** | 20.0% | 40.0% | 0.0% | 20.0% | -2.2% [-] |
+| **baseline** | 80.0% | 90.0% | 80.0% | 83.3% | - |
+| **technical_expert** | 85.0% | 90.0% | 90.0% | 88.3% | +5.0% [+] |
+| **creative_thinker** | 85.0% | 90.0% | 90.0% | 88.3% | +5.0% [+] |
+| **concise_analyst** | 80.0% | 90.0% | 100.0% | 90.0% | +6.7% [+] |
+| **balanced** | 85.0% | 90.0% | 80.0% | 85.0% | +1.7% [=] |
+| **high_context** | 90.0% | 90.0% | 80.0% | 86.7% | +3.3% [+] |
 
-> **Best performing personality**: `creative_thinker` with 35.6% average
+> **Best Performer**: `concise_analyst` (90.0% average, +6.7% gain)
 
-<!-- BENCHMARK_RESULTS_END -->
+Run benchmarks: `python scripts/run_personality_benchmark.py --model qwen2.5:0.5b --samples 30`
+<!-- PERSONALITY_RESULTS_END -->
 
 ---
 
