@@ -88,10 +88,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Remove generated benchmark results (avoid spurious codespell)
+      run: rm -rf benchmark_results || true
+
     - name: Codespell
       uses: codespell-project/actions-codespell@v2
       with:
         check_filenames: true
         check_hidden: true
-        # Avoid scanning generated benchmark outputs and common binary files
-        args: --skip="benchmark_results/**,*.pyc,*.json,*.lock"
+        # Avoid scanning common binary files
+        args: --skip="*.pyc,*.json,*.lock"
