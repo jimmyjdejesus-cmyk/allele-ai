@@ -1,4 +1,4 @@
-from src.benchmark.utils import check_answer
+from phylogenic.benchmark.utils import check_answer
 
 
 def test_check_answer_multiple_choice():

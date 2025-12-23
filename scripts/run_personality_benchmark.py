@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.phylogenic.llm_client import LLMConfig
 from src.phylogenic.llm_ollama import OllamaClient
 from src.phylogenic.genome import ConversationalGenome
-from src.benchmark.utils import check_answer
+from phylogenic.benchmark.utils import check_answer
 
 
 # Define personality archetypes to test

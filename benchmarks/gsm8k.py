@@ -18,7 +18,7 @@ import aiohttp
 
 from .base import Benchmark, BenchmarkResult
 from .registry import register_benchmark
-from src.benchmark.utils import check_answer
+from phylogenic.benchmark.utils import check_answer
 
 
 @register_benchmark("gsm8k")
