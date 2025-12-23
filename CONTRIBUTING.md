@@ -59,3 +59,6 @@ OpenSpec requires Node.js >= 20.19.0.
 
 ## Reporting Issues
 Use the issue templates provided in the repository to report bugs, request features, or ask questions.
+
+## Agent development
+If you're proposing or changing an AI agent, follow the repository's agent lifecycle and templates documented in `AGENTS_GUIDELINES.md` and use the `.github/ISSUE_TEMPLATES/agent_proposal.md` template to begin. Agent-specific work requires a completed spec (`AGENTS/TEMPLATES/agent_spec_template.md`), safety review, and CI `agent-safety-check` sign-off before merging.
