@@ -1,8 +1,13 @@
 """Pytest configuration and fixtures for Allele testing."""
 
-import asyncio
+import sys
 import os
+import asyncio
 from typing import List
+
+# Ensure the repository root is on sys.path so tests can import helpers using
+# absolute imports like `from tests.test_utils import ...` during CI runs.
+sys.path.insert(0, os.getcwd())
 
 import aiohttp
 import pytest
