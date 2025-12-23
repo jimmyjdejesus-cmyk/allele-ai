@@ -96,5 +96,5 @@ jobs:
       with:
         check_filenames: true
         check_hidden: true
-        # Avoid scanning common binary files
-        args: --skip="*.pyc,*.json,*.lock"
+        # Avoid scanning generated benchmark outputs and common binary files
+        args: --skip="benchmark_results/**,*.pyc,*.json,*.jsonl,*.lock"
