@@ -48,7 +48,7 @@ jobs:
       run: |
         echo "🧪 Running unit tests..."
         pytest tests/ \
-          --cov=src/allele \
+          --cov=src/phylogenic \
           --cov-report=xml \
           --cov-report=term-missing \
           --cov-fail-under=85 \
@@ -150,15 +150,15 @@ jobs:
         import os
         os.environ['ALLELE_TEST_MODE'] = 'true'
 
-        from allele.agent import AlleleAgent
-        from allele.genome import ConversationalGenome
-        from allele.llm_exceptions import LLMServiceUnavailable
+        from phylogenic.agent import NLPAgent, AgentConfig
+        from phylogenic.genome import ConversationalGenome
+        from phylogenic.llm_exceptions import LLMServiceUnavailable
 
         print('Testing agent initialization...')
 
         # Test with mock genome
         genome = ConversationalGenome('test_genome')
-        agent = AlleleAgent(genome)
+        agent = NLPAgent(genome, AgentConfig())
 
         print('✅ Agent initialized successfully')
 
@@ -180,7 +180,7 @@ jobs:
 
         python -c "
         import json
-        from allele.genome import ConversationalGenome, TraitDict
+        from phylogenic.genome import ConversationalGenome, TraitDict
 
         print('Testing genome creation and manipulation...')
 
@@ -226,8 +226,8 @@ jobs:
 
         python -c "
         import asyncio
-        from allele.evolution import EvolutionEngine
-        from allele.genome import ConversationalGenome
+        from phylogenic.evolution import EvolutionEngine
+        from phylogenic.genome import ConversationalGenome
 
         print('Testing evolution engine...')
 
@@ -443,7 +443,7 @@ jobs:
           import os
           os.environ['OPENAI_API_KEY'] = '${{ secrets.OPENAI_API_KEY }}'
 
-          from allele.llm_openai import OpenAIClient
+          from phylogenic.llm_openai import OpenAIClient
 
           print('Testing OpenAI client initialization...')
           try:
@@ -460,8 +460,8 @@ jobs:
         else
           echo "⚠️ LLM API keys not available, skipping integration tests"
           python -c "
-          from allele.llm_client import LLMClient
-          from allele.llm_mock import MockLLMClient
+          from phylogenic.llm_client import LLMClient
+          from phylogenic.llm_client import MockLLMClient
 
           print('Testing mock LLM client...')
           mock_client = MockLLMClient()
@@ -478,7 +478,7 @@ jobs:
 
         # Test Ollama client (should work without external server)
         python -c "
-        from allele.llm_ollama import OllamaClient
+        from phylogenic.llm_ollama import OllamaClient
 
         print('Testing Ollama client...')
         try:
@@ -521,8 +521,8 @@ jobs:
 
         # Test basic import
         python -c "
-        from allele.agent import AlleleAgent
-        from allele.genome import ConversationalGenome
+        from phylogenic.agent import NLPAgent, AgentConfig
+        from phylogenic.genome import ConversationalGenome
         print('✅ Package import successful')
         print('✅ Core functionality accessible')
         "
