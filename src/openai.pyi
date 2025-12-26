@@ -1,8 +1,8 @@
 from typing import Any, AsyncIterator, Optional
 
 class APIError(Exception):
-    code: Optional[str]
-    type: Optional[str]
+    code: str | None
+    type: str | None
 
 class APITimeoutError(Exception):
     pass
@@ -11,7 +11,7 @@ class AuthenticationError(Exception):
     pass
 
 class RateLimitError(Exception):
-    retry_after: Optional[float]
+    retry_after: float | None
 
 class ChatCompletion:  # Minimal placeholder for sync completion
     choices: Any
@@ -22,7 +22,7 @@ class ChatCompletionChunk:  # Minimal placeholder for streamed chunk
     usage: Any
 
 class AsyncStream(AsyncIterator[ChatCompletionChunk]):
-    def __aiter__(self) -> "AsyncStream": ...
+    def __aiter__(self) -> AsyncStream: ...
     async def __anext__(self) -> ChatCompletionChunk: ...
 
 class AsyncOpenAI:

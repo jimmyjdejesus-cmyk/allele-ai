@@ -26,7 +26,6 @@
 
 from typing import Any, AsyncGenerator, AsyncIterable, Dict, List, Optional, cast
 
-import structlog
 from openai import (
     APIError,
     APITimeoutError,
@@ -34,6 +33,8 @@ from openai import (
     AuthenticationError,
     RateLimitError,
 )
+
+import structlog
 
 from .llm_client import LLMClient, LLMConfig
 from .llm_exceptions import (
