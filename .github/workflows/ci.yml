@@ -49,16 +49,28 @@ jobs:
 
     - name: Install dependencies (verbose, capture logs) # TEMP DEBUG
       run: |
+        set -euo pipefail
         python -m pip install --upgrade pip
-        pip install -v -e .[dev,docs,all] 2>&1 | tee pip-install-${{ matrix.python-version }}.log
-        # Install available typing stubs for third-party packages (best-effort)
-        # Use || true to avoid failing the job if a stub package is unavailable
-        python -m pip install types-tensorflow || true
-        python -m pip install types-tiktoken || true
-        python -m pip install types-scipy || true
-        python -m pip install types-scikit-learn || true
-        python -m pip install types-psutil || true
-        python -m pip install types-pandas || true
+        # Install only the dev extras in the matrix to keep matrix jobs fast and avoid optional heavy deps
+        pip install -v -e .[dev] 2>&1 | tee pip-install-${{ matrix.python-version }}.log
+        # Best-effort typing stub installs: attempt and warn if unavailable (do not fail the job)
+        python - <<'PY'
+import subprocess, sys
+pkgs = [
+    "types-tensorflow",
+    "types-tiktoken",
+    "types-scipy",
+    "types-scikit-learn",
+    "types-psutil",
+    "types-pandas",
+]
+for pkg in pkgs:
+    print(f"Attempting to install {pkg}")
+    r = subprocess.run([sys.executable, "-m", "pip", "install", pkg], capture_output=True, text=True)
+    print(r.stdout)
+    if r.returncode != 0:
+        print(f"WARNING: failed to install {pkg}: {r.stderr}", file=sys.stderr)
+PY
 
     - name: Upload pip install logs (TEMP DEBUG)
       uses: actions/upload-artifact@v4
