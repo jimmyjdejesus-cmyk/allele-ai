@@ -5,14 +5,13 @@ This module implements the HumanEval benchmark for evaluating Python code genera
 from function docstrings.
 """
 
-import asyncio
 import json
-import logging
-import tempfile
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Optional
+
 import aiohttp
 
 from .base import Benchmark, BenchmarkResult
@@ -23,66 +22,66 @@ from .registry import register_benchmark
 class HumanEvalBenchmark(Benchmark):
     """
     HumanEval Benchmark for Python Code Generation.
-    
+
     Evaluates Python code generation capabilities by asking models to implement
     functions based on docstring descriptions.
-    
+
     Each example contains:
     - Function signature
     - Docstring description
     - Test cases
     - Correct implementation
     """
-    
+
     def __init__(self, split: str = "test", max_samples: Optional[int] = None):
         """
         Initialize HumanEval benchmark.
-        
+
         Args:
             split: Dataset split ('test' recommended for evaluation)
             max_samples: Maximum number of samples to evaluate
         """
         description = "HumanEval: Python code generation from docstrings"
         super().__init__("HumanEval", description, max_score=100.0)
-        
+
         self.split = split
         self.max_samples = max_samples
         self.data_dir = Path("benchmarks/data/humaneval")
         self.dataset = []
-        
+
     async def setup(self) -> None:
         """Download and prepare HumanEval dataset."""
         self.logger.info("Setting up HumanEval benchmark...")
-        
+
         # Create data directory
         self.data_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Check if dataset already exists
         data_file = self.data_dir / f"{self.split}.jsonl"
         if data_file.exists():
             self.logger.info("HumanEval dataset already exists, loading...")
             await self._load_dataset()
             return
-        
+
         # Download HumanEval dataset
         await self._download_dataset()
-        
+
         # Load and process dataset
         await self._load_dataset()
-        
+
     async def _download_dataset(self) -> None:
         """Download HumanEval dataset from official source."""
         self.logger.info("Downloading HumanEval dataset...")
-        
+
         # HumanEval dataset URLs
         base_url = "https://raw.githubusercontent.com/openai/human-eval/master"
-        
+
         async with aiohttp.ClientSession() as session:
             try:
                 # Download the main dataset
                 url = f"{base_url}/humaneval/{self.split}.jsonl"
                 self.logger.info(f"Downloading from {url}")
-                
+
                 async with session.get(url) as response:
                     if response.status == 200:
                         content = await response.text()
@@ -94,16 +93,16 @@ class HumanEvalBenchmark(Benchmark):
                         self.logger.error(f"Failed to download dataset: {response.status}")
                         # Fallback to generating sample data
                         await self._generate_fallback_data()
-                        
+
             except Exception as e:
                 self.logger.error(f"Error downloading HumanEval dataset: {e}")
                 # Fallback to generating sample data
                 await self._generate_fallback_data()
-    
+
     async def _generate_fallback_data(self) -> None:
         """Generate fallback HumanEval-style data if download fails."""
         self.logger.info("Generating fallback HumanEval data...")
-        
+
         # Sample HumanEval-style problems for testing
         sample_data = [
             {
@@ -114,7 +113,7 @@ class HumanEvalBenchmark(Benchmark):
                 "entry_point": "add_numbers"
             },
             {
-                "task_id": "test_002", 
+                "task_id": "test_002",
                 "prompt": "def is_even(n):\n    \"\"\"Check if a number is even.\n    \n    Args:\n        n: Number to check\n        \n    Returns:\n        True if n is even, False otherwise\n    \"\"\"\n    ",
                 "canonical_solution": "    return n % 2 == 0",
                 "test": "def check():\n    assert is_even(2) == True\n    assert is_even(3) == False\n    assert is_even(0) == True",
@@ -146,41 +145,41 @@ class HumanEvalBenchmark(Benchmark):
                 "entry_point": "reverse_string"
             }
         ]
-        
+
         # Save fallback data
         data_file = self.data_dir / f"{self.split}.jsonl"
         with open(data_file, 'w') as f:
             for item in sample_data:
                 f.write(json.dumps(item) + '\n')
-        
+
         self.logger.info(f"Generated {len(sample_data)} fallback samples")
-    
+
     async def _load_dataset(self) -> None:
         """Load and parse HumanEval dataset."""
         self.logger.info("Loading HumanEval dataset...")
-        
+
         data_file = self.data_dir / f"{self.split}.jsonl"
         if not data_file.exists():
             self.logger.error(f"Dataset file {data_file} does not exist")
             return
-        
+
         try:
-            with open(data_file, 'r') as f:
+            with open(data_file) as f:
                 for line_num, line in enumerate(f):
                     line = line.strip()
                     if not line:
                         continue
-                    
+
                     try:
                         item = json.loads(line)
-                        
+
                         # Parse the item
                         task_id = item.get("task_id", f"task_{line_num}")
                         prompt = item.get("prompt", "")
                         canonical_solution = item.get("canonical_solution", "")
                         test = item.get("test", "")
                         entry_point = item.get("entry_point", "")
-                        
+
                         # Add to dataset
                         self.dataset.append({
                             "task_id": task_id,
@@ -190,38 +189,38 @@ class HumanEvalBenchmark(Benchmark):
                             "entry_point": entry_point,
                             "full_prompt": prompt + canonical_solution
                         })
-                        
+
                         # Limit samples if specified
                         if self.max_samples and len(self.dataset) >= self.max_samples:
                             break
-                            
+
                     except json.JSONDecodeError as e:
                         self.logger.warning(f"Error parsing line {line_num}: {e}")
                         continue
-            
+
             self.logger.info(f"Loaded {len(self.dataset)} HumanEval samples")
-                        
+
         except Exception as e:
             self.logger.error(f"Error loading HumanEval dataset: {e}")
-    
+
     async def evaluate(self, model: Any, **kwargs) -> BenchmarkResult:
         """Evaluate model on HumanEval benchmark."""
         self.logger.info(f"Evaluating model on HumanEval with {len(self.dataset)} samples...")
-        
+
         passed_tests = 0
         total_tests = len(self.dataset)
         pass_at_1_results = []
         pass_at_10_results = []
-        
+
         # Evaluate each sample
         for item in self.dataset:
             try:
                 # Get model prediction
                 prediction = await self._get_model_prediction(model, item)
-                
+
                 # Test the prediction
                 test_result = await self._test_prediction(prediction, item)
-                
+
                 if test_result["passed"]:
                     passed_tests += 1
                     pass_at_1_results.append(True)
@@ -229,17 +228,17 @@ class HumanEvalBenchmark(Benchmark):
                 else:
                     pass_at_1_results.append(False)
                     pass_at_10_results.append(False)
-                
+
             except Exception as e:
                 self.logger.warning(f"Error evaluating sample {item.get('task_id', 'unknown')}: {e}")
                 pass_at_1_results.append(False)
                 pass_at_10_results.append(False)
                 continue
-        
+
         # Calculate results
         pass_at_1 = (sum(pass_at_1_results) / total_tests) * 100 if total_tests > 0 else 0
         pass_at_10 = (sum(pass_at_10_results) / total_tests) * 100 if total_tests > 0 else 0
-        
+
         result = BenchmarkResult(
             benchmark_name=self.name,
             score=pass_at_1,
@@ -256,14 +255,14 @@ class HumanEvalBenchmark(Benchmark):
                 "split": self.split
             }
         )
-        
+
         self.logger.info(f"HumanEval Results: {pass_at_1:.2f}% Pass@1 ({passed_tests}/{total_tests})")
         return result
-    
+
     async def _get_model_prediction(self, model: Any, item: Dict[str, Any]) -> str:
         """Get model prediction for HumanEval task."""
         prompt = item["prompt"]
-        
+
         if hasattr(model, 'chat'):
             # If model has chat interface (like your NLPAgent)
             response = ""
@@ -277,22 +276,22 @@ class HumanEvalBenchmark(Benchmark):
         else:
             # Fallback - return empty implementation
             return ""
-    
+
     async def _test_prediction(self, prediction: str, item: Dict[str, Any]) -> Dict[str, Any]:
         """Test the model's prediction against test cases."""
         try:
             # Combine prompt with prediction
             full_code = item["prompt"] + prediction
             test_code = item["test"]
-            entry_point = item["entry_point"]
-            
+            _entry_point = item["entry_point"]
+
             # Create temporary file with the code
             with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
                 f.write(full_code)
                 f.write('\n\n')
                 f.write(test_code)
                 temp_file = f.name
-            
+
             try:
                 # Run the test
                 result = subprocess.run(
@@ -301,20 +300,20 @@ class HumanEvalBenchmark(Benchmark):
                     text=True,
                     timeout=30  # 30 second timeout
                 )
-                
+
                 # Check if tests passed
                 passed = result.returncode == 0
-                
+
                 return {
                     "passed": passed,
                     "stdout": result.stdout,
                     "stderr": result.stderr
                 }
-                
+
             finally:
                 # Clean up temp file
                 Path(temp_file).unlink(missing_ok=True)
-                
+
         except Exception as e:
             self.logger.warning(f"Error testing prediction: {e}")
             return {
@@ -322,11 +321,11 @@ class HumanEvalBenchmark(Benchmark):
                 "stdout": "",
                 "stderr": str(e)
             }
-    
+
     def get_dataset_size(self) -> int:
         """Return total number of HumanEval tasks."""
         return len(self.dataset)
-    
+
     def cleanup(self) -> None:
         """Cleanup resources."""
         self.logger.info("HumanEval benchmark cleanup completed")

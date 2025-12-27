@@ -24,9 +24,10 @@
 
 """OpenAI LLM client implementation with comprehensive error handling."""
 
-from typing import Any, AsyncGenerator, Dict, List, Optional
+from typing import Any, AsyncGenerator, AsyncIterable, Dict, List, Optional, cast
 
 import structlog
+
 from openai import (
     APIError,
     APITimeoutError,
@@ -231,7 +232,7 @@ class OpenAIClient(LLMClient):
 
                 if stream:
                     # Type ignore: stream response is AsyncIterable
-                    async for chunk in response:  # type: ignore[union-attr]
+                    async for chunk in cast(AsyncIterable[Any], response):
                         if hasattr(chunk, "choices") and chunk.choices:
                             delta = chunk.choices[0].delta
                             if hasattr(delta, "content") and delta.content:
@@ -337,7 +338,7 @@ class OpenAIClient(LLMClient):
             return 0
 
         try:
-            import tiktoken
+            import tiktoken  # type: ignore[import-not-found]
 
             # Use the appropriate encoding for the model
             # For GPT-4 and newer models, use cl100k_base

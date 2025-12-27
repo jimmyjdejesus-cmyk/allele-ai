@@ -1,0 +1,116 @@
+{
+  "model": "tinyllama:latest",
+  "timestamp": "2025-12-19T19:30:30.360110",
+  "samples": {
+    "mmlu": 15,
+    "gsm8k": 5,
+    "reasoning": 5
+  },
+  "results": [
+    {
+      "personality": "baseline",
+      "traits": {},
+      "mmlu_score": 26.666666666666668,
+      "gsm8k_score": 40.0,
+      "reasoning_score": 0.0,
+      "average_score": 22.222222222222225,
+      "delta_vs_baseline": 0.0,
+      "time": 62.89265751838684
+    },
+    {
+      "personality": "technical_expert",
+      "traits": {
+        "empathy": 0.2,
+        "technical_knowledge": 0.99,
+        "creativity": 0.3,
+        "conciseness": 0.95,
+        "context_awareness": 0.9,
+        "adaptability": 0.5,
+        "engagement": 0.2,
+        "personability": 0.2
+      },
+      "mmlu_score": 13.333333333333334,
+      "gsm8k_score": 20.0,
+      "reasoning_score": 20.0,
+      "average_score": 17.77777777777778,
+      "delta_vs_baseline": -4.444444444444446,
+      "time": 129.7962532043457
+    },
+    {
+      "personality": "creative_thinker",
+      "traits": {
+        "empathy": 0.7,
+        "technical_knowledge": 0.6,
+        "creativity": 0.99,
+        "conciseness": 0.4,
+        "context_awareness": 0.7,
+        "adaptability": 0.9,
+        "engagement": 0.8,
+        "personability": 0.7
+      },
+      "mmlu_score": 26.666666666666668,
+      "gsm8k_score": 40.0,
+      "reasoning_score": 40.0,
+      "average_score": 35.55555555555556,
+      "delta_vs_baseline": 13.333333333333332,
+      "time": 123.9986801147461
+    },
+    {
+      "personality": "concise_analyst",
+      "traits": {
+        "empathy": 0.3,
+        "technical_knowledge": 0.85,
+        "creativity": 0.4,
+        "conciseness": 0.99,
+        "context_awareness": 0.8,
+        "adaptability": 0.6,
+        "engagement": 0.3,
+        "personability": 0.3
+      },
+      "mmlu_score": 13.333333333333334,
+      "gsm8k_score": 40.0,
+      "reasoning_score": 0.0,
+      "average_score": 17.77777777777778,
+      "delta_vs_baseline": -4.444444444444446,
+      "time": 114.52540946006775
+    },
+    {
+      "personality": "balanced",
+      "traits": {
+        "empathy": 0.5,
+        "technical_knowledge": 0.7,
+        "creativity": 0.5,
+        "conciseness": 0.6,
+        "context_awareness": 0.7,
+        "adaptability": 0.7,
+        "engagement": 0.5,
+        "personability": 0.5
+      },
+      "mmlu_score": 20.0,
+      "gsm8k_score": 40.0,
+      "reasoning_score": 0.0,
+      "average_score": 20.0,
+      "delta_vs_baseline": -2.222222222222225,
+      "time": 116.2748453617096
+    },
+    {
+      "personality": "high_context",
+      "traits": {
+        "empathy": 0.6,
+        "technical_knowledge": 0.8,
+        "creativity": 0.5,
+        "conciseness": 0.7,
+        "context_awareness": 0.99,
+        "adaptability": 0.8,
+        "engagement": 0.5,
+        "personability": 0.5
+      },
+      "mmlu_score": 20.0,
+      "gsm8k_score": 40.0,
+      "reasoning_score": 0.0,
+      "average_score": 20.0,
+      "delta_vs_baseline": -2.222222222222225,
+      "time": 109.240225315094
+    }
+  ]
+}

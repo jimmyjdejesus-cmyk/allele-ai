@@ -23,6 +23,7 @@
 # =============================================================================
 
 import importlib
+import importlib.util as importlib_util
 from typing import Any, Dict
 
 # Alias used to import a BaseSettings implementation (pydantic v2/v1)
@@ -116,10 +117,10 @@ class LiquidDynamicsSettings(BaseModel):
 # errors from mypy while preserving runtime behavior.
 
 _PydanticRuntimeBase: type
-if importlib.util.find_spec("pydantic_settings") is not None:
+if importlib_util.find_spec("pydantic_settings") is not None:
     _mod = importlib.import_module("pydantic_settings")
     _PydanticRuntimeBase = _mod.BaseSettings
-elif importlib.util.find_spec("pydantic") is not None:
+elif importlib_util.find_spec("pydantic") is not None:
     _mod = importlib.import_module("pydantic")
     _PydanticRuntimeBase = _mod.BaseSettings
 else:
@@ -156,24 +157,47 @@ class AlleleSettings(BaseModel):
             env_file_encoding = "utf-8"
 
     def __new__(cls, *args: Any, **kwargs: Any) -> Any:
-        """If a pydantic BaseSettings implementation is available at
-        runtime, instantiate and return a BaseSettings-backed instance so
-        environment variable overrides are respected when callers use
-        ``AlleleSettings()`` directly in tests or runtime code.
-        """
-        if PydanticBaseSettingsImpl is not None and cls is AlleleSettings:
-            # Build a runtime class dict without the `__new__` hook to avoid
-            # recursive instantiation issues when the runtime class is
-            # created from the BaseModel-defined class.
-            class_dict = dict(cls.__dict__)
-            class_dict.pop("__new__", None)
-            class_dict.pop("__classcell__", None)
-            RuntimeCls = type("AlleleSettingsRuntime", (PydanticBaseSettingsImpl,), class_dict)
-            # Construct and return a pydantic-backed instance which will
-            # automatically load from environment variables.
-            return RuntimeCls(*args, **kwargs)
-
+        # Keep new simple and avoid dynamically creating runtime subclasses of
+        # pydantic at import-time which can be brittle across pydantic
+        # implementations. We will rely on a post-init override pass in
+        # `__init__` below to pick up environment variables consistently.
         return super().__new__(cls)
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # Let the BaseModel (or fallback) initialize default values first.
+        super().__init__(*args, **kwargs)
+
+        # Apply conservative env-var overrides for common nested fields
+        # (e.g., AGENT__MODEL_NAME, EVOLUTION__IMMUTABLE_EVOLUTION).
+        try:
+            import os as _os
+
+            def _coerce_env_value(val: str, target_type: type) -> Any:
+                v = val.strip()
+                if target_type is bool:
+                    return v.lower() in ("1", "true", "yes", "on")
+                if target_type is int:
+                    return int(v)
+                if target_type is float:
+                    return float(v)
+                return v
+
+            for prefix, attr in (("AGENT__", "agent"), ("EVOLUTION__", "evolution")):
+                for _k, _v in list(_os.environ.items()):
+                    if _k.startswith(prefix):
+                        nested_key = _k.split("__", 1)[1].lower()
+                        target_obj = getattr(self, attr, None)
+                        if target_obj and hasattr(target_obj, nested_key):
+                            current_val = getattr(target_obj, nested_key)
+                            try:
+                                coerced = _coerce_env_value(_v, type(current_val))
+                                setattr(target_obj, nested_key, coerced)
+                            except Exception:
+                                # Ignore coercion failures and continue
+                                pass
+        except Exception:
+            # Be conservative: if anything goes wrong reading env vars, leave defaults
+            pass
 
 
 # Singleton instance to use across the package
@@ -186,7 +210,12 @@ if PydanticBaseSettingsImpl is not None:
         # Use the BaseSettings implementation directly if it exists; fall back
         # to BaseModel behavior when constructing the runtime class. We avoid
         # referencing internal temporary names to keep mypy happy.
-        AlleleSettingsRuntime = type("AlleleSettingsRuntime", (PydanticBaseSettingsImpl,), dict(AlleleSettings.__dict__))
+        # Filter out internal pydantic attributes to avoid conflicts during dynamic class creation
+        runtime_dict = {
+            k: v for k, v in AlleleSettings.__dict__.items()
+            if not k.startswith("__")
+        }
+        AlleleSettingsRuntime = type("AlleleSettingsRuntime", (PydanticBaseSettingsImpl,), runtime_dict)
         settings = AlleleSettingsRuntime()
     except Exception:
         settings = AlleleSettings()
