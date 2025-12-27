@@ -43,10 +43,37 @@ def check_answer(response: str, expected: str) -> bool:
     if is_numeric_expected:
         # Extract all numbers from response (including decimals and negatives)
         numbers_in_response = re.findall(r"-?\d+(?:\.\d+)?", response)
-        return expected in numbers_in_response
+        # Normalize and compare numerically to avoid false negatives/positives
+        # e.g., '06' should match expected '6', and '6.0' should match '6.0'
+        try:
+            if '.' in expected:
+                expected_val = float(expected)
+            else:
+                expected_val = int(expected)
+        except ValueError:
+            expected_val = expected
 
-    # For other text answers, do simple substring matching
-    # Convert to lowercase for case-insensitive comparison
+        for num in numbers_in_response:
+            norm = num.replace(',', '')
+            try:
+                if isinstance(expected_val, float) or '.' in norm:
+                    if float(norm) == float(expected_val):
+                        return True
+                else:
+                    if int(norm) == int(expected_val):
+                        return True
+            except ValueError:
+                continue
+        return False
+
+    # For other text answers:
+    # If expected is a single token (no whitespace and contains only alnum/underscore/+-),
+    # prefer a word-boundary regex to avoid false positives (e.g., 'Paris' matching 'Comparison').
+    if re.fullmatch(r"[A-Za-z0-9_+\-]+", expected):
+        pattern = rf"\b{re.escape(expected.lower())}\b"
+        return bool(re.search(pattern, response.lower()))
+
+    # For multi-word expected answers, fall back to a case-insensitive substring match
     return expected.lower() in response.lower()
 
 

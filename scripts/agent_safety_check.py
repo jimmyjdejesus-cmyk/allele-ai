@@ -13,6 +13,10 @@ SECRET_PATTERNS = [
     re.compile(r"(?i)secret"),
     re.compile(r"(?i)aws[_-]?secret"),
     re.compile(r"(?i)password"),
+    re.compile(r"(?i)private[_-]?key"),
+    re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
+    # JWT-like pattern: three base64url segments separated by dots (not exhaustive)
+    re.compile(r"[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+"),
 ]
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,6 +41,40 @@ def scan_file(path: Path):
     return matches
 
 
+def find_trc_occurrences(bases):
+    """Return list of files that contain an explicit trust_remote_code setting.
+
+    Accept a list/iterable of base Path objects to search. Matches are
+    tolerant of Python and JSON-style assignments, e.g.:
+      trust_remote_code=True
+      "trust_remote_code": true
+      trust_remote_code = True
+    """
+    occurrences = []
+    trc_pattern = re.compile(r"trust_remote_code\s*[:=]\s*(?:True|true)\b")
+    for base in bases:
+        if not base.exists():
+            continue
+        for p in base.rglob("*.py"):
+            # skip this script file if ever included under src/ or AGENTS
+            if p.resolve() == Path(__file__).resolve():
+                continue
+            try:
+                text = p.read_text(errors='ignore')
+            except Exception:
+                continue
+            if trc_pattern.search(text):
+                try:
+                    occurrences.append(p.relative_to(ROOT))
+                except Exception:
+                    # In tests or alternative roots, fall back to path relative to base
+                    try:
+                        occurrences.append(p.relative_to(base))
+                    except Exception:
+                        occurrences.append(p)
+    return occurrences
+
+
 def main():
     flagged = []
     # Focus scan on source code and agent specs to reduce false positives
@@ -58,22 +96,7 @@ def main():
         sys.exit(2)
 
     # Additional checks for known risky settings (non-fatal by default)
-    # Only scan source code and AGENTS for explicit 'trust_remote_code=True' to avoid
-    # false positives from generated outputs (e.g., benchmark_results) or this script.
-    trc_occurrences = []
-    for base in (ROOT / 'src', ROOT / 'AGENTS'):
-        if not base.exists():
-            continue
-        for p in base.rglob("*.py"):
-            # skip this script file if ever included under src/ or AGENTS
-            if p.resolve() == Path(__file__).resolve():
-                continue
-            try:
-                text = p.read_text(errors='ignore')
-            except Exception:
-                continue
-            if 'trust_remote_code=True' in text:
-                trc_occurrences.append(p.relative_to(ROOT))
+    trc_occurrences = find_trc_occurrences([ROOT / 'src', ROOT / 'AGENTS'])
 
     if trc_occurrences:
         print("Warning: explicit 'trust_remote_code=True' found in source files:")

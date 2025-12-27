@@ -26,3 +26,19 @@ def test_check_answer_text_substring():
 def test_check_answer_case_insensitive():
     assert check_answer("paris is lovely", "Paris") is True
     assert check_answer("answer: b", "B") is True
+
+
+def test_check_answer_negative_and_variations():
+    # Avoid false positives ("Comparison" should not match "Paris")
+    assert check_answer("This is a comparison of methods", "Paris") is False
+
+    # More multiple choice variations
+    assert check_answer("Answer: (B)", "B") is True
+    assert check_answer("B)", "B") is True
+    assert check_answer("option a.", "A") is True
+    assert check_answer("final answer: c", "C") is True
+
+    # Numeric edge cases: leading zeros and decimal forms
+    assert check_answer("Result: 06", "6") is True
+    assert check_answer("Final value: 6.0", "6.0") is True
+    assert check_answer("The number is 1,234", "1234") is False  # comma formatting not recognized as numeric token
