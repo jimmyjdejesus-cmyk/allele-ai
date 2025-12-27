@@ -204,7 +204,7 @@ class ConversationalGenome(GenomeBase):
         super().__init__(genome_id)
 
         # Initialize traits with defaults (pull from settings if present)
-        self.traits = (
+        self.traits: TraitDict = (
             self.DEFAULT_TRAITS.copy()
             if self.DEFAULT_TRAITS
             else allele_settings.default_traits.copy()

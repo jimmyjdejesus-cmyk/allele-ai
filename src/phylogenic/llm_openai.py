@@ -230,8 +230,8 @@ class OpenAIClient(LLMClient):
                 response_content = ""
 
                 if stream:
-                    # Type ignore: stream response is AsyncIterable
-                    async for chunk in response:  # type: ignore[union-attr]
+                    # Type ignore removed: response typing updated so normal iteration is valid
+                    async for chunk in response:
                         if hasattr(chunk, "choices") and chunk.choices:
                             delta = chunk.choices[0].delta
                             if hasattr(delta, "content") and delta.content:
