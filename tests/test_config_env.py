@@ -39,16 +39,3 @@ def test_env_override_evolution_immutable_and_hpc_flags():
     del os.environ["EVOLUTION__HPC_MODE"]
 
 
-def test_env_override_evolution_immutable_and_hpc_flags():
-    os.environ["EVOLUTION__IMMUTABLE_EVOLUTION"] = "true"
-    os.environ["EVOLUTION__HPC_MODE"] = "false"
-
-    from phylogenic.config import AlleleSettings
-
-    config = AlleleSettings()
-
-    assert config.evolution.immutable_evolution is True
-    assert config.evolution.hpc_mode is False
-
-    del os.environ["EVOLUTION__IMMUTABLE_EVOLUTION"]
-    del os.environ["EVOLUTION__HPC_MODE"]
