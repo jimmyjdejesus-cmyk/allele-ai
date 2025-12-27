@@ -27,7 +27,7 @@ from typing import Any, Dict, List
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from phylogenic.benchmark.utils import check_answer
+from phylogenic.benchmark.utils import check_answer, build_system_prompt
 from src.phylogenic.genome import ConversationalGenome
 from src.phylogenic.llm_client import LLMConfig
 from src.phylogenic.llm_ollama import OllamaClient
@@ -84,44 +84,8 @@ class PhylogenicModel:
         self.name = "phylogenic"
 
     def _build_system_prompt(self) -> str:
-        """Build system prompt from genome traits."""
-        traits = self.genome.traits
-
-        # Map trait values to behavioral descriptors
-        trait_descriptions = []
-
-        if traits.get("empathy", 0.5) > 0.7:
-            trait_descriptions.append("Show deep understanding and emotional intelligence")
-        if traits.get("technical_knowledge", 0.5) > 0.7:
-            trait_descriptions.append("Provide technically accurate and detailed explanations")
-        if traits.get("creativity", 0.5) > 0.7:
-            trait_descriptions.append("Think creatively and offer novel perspectives")
-        if traits.get("conciseness", 0.5) > 0.7:
-            trait_descriptions.append("Be direct and concise in responses")
-        if traits.get("context_awareness", 0.5) > 0.7:
-            trait_descriptions.append("Maintain strong awareness of context")
-        if traits.get("adaptability", 0.5) > 0.7:
-            trait_descriptions.append("Adapt communication style to the task")
-        if traits.get("engagement", 0.5) > 0.7:
-            trait_descriptions.append("Be engaging and maintain conversational flow")
-        if traits.get("personability", 0.5) > 0.7:
-            trait_descriptions.append("Be friendly and approachable")
-
-        system_prompt = """You are an AI assistant with evolved personality traits optimized for high performance.
-
-Your behavioral guidelines:
-"""
-        for desc in trait_descriptions:
-            system_prompt += f"- {desc}\n"
-
-        system_prompt += """
-When answering questions:
-1. Analyze the question carefully before responding
-2. For multiple choice questions, state only the letter (A, B, C, or D)
-3. For math problems, show reasoning then give the final answer
-4. For code problems, write clean, working code
-"""
-        return system_prompt
+        """Delegate prompt building to shared utility to avoid duplication."""
+        return build_system_prompt(self.genome.traits)
 
     async def generate(self, prompt: str) -> str:
         """Generate response with genome-enhanced prompting."""
