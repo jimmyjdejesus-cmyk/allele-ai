@@ -29,7 +29,7 @@ import time
 from abc import ABC, abstractmethod
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-from typing import Any, AsyncGenerator, Callable, Dict, List, Optional
+from typing import Any, AsyncGenerator, Callable, Dict, List, Optional, cast
 
 import structlog
 
@@ -117,11 +117,24 @@ class RateLimiter:
         self.tokens_per_minute = tokens_per_minute
         self.request_timestamps: List[float] = []
         self.token_usage: List[float] = []
-        self.lock = asyncio.Lock()
+        # Create lock lazily to avoid issues on Python < 3.10 where
+        # creating asyncio primitives in synchronous constructors can
+        # raise "There is no current event loop in thread" if no loop
+        # is set yet (e.g., during synchronous test initialization).
+        self.lock: Optional[asyncio.Lock] = None
+
+    async def _ensure_lock(self) -> None:
+        """Ensure the asyncio lock exists within an event loop."""
+        if self.lock is None:
+            self.lock = asyncio.Lock()
 
     async def wait_if_needed(self, tokens_used: int = 1) -> float:
         """Wait if rate limit would be exceeded. Returns wait time in seconds."""
-        async with self.lock:
+        await self._ensure_lock()
+        # mypy can't infer that self.lock is not None here because it's Optional,
+        # so cast to a concrete Lock before using in an async context.
+        lock = cast(asyncio.Lock, self.lock)
+        async with lock:
             current_time = time.time()
 
             # Clean old entries (sliding window of 60 seconds)

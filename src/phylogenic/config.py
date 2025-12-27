@@ -23,6 +23,7 @@
 # =============================================================================
 
 import importlib
+import importlib.util as importlib_util
 from typing import Any, Dict
 
 # Alias used to import a BaseSettings implementation (pydantic v2/v1)
@@ -116,10 +117,10 @@ class LiquidDynamicsSettings(BaseModel):
 # errors from mypy while preserving runtime behavior.
 
 _PydanticRuntimeBase: type
-if importlib.util.find_spec("pydantic_settings") is not None:
+if importlib_util.find_spec("pydantic_settings") is not None:
     _mod = importlib.import_module("pydantic_settings")
     _PydanticRuntimeBase = _mod.BaseSettings
-elif importlib.util.find_spec("pydantic") is not None:
+elif importlib_util.find_spec("pydantic") is not None:
     _mod = importlib.import_module("pydantic")
     _PydanticRuntimeBase = _mod.BaseSettings
 else:
@@ -165,13 +166,19 @@ class AlleleSettings(BaseModel):
             # Build a runtime class dict without the `__new__` hook to avoid
             # recursive instantiation issues when the runtime class is
             # created from the BaseModel-defined class.
-            class_dict = dict(cls.__dict__)
-            class_dict.pop("__new__", None)
-            class_dict.pop("__classcell__", None)
+            class_dict = {
+                k: v for k, v in cls.__dict__.items()
+                if not k.startswith("__") and not k.startswith("model_")
+            }
             RuntimeCls = type("AlleleSettingsRuntime", (PydanticBaseSettingsImpl,), class_dict)
             # Construct and return a pydantic-backed instance which will
             # automatically load from environment variables.
-            return RuntimeCls(*args, **kwargs)
+            try:
+                return RuntimeCls(*args, **kwargs)
+            except (TypeError, Exception):
+                # Fallback to standard BaseModel instantiation if dynamic creation fails
+                # (e.g. pickling errors with pydantic v2)
+                return super().__new__(cls)
 
         return super().__new__(cls)
 
@@ -186,7 +193,12 @@ if PydanticBaseSettingsImpl is not None:
         # Use the BaseSettings implementation directly if it exists; fall back
         # to BaseModel behavior when constructing the runtime class. We avoid
         # referencing internal temporary names to keep mypy happy.
-        AlleleSettingsRuntime = type("AlleleSettingsRuntime", (PydanticBaseSettingsImpl,), dict(AlleleSettings.__dict__))
+        # Filter out internal pydantic attributes to avoid conflicts during dynamic class creation
+        runtime_dict = {
+            k: v for k, v in AlleleSettings.__dict__.items()
+            if not k.startswith("__") and not k.startswith("model_")
+        }
+        AlleleSettingsRuntime = type("AlleleSettingsRuntime", (PydanticBaseSettingsImpl,), runtime_dict)
         settings = AlleleSettingsRuntime()
     except Exception:
         settings = AlleleSettings()

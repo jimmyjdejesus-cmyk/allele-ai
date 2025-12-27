@@ -40,37 +40,37 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from src.phylogenic.observability.ml_analytics.alert_intelligence import (
+from phylogenic.observability.ml_analytics.alert_intelligence import (
     AlertCorrelator,
     IntelligentAlertManager,
 )
 
 # Import ML analytics components
-from src.phylogenic.observability.ml_analytics.anomaly_detection import (
+from phylogenic.observability.ml_analytics.anomaly_detection import (
     EnsembleAnomalyDetector,
     IsolationForestDetector,
     OneClassSVMDetector,
 )
-from src.phylogenic.observability.ml_analytics.ml_config import (
+from phylogenic.observability.ml_analytics.ml_config import (
     AlertIntelligenceConfig,
     AnomalyDetectionConfig,
     MLAnalyticsConfig,
     OptimizationEngineConfig,
     PredictiveAnalyticsConfig,
 )
-from src.phylogenic.observability.ml_analytics.optimization_engine import (
+from phylogenic.observability.ml_analytics.optimization_engine import (
     ConfigurationRecommender,
     OptimizationEngine,
     PerformanceOptimizer,
 )
-from src.phylogenic.observability.ml_analytics.predictive_analytics import (
+from phylogenic.observability.ml_analytics.predictive_analytics import (
     PerformancePredictor,
     PredictiveAnalyzer,
     TimeSeriesForecaster,
 )
 
 # Import types and configuration
-from src.phylogenic.observability.ml_analytics.types import (
+from phylogenic.observability.ml_analytics.types import (
     AlertCluster,
     AlertSeverity,
     AnomalyResult,
