@@ -53,7 +53,7 @@ This script scans `src/` and `AGENTS/` for secret-like patterns and reports `tru
 ### Agent-spec check
 We added `scripts/check_agent_spec.py` and `.github/workflows/agent-spec-check.yml` to enforce presence of an agent spec when agent code changes are detected. The script supports a `--local` mode for developers to run the check before pushing (see `scripts/check_agent_spec.py --help`).
 
-The check looks for agent-related file changes (files under `AGENTS/`, `src/**/agent*.py`, or filenames containing `agent`) and fails the PR if no matching agent spec is attached. An override is available via the PR label `allow-agent-without-spec` or the env var `AGENT_SAFETY_IGNORE_SPEC=1` (documented in `docs/SECURITY_REVIEW.md`).
+The check looks for agent-related file changes (files under `AGENTS/`, `src/**/agent*.py`, or filenames containing `agent`). **Trial / advisory mode:** the workflow currently runs in advisory mode and will not fail the PR by default; instead it posts an automated comment on PRs that are missing a matching spec so reviewers are notified. After a trial period we will consider making the check blocking. An override is available via the PR label `allow-agent-without-spec` or the env var `AGENT_SAFETY_IGNORE_SPEC=1` (documented in `docs/SECURITY_REVIEW.md`).
 
 ## Troubleshooting
 - If CI fails due to missing optional typing stubs, consult the pip logs uploaded by the workflow artifacts and reference the heavy-deps job logs.

@@ -25,8 +25,33 @@ jobs:
           python -m pip install -U pip
           pip install -e '.[dev]'
 
-      - name: Run agent-spec check
+      - name: Run agent-spec check (advisory)
+        id: agent_spec_check
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
         run: |
-          python scripts/check_agent_spec.py --pr ${{ github.event.pull_request.number }}
+          set -o pipefail
+          python scripts/check_agent_spec.py --pr ${{ github.event.pull_request.number }} || echo "EXIT_CODE:$?" > /tmp/agent_spec_exit
+
+      - name: Post advisory comment if specs missing
+        if: ${{ always() }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            let body = fs.existsSync('/tmp/agent_spec_exit') ? fs.readFileSync('/tmp/agent_spec_exit', 'utf8').trim() : '';
+            if (body.includes('EXIT_CODE:4')) {
+              const pr = context.payload.pull_request.number;
+              const message = `⚠️ Agent spec check (trial mode) detected agent code changes with missing spec(s). Please attach a filled spec under AGENTS/ or add the label **allow-agent-without-spec** to temporarily bypass (see docs/SECURITY_REVIEW.md).`;
+              await github.issues.createComment({owner: context.repo.owner, repo: context.repo.repo, issue_number: pr, body: message});
+            } else if (body.includes('EXIT_CODE:2')) {
+              const pr = context.payload.pull_request && context.payload.pull_request.number ? context.payload.pull_request.number : undefined;
+              if (pr) {
+                const message = `⚠️ Agent spec check had an error while checking the PR (API/invocation error). Please re-run or check the workflow logs.`;
+                await github.issues.createComment({owner: context.repo.owner, repo: context.repo.repo, issue_number: pr, body: message});
+              }
+            } else {
+              // No issues detected — no comment
+            }
