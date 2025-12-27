@@ -2,10 +2,15 @@
 
 import asyncio
 import os
+import sys
 from typing import List
 
 import aiohttp
 import pytest
+
+# Ensure the repository root is on sys.path so tests can import helpers using
+# absolute imports like `from tests.test_utils import ...` during CI runs.
+sys.path.insert(0, os.getcwd())
 
 
 @pytest.fixture(scope="session")

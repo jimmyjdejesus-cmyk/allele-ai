@@ -1,0 +1,4 @@
+LLaMA2 benchmark started in background at 2025-12-19 19:23:07
+Process command: python scripts/run_personality_benchmark.py --model llama2:latest --samples 15
+Log file: benchmark_results/llama2_full_run.log
+Expected runtime: 10-15 minutes
