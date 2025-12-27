@@ -79,10 +79,15 @@ def get_pr_changed_files(pr: int, token: str) -> List[str]:
         if r.status_code != 200:
             raise RuntimeError(f"GitHub API error: {r.status_code} {r.text}")
         data = r.json()
-        if not data:
+        # If the response is empty or does not look like a list of files
+        # (i.e., lacks 'filename'), stop paginating and treat as no more files.
+        if not data or not any(isinstance(entry, dict) and 'filename' in entry for entry in data):
             break
         for entry in data:
             files.append(entry.get('filename'))
+        # GitHub paginates; if we got a partial page then we can stop
+        if len(data) < 100:
+            break
         page += 1
     return files
 

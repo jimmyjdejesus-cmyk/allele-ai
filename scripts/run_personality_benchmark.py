@@ -20,7 +20,7 @@ from typing import Dict, List
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from phylogenic.benchmark.utils import check_answer
+from phylogenic.benchmark.utils import check_answer, build_system_prompt
 from src.phylogenic.genome import ConversationalGenome
 from src.phylogenic.llm_client import LLMConfig
 from src.phylogenic.llm_ollama import OllamaClient
@@ -101,38 +101,10 @@ class GenomeModel:
         self.genome = genome
 
     def _build_system_prompt(self) -> str:
+        """Delegate prompt building to shared utility to avoid duplication."""
         if self.genome is None:
             return ""
-
-        traits = self.genome.traits
-        trait_descriptions = []
-
-        if traits.get("empathy", 0.5) > 0.7:
-            trait_descriptions.append("Show deep understanding and emotional intelligence")
-        if traits.get("technical_knowledge", 0.5) > 0.7:
-            trait_descriptions.append("Provide technically accurate and detailed explanations")
-        if traits.get("creativity", 0.5) > 0.7:
-            trait_descriptions.append("Think creatively and offer novel perspectives")
-        if traits.get("conciseness", 0.5) > 0.7:
-            trait_descriptions.append("Be direct and concise - give short, precise answers")
-        if traits.get("context_awareness", 0.5) > 0.7:
-            trait_descriptions.append("Maintain strong awareness of context and implications")
-        if traits.get("adaptability", 0.5) > 0.7:
-            trait_descriptions.append("Adapt communication style to the task requirements")
-        if traits.get("engagement", 0.5) > 0.7:
-            trait_descriptions.append("Be engaging and thorough")
-        if traits.get("personability", 0.5) > 0.7:
-            trait_descriptions.append("Be friendly and approachable")
-
-        if not trait_descriptions:
-            return ""
-
-        prompt = "You are an AI assistant. Your behavioral guidelines:\n"
-        for desc in trait_descriptions:
-            prompt += f"- {desc}\n"
-
-        prompt += "\nFor multiple choice: answer with just the letter. For math: show work then final number."
-        return prompt
+        return build_system_prompt(self.genome.traits)
 
     async def generate(self, prompt: str) -> str:
         system_prompt = self._build_system_prompt()
