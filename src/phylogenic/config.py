@@ -23,6 +23,7 @@
 # =============================================================================
 
 import importlib
+import importlib.util as importlib_util
 from typing import Any, Dict
 
 # Alias used to import a BaseSettings implementation (pydantic v2/v1)
@@ -116,10 +117,10 @@ class LiquidDynamicsSettings(BaseModel):
 # errors from mypy while preserving runtime behavior.
 
 _PydanticRuntimeBase: type
-if importlib.util.find_spec("pydantic_settings") is not None:
+if importlib_util.find_spec("pydantic_settings") is not None:
     _mod = importlib.import_module("pydantic_settings")
     _PydanticRuntimeBase = _mod.BaseSettings
-elif importlib.util.find_spec("pydantic") is not None:
+elif importlib_util.find_spec("pydantic") is not None:
     _mod = importlib.import_module("pydantic")
     _PydanticRuntimeBase = _mod.BaseSettings
 else:
