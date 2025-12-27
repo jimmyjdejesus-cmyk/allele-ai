@@ -117,11 +117,16 @@ class RateLimiter:
         self.tokens_per_minute = tokens_per_minute
         self.request_timestamps: List[float] = []
         self.token_usage: List[float] = []
-        self.lock = asyncio.Lock()
+        # Create the lock lazily inside async context to avoid creating an
+        # asyncio.Lock() before an event loop exists (which fails on Py3.9).
+        self._lock: Optional[asyncio.Lock] = None
 
     async def wait_if_needed(self, tokens_used: int = 1) -> float:
         """Wait if rate limit would be exceeded. Returns wait time in seconds."""
-        async with self.lock:
+        if self._lock is None:
+            # Safe to create inside coroutine where an event loop is present
+            self._lock = asyncio.Lock()
+        async with self._lock:
             current_time = time.time()
 
             # Clean old entries (sliding window of 60 seconds)

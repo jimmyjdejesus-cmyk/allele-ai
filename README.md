@@ -300,6 +300,46 @@ pytest --cov=src/allele --cov-report=html
 
 ---
 
+<!-- LM_EVAL_RESULTS_START -->
+## LM-Eval Benchmark Results
+
+**Evaluation Harness**: lm-eval v0.4+  
+**Hardware**: M1 Mac Mini  
+**Run Mode**: Local Ollama Inference
+
+### Performance Comparison
+
+| Model | MMLU | HellaSwag | GSM8K | ARC-E | TruthfulQA | Average |
+|-------|------|-----------|-------|-------|------------|---------|
+| gemma3:1b | TBD | TBD | TBD | TBD | TBD | TBD |
+| qwen2.5:0.5b | TBD | TBD | TBD | TBD | TBD | TBD |
+
+Run benchmarks: `python scripts/run_lm_eval_mass.py --mode quick`
+
+[Full Results →](benchmark_results/lm_eval/COMPARISON.md)
+<!-- LM_EVAL_RESULTS_END -->
+
+<!-- PERSONALITY_RESULTS_START -->
+## Personality A/B Benchmark Results
+
+**Model**: `qwen2.5:0.5b` | **Date**: 2025-12-22
+
+| Personality | MMLU | GSM8K | Reasoning | Average | vs Baseline |
+|-------------|------|-------|-----------|---------|-------------|
+| **baseline** | 80.0% | 90.0% | 80.0% | 83.3% | - |
+| **technical_expert** | 85.0% | 90.0% | 90.0% | 88.3% | +5.0% [+] |
+| **creative_thinker** | 85.0% | 90.0% | 90.0% | 88.3% | +5.0% [+] |
+| **concise_analyst** | 80.0% | 90.0% | 100.0% | 90.0% | +6.7% [+] |
+| **balanced** | 85.0% | 90.0% | 80.0% | 85.0% | +1.7% [=] |
+| **high_context** | 90.0% | 90.0% | 80.0% | 86.7% | +3.3% [+] |
+
+> **Best Performer**: `concise_analyst` (90.0% average, +6.7% gain)
+
+Run benchmarks: `python scripts/run_personality_benchmark.py --model qwen2.5:0.5b --samples 30`
+<!-- PERSONALITY_RESULTS_END -->
+
+---
+
 ## Architecture
 
 ```
