@@ -62,3 +62,26 @@ def test_local_mode_no_agent(tmp_path, monkeypatch, capsys):
         mock_local.return_value = []
         code = cas.main(['--local'])
         assert code == 0
+
+
+@patch('scripts.check_agent_spec.requests.get')
+def test_pr_non_code_agents_changed_ignored(mock_get, tmp_path, monkeypatch):
+    # PR contains AGENTS docs and templates and workflow files (non-code). These should not
+    # trigger the agent-spec requirement because they are docs/templates.
+    mock_get.side_effect = [
+        DummyResponse(200, [
+            {"filename": ".github/ISSUE_TEMPLATES/agent_incident.md"},
+            {"filename": "AGENTS.md"},
+            {"filename": "AGENTS/TEMPLATES/agent_spec_template.md"},
+            {"filename": "docs/agents.md"},
+            {"filename": "scripts/agent_safety_check.py"},
+        ]),
+    ]
+
+    # Mock find_matching_spec to ensure it's not called for docs
+    with patch('scripts.check_agent_spec.find_matching_spec_for_agent') as mock_find:
+        mock_find.return_value = None
+        code = cas.main(['--pr', '1'])
+        # scripts/agent_safety_check.py contains 'agent' in name but is a utility; we do not
+        # require a spec for helper scripts — expecting no agent-spec enforcement here.
+        assert code == 0

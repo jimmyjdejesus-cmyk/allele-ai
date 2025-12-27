@@ -29,7 +29,13 @@ import requests
 REPO_OWNER = os.environ.get("GITHUB_REPOSITORY", "").split("/")[0]
 REPO_NAME = os.environ.get("GITHUB_REPOSITORY", "").split("/")[1] if "/" in os.environ.get("GITHUB_REPOSITORY", "") else "Phylogenic-AI-Agents"
 
-AGENT_FILE_PATTERNS = [re.compile(r"^AGENTS/", re.I), re.compile(r"src/.*/agent.*\.py$", re.I), re.compile(r"agent", re.I)]
+# Match Python agent implementation files under the source tree. We intentionally
+# ignore files outside of `src/` (docs, templates, scripts, workflows) to avoid
+# blocking edits that are not actual agent runtime code.
+AGENT_FILE_PATTERNS = [
+    # Any file under src/* whose filename contains 'agent' and ends with .py
+    re.compile(r"^src/.*/[^/]*agent[^/]*\.py$", re.I),
+]
 
 
 def run_cmd(cmd: List[str], cwd: Optional[Path] = None) -> str:
