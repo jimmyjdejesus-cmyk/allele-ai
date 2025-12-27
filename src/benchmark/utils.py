@@ -5,8 +5,8 @@ This module provides robust answer checking, system prompt building,
 and other common functionality used across benchmark scripts.
 """
 
-from typing import Dict, List, Optional
 import re
+from typing import Dict, List, Optional
 
 
 def check_answer(response: str, expected: str) -> bool:
