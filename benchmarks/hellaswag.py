@@ -1,6 +1,9 @@
 """
 HellaSwag Benchmark Implementation.
 
+DEPRECATED: This custom implementation is deprecated in favor of the official lm-eval harness.
+Please use `scripts/run_lm_eval_mass.py` for standard benchmarking.
+
 This module implements the HellaSwag benchmark for evaluating commonsense reasoning
 through adversarial sentence completion.
 """

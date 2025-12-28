@@ -536,7 +536,7 @@ class LiquidStateMachine:
         Optimized with pre-multiplied connection matrix for better performance.
         """
         # Optimized input injection using direct slicing assignment
-        input_injection = np.zeros(self.reservoir_size, dtype=np.float64)
+        input_injection: np.ndarray = np.zeros(self.reservoir_size, dtype=np.float64)
         input_injection[: min(10, self.reservoir_size)] = input_value
 
         # Pre-multiply connection and weight matrices for faster computation

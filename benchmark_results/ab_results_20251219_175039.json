@@ -1,0 +1,52 @@
+{
+  "model": "tinyllama:latest",
+  "timestamp": "2025-12-19T17:47:23.801088",
+  "total_baseline_score": 15.555555555555557,
+  "total_phylogenic_score": 11.111111111111112,
+  "total_delta": -4.444444444444445,
+  "genome_config": {
+    "empathy": 0.3,
+    "engagement": 0.3,
+    "technical_knowledge": 0.95,
+    "creativity": 0.4,
+    "conciseness": 0.9,
+    "context_awareness": 0.8,
+    "adaptability": 0.7,
+    "personability": 0.3
+  },
+  "results": [
+    {
+      "benchmark": "MMLU",
+      "baseline_score": 26.666666666666668,
+      "phylogenic_score": 13.333333333333334,
+      "delta": -13.333333333333334,
+      "delta_percent": -50.0,
+      "baseline_time": 41.3770854473114,
+      "phylogenic_time": 65.89015746116638,
+      "samples": 15,
+      "status": "degraded"
+    },
+    {
+      "benchmark": "GSM8K",
+      "baseline_score": 20.0,
+      "phylogenic_score": 20.0,
+      "delta": 0.0,
+      "delta_percent": 0.0,
+      "baseline_time": 19.179187774658203,
+      "phylogenic_time": 29.93265962600708,
+      "samples": 5,
+      "status": "neutral"
+    },
+    {
+      "benchmark": "HellaSwag",
+      "baseline_score": 0.0,
+      "phylogenic_score": 0.0,
+      "delta": 0.0,
+      "delta_percent": 0,
+      "baseline_time": 22.269484281539917,
+      "phylogenic_time": 17.44868302345276,
+      "samples": 5,
+      "status": "neutral"
+    }
+  ]
+}

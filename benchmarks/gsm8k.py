@@ -1,6 +1,9 @@
 """
 GSM8K Benchmark Implementation.
 
+DEPRECATED: This custom implementation is deprecated in favor of the official lm-eval harness.
+Please use `scripts/run_lm_eval_mass.py` for standard benchmarking.
+
 This module implements the GSM8K benchmark for evaluating mathematical reasoning
 through grade school math word problems.
 """
