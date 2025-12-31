@@ -29,8 +29,8 @@ def test_genomemodel_uses_shared_prompt():
 
     assert model._build_system_prompt() == build_system_prompt(traits)
 
-    # run the async generate
-    resp = asyncio.get_event_loop().run_until_complete(_run_generate(model, "Hello"))
+    # run the async generate using asyncio.run() for Python 3.7+ compatibility
+    resp = asyncio.run(_run_generate(model, "Hello"))
     assert resp == "Answer"
     assert fake.last_messages is not None
     assert fake.last_messages[0]["role"] == "system"
@@ -45,7 +45,8 @@ def test_phylogenicmodel_uses_shared_prompt():
 
     assert model._build_system_prompt() == build_system_prompt(traits)
 
-    resp = asyncio.get_event_loop().run_until_complete(_run_generate(model, "Q"))
+    # run the async generate using asyncio.run() for Python 3.7+ compatibility
+    resp = asyncio.run(_run_generate(model, "Q"))
     assert resp == "Done"
     assert fake.last_messages is not None
     assert fake.last_messages[0]["role"] == "system"
