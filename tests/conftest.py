@@ -8,9 +8,14 @@ from typing import List
 import aiohttp
 import pytest
 
-# Ensure the repository root is on sys.path so tests can import helpers using
-# absolute imports like `from tests.test_utils import ...` during CI runs.
-sys.path.insert(0, os.getcwd())
+# Ensure the repository root and src/ are on sys.path so tests can import helpers
+# using absolute imports like `from tests.test_utils import ...` and `from phylogenic...`
+# during CI runs.
+repo_root = os.getcwd()
+sys.path.insert(0, repo_root)
+src_path = os.path.join(repo_root, "src")
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
 
 
 @pytest.fixture(scope="session")

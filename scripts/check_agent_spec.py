@@ -26,8 +26,14 @@ from typing import Iterable, List, Optional
 
 import requests
 
-REPO_OWNER = os.environ.get("GITHUB_REPOSITORY", "").split("/")[0]
-REPO_NAME = os.environ.get("GITHUB_REPOSITORY", "").split("/")[1] if "/" in os.environ.get("GITHUB_REPOSITORY", "") else "Phylogenic-AI-Agents"
+# Extract repo owner and name from GITHUB_REPOSITORY env var or default
+_github_repo = os.environ.get("GITHUB_REPOSITORY", "")
+if "/" in _github_repo:
+    REPO_OWNER, REPO_NAME = _github_repo.split("/", 1)
+else:
+    # Default fallback if GITHUB_REPOSITORY not set
+    REPO_OWNER = "PhylogenicAIAgents"
+    REPO_NAME = "Phylogenic-AI-Agents"
 
 # Match Python agent implementation files under the source tree. We intentionally
 # ignore files outside of `src/` (docs, templates, scripts, workflows) to avoid
