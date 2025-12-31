@@ -79,6 +79,8 @@ Applies to all agent-related code, tests, CI, documentation, and deployed agents
 
 ---
 
+For agent changes, file a security review using `.github/ISSUE_TEMPLATES/agent_security_review.md` and request Security/Privacy signoff before merging.
+
 ## Quick PR checklist ✅
 - [ ] Agent spec attached and complete
 - [ ] Tests added and passing locally
