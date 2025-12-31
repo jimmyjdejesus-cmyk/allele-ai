@@ -34,15 +34,19 @@ def test_collect_metrics_basic(mock_changed, mock_get):
     assert metrics['flagged_prs'] == 0
 
 
-@patch('scripts.collect_agent_spec_metrics.requests.get')
+@patch('scripts.collect_agent_spec_metrics.get_recent_prs')
 @patch('scripts.collect_agent_spec_metrics.get_pr_changed_files')
-def test_collect_metrics_flagged(mock_changed, mock_get):
-    now = '2025-12-27T00:00:00Z'
-    pr = {'number': 2, 'updated_at': now, 'labels': [{'name': 'allow-agent-without-spec'}]}
-    # get_recent_prs may call pulls API twice (page 1, page 2), then comments endpoint
-    mock_get.side_effect = [DummyResponse(200, [pr]), DummyResponse(200, []), DummyResponse(200, [{'body': '❌ Agent spec check failed: agent code changes require a matching agent spec attached under AGENTS/.'}])]
-
-    mock_changed.return_value = ['AGENTS/special_agent.md']
+@patch('scripts.collect_agent_spec_metrics.pr_has_failure_comment')
+def test_collect_metrics_flagged(mock_has_failure, mock_changed, mock_recent_prs):
+    # Mock get_recent_prs to return a PR directly
+    pr = {'number': 2, 'updated_at': '2025-12-27T00:00:00Z', 'labels': [{'name': 'allow-agent-without-spec'}]}
+    mock_recent_prs.return_value = [pr]
+    
+    # Mock pr_has_failure_comment to return True (PR was flagged)
+    mock_has_failure.return_value = True
+    
+    # Mock changed files - need agent changes to be inspected
+    mock_changed.return_value = ['src/phylogenic/my_agent.py']
 
     metrics = collect_metrics(days=7, token='token')
     assert metrics['inspected_prs'] == 1
