@@ -6,6 +6,10 @@ This document explains the security review workflow for agents in this repositor
 - Any PR that **adds** or **changes** agent code (`AGENTS/**`, `src/**/agent*.py`, or files containing `agent` in their name).
 - Any change that introduces new permissions, secrets usage, external network access, or `trust_remote_code=True`.
 
+### trust_remote_code policy
+- **Default**: `trust_remote_code` must be **disabled** by default. Any use of `trust_remote_code=True` must be explicitly opt-in, justified in the agent spec, and approved through the security review process.
+- The repository includes an automated static check (`scripts/agent_safety_check.py`) which will warn about `trust_remote_code` occurrences; CI can be configured to fail on detection by setting `AGENT_SAFETY_FAIL_ON_TRC=1` in the workflow environment.
+
 ## How to request a review
 1. Open your PR with your changes and attach a filled agent spec (see `AGENTS/TEMPLATES/agent_spec_template.md`).
 2. Use the security issue template: **New issue → _Agent security review_** or click **Create Issue** and choose the template `Agent security review`.

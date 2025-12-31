@@ -50,8 +50,10 @@ python scripts/agent_safety_check.py
 
 This script scans `src/` and `AGENTS/` for secret-like patterns and reports `trust_remote_code=True` occurrences.
 
-### Notes about future `agent-spec` check
-We plan to add `scripts/check_agent_spec.py` and `.github/workflows/agent-spec-check.yml` to enforce presence of an agent spec on agent-code changes. The script will support a `--local` mode to let developers run the check before pushing.
+### Agent-spec check
+We added `scripts/check_agent_spec.py` and `.github/workflows/agent-spec-check.yml` to enforce presence of an agent spec when agent code changes are detected. The script supports a `--local` mode for developers to run the check before pushing (see `scripts/check_agent_spec.py --help`).
+
+The check looks for agent-related file changes (files under `AGENTS/`, `src/**/agent*.py`, or filenames containing `agent`). **Enforced blocking:** the workflow now enforces that PRs with agent-related changes include a matching agent spec; the check will fail the PR if no spec is found. If you intentionally need to bypass the check, add the PR label `allow-agent-without-spec` or set the env var `AGENT_SAFETY_IGNORE_SPEC=1` in the workflow (both require maintainers' approval). See `docs/SECURITY_REVIEW.md` for the override and review process.
 
 ## Troubleshooting
 - If CI fails due to missing optional typing stubs, consult the pip logs uploaded by the workflow artifacts and reference the heavy-deps job logs.
