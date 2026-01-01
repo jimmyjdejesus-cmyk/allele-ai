@@ -309,11 +309,6 @@ pytest --cov=src/allele --cov-report=html
 
 ### Performance Comparison
 
-| Model | MMLU | HellaSwag | GSM8K | ARC-E | TruthfulQA | Average |
-|-------|------|-----------|-------|-------|------------|---------|
-| gemma3:1b | TBD | TBD | TBD | TBD | TBD | TBD |
-| qwen2.5:0.5b | TBD | TBD | TBD | TBD | TBD | TBD |
-
 Run benchmarks: `python scripts/run_lm_eval_mass.py --mode quick`
 
 [Full Results →](benchmark_results/lm_eval/COMPARISON.md)
@@ -322,7 +317,7 @@ Run benchmarks: `python scripts/run_lm_eval_mass.py --mode quick`
 <!-- PERSONALITY_RESULTS_START -->
 ## Personality A/B Benchmark Results
 
-**Model**: `qwen2.5:0.5b` | **Date**: 2025-12-22
+**Model**: `qwen2.5:0.5b` | **Date**: 2026-01-01
 
 | Personality | MMLU | GSM8K | Reasoning | Average | vs Baseline |
 |-------------|------|-------|-----------|---------|-------------|
@@ -342,13 +337,16 @@ Run benchmarks: `python scripts/run_personality_benchmark.py --model qwen2.5:0.5
 
 ## Multi-Model Personality Matrix Evaluation
 
+**Generated**: 2026-01-01 00:59:04
+
 Comprehensive evaluation testing multiple small language models (0.5B-3B parameters) across different personality configurations, Chain of Thought (COT) prompting, and standardized benchmarks.
 
 ### Results Summary
 
-**Total Configurations**: 180 (3 models × 12 personalities × 5 benchmarks)  
-**Success Rate**: 100%  
-**Average Score**: 0.89
+**Total Configurations**: 180 (3 models × 12 personalities × 5 benchmarks)
+**Success Rate**: 100%
+**Top Score**: 1.00 (perfect scores achieved by 3 configurations)
+**Average Score Across All Configs**: 0.89
 
 ### Key Findings
 

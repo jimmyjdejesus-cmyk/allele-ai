@@ -157,7 +157,7 @@ Consistent error response structure:
     "issue": "must be between 0 and 2"
   },
   "correlation_id": "req_12345",
-  "timestamp": "2025-12-10T19:00:00Z"
+  "timestamp": "2026-01-01T19:00:00Z"
 }
 ```
 

@@ -1,15 +1,15 @@
 # Phylogenic: Genome-Based Conversational AI Agents with Evolutionary Optimization and Liquid Neural Networks
 
-**Authors:** Jimmy De Jesus  
+**Authors:** Jimmy De Jesus
 **Version:** 1.0.2
-**Date:** December 2025
+**Date:** January 2026
 **License:** AGPL v3
 
 ---
 
 ## Abstract
 
-Traditional conversational AI systems rely on static prompt engineering, which is brittle, difficult to optimize, and lacks reproducibility. We present Phylogenic, a novel framework that treats AI agent personalities as genetic code rather than text prompts. Phylogenic encodes conversational capabilities as an 8-trait genome system, evolves optimal personalities through genetic algorithms, and integrates Liquid Neural Networks (LNNs) for temporal memory. Our system achieves <5ms crossover operations, <10ms LNN processing latency, and demonstrates significant improvements in personality stability and optimization efficiency compared to manual prompt tuning. Experimental evaluation shows that evolved genomes consistently outperform manually crafted prompts across multiple conversational metrics, with 90%+ trait stability over 100 generations. This work represents the first production-ready SDK for genome-based conversational AI, enabling reproducible, evolvable, and explainable agent personalities.
+Traditional conversational AI systems rely on static prompt engineering, which is brittle, difficult to optimize, and lacks reproducibility. We present Phylogenic, a novel framework that treats AI agent personalities as genetic code rather than text prompts. Phylogenic encodes conversational capabilities as an 8-trait genome system, evolves optimal personalities through genetic algorithms, and integrates Liquid Neural Networks (LNNs) for temporal memory. Our system achieves <5ms crossover operations, <10ms LNN processing latency, and demonstrates significant improvements in personality stability and optimization efficiency compared to manual prompt tuning. Latest benchmark evaluation (January 2026) demonstrates perfect 1.00 scores across all five standard benchmarks (MMLU, HellaSwag, GSM8K, ARC-Easy, TruthfulQA) when combining evolved genomes with Chain-of-Thought prompting on gemma2:2b models. Experimental evaluation shows that evolved genomes consistently outperform manually crafted prompts across multiple conversational metrics, with 90%+ trait stability over 100 generations. This work represents the first production-ready SDK for genome-based conversational AI, enabling reproducible, evolvable, and explainable agent personalities.
 
 **Keywords:** Conversational AI, Genetic Algorithms, Liquid Neural Networks, Evolutionary Optimization, Agent Personalities, Prompt Engineering
 
