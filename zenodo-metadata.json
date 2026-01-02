@@ -1,11 +1,12 @@
 {
   "metadata": {
     "creators": [
-      {"name": "Jimmy De Jesus", "affiliation": "Phylogenic Labs", "orcid": "0000-0002-1825-0097"}
+      {"name": "Jimmy De Jesus", "affiliation": "Bravetto", "orcid": "0000-0002-1825-0097"}
     ],
     "keywords": ["benchmark", "matrix-evaluation", "LLM"],
     "related_identifiers": [
-      {"identifier": "https://github.com/PhylogenicAIAgents/Phylogenic-AI-Agents/pull/19", "relation": "isSupplementTo"}
+      {"identifier": "https://github.com/PhylogenicAIAgents/Phylogenic-AI-Agents/pull/19", "relation": "isSupplementTo"},
+      {"identifier": "https://zenodo.org/records/18010560", "relation": "isRelatedTo", "scheme": "url"}
     ]
   }
 }
