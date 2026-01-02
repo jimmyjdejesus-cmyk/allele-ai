@@ -1,0 +1,136 @@
+name: Release Dry Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to test (e.g. v1.0.0)'
+        required: true
+      name:
+        description: 'Release name/title'
+        required: false
+        default: ''
+      body:
+        description: 'Release body/notes'
+        required: false
+        default: ''
+      dry_run:
+        description: 'If true, simulate Zenodo upload (default true)'
+        required: false
+        default: 'true'
+      publish_pypi:
+        description: 'If true and PYPI_API_TOKEN set, attempt PyPI upload (use with caution)'
+        required: false
+        default: 'false'
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set env from inputs
+        run: |
+          echo "RELEASE_TAG=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
+          echo "RELEASE_NAME=${{ github.event.inputs.name }}" >> $GITHUB_ENV
+          echo "RELEASE_BODY=${{ github.event.inputs.body }}" >> $GITHUB_ENV
+          echo "DRY_RUN=${{ github.event.inputs.dry_run }}" >> $GITHUB_ENV
+          echo "PUBLISH_PYPI=${{ github.event.inputs.publish_pypi }}" >> $GITHUB_ENV
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install build jq
+
+      - name: Build distributions (dry-run)
+        run: |
+          python -m build --sdist --wheel
+          ls -lah dist
+
+      - name: Collect zenodo metadata payload
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+import json, tomllib, os
+meta = {}
+if os.path.exists('pyproject.toml'):
+    with open('pyproject.toml','rb') as f:
+        data = tomllib.load(f)
+    proj = data.get('project', {})
+    if proj:
+        meta['name'] = proj.get('name')
+        meta['version'] = proj.get('version')
+        meta['authors'] = [a.get('name') if isinstance(a, dict) else a for a in proj.get('authors', [])]
+        meta['keywords'] = proj.get('keywords', []) or []
+        meta['license'] = (proj.get('license') or {}).get('text') if isinstance(proj.get('license'), dict) else proj.get('license')
+zen_file='zenodo-metadata.json'
+if os.path.exists(zen_file):
+    with open(zen_file,'r') as f:
+        extra=json.load(f)
+    meta.update(extra)
+payload={'metadata':{
+    'title': f"{meta.get('name','') or os.environ.get('RELEASE_NAME')} {os.environ.get('RELEASE_TAG')}",
+    'upload_type':'software',
+    'description': os.environ.get('RELEASE_BODY','').strip() or f'Release {os.environ.get("RELEASE_TAG")}',
+    'creators':[],
+    'version': meta.get('version',''),
+    'keywords': meta.get('keywords',[]),
+    'license': meta.get('license','')
+}}
+for a in meta.get('authors',[]):
+    name=a
+    if '<' in a:
+        name=a.split('<',1)[0].strip()
+    if '(' in name:
+        name=name.split('(')[0].strip()
+    payload['metadata']['creators'].append({'name':name})
+if os.path.exists(zen_file):
+    with open(zen_file,'r') as f:
+        extra=json.load(f)
+    payload['metadata'].update(extra.get('metadata',{}))
+os.makedirs('.zenodo', exist_ok=True)
+with open('.zenodo/payload.json','w') as f:
+    json.dump(payload,f,indent=2)
+print('Wrote .zenodo/payload.json')
+PY
+
+      - name: Show dry-run summary
+        run: |
+          echo "Release tag: $RELEASE_TAG"
+          echo "Payload preview:"
+          jq . .zenodo/payload.json || true
+          echo "Files to upload:"
+          ls -lah dist || true
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "DRY RUN enabled: No remote uploads will be performed.";
+            exit 0
+          fi
+
+      - name: Optionally upload to Zenodo (non-dry-run)
+        if: ${{ env.DRY_RUN == 'false' && secrets.ZENODO_TOKEN != '' }}
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
+          ZENODO_URL: ${{ secrets.ZENODO_URL || 'https://zenodo.org' }}
+        run: |
+          set -euo pipefail
+          echo "Creating Zenodo deposition (dry-run false)..."
+          resp=$(curl -s -X POST "$ZENODO_URL/api/deposit/depositions" -H "Content-Type: application/json" -H "Authorization: Bearer $ZENODO_TOKEN" -d @.zenodo/payload.json)
+          echo "$resp" | jq .
+
+      - name: Optionally upload to PyPI (non-dry-run)
+        if: ${{ env.PUBLISH_PYPI == 'true' && secrets.PYPI_API_TOKEN != '' }}
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          python -m pip install --upgrade twine
+          python -m twine upload dist/*
+
+      - name: Dry run finished
+        run: echo "Dry run complete."

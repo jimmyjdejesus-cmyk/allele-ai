@@ -1,0 +1,181 @@
+# Release workflow: builds dists, publishes to PyPI (if token provided),
+# attaches artifacts to the GitHub Release, and optionally uploads and
+# publishes a Zenodo deposition using the Zenodo REST API.
+#
+# Triggers: `release` events (type: "published").
+# Secrets expected (configure in repo Settings → Secrets):
+# - PYPI_API_TOKEN (optional) — API token for PyPI (aka __token__)
+# - ZENODO_TOKEN (optional) — Zenodo access token (for uploads)
+# - ZENODO_URL (optional) — Zenodo base URL; default: https://zenodo.org
+
+name: Release (PyPI + Zenodo)
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine jq
+
+      - name: Build distributions
+        run: |
+          python -m build --sdist --wheel
+          ls -lah dist
+
+      - name: Upload to PyPI (if PYPI_API_TOKEN provided)
+        if: ${{ secrets.PYPI_API_TOKEN != '' }}
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          python -m pip install --upgrade twine
+          python -m twine upload dist/*
+
+      - name: Upload artifacts to GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: dist/*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Collect project and release metadata for Zenodo
+        if: ${{ secrets.ZENODO_TOKEN != '' }}
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_NAME: ${{ github.event.release.name }}
+          RELEASE_BODY: ${{ github.event.release.body }}
+        run: |
+          set -euo pipefail
+          # Extract metadata from pyproject.toml (PEP 621) when available
+          python - <<'PY'
+import json, tomllib, os, sys
+meta = {}
+if os.path.exists('pyproject.toml'):
+    with open('pyproject.toml','rb') as f:
+        data = tomllib.load(f)
+    # PEP 621-style: project table
+    proj = data.get('project', {})
+    if proj:
+        meta['name'] = proj.get('name')
+        meta['version'] = proj.get('version')
+        meta['authors'] = [a.get('name') if isinstance(a, dict) else a for a in proj.get('authors', [])]
+        meta['keywords'] = proj.get('keywords', []) or []
+        meta['license'] = (proj.get('license') or {}).get('text') if isinstance(proj.get('license'), dict) else proj.get('license')
+    # poetry fallback
+    poetry = data.get('tool', {}).get('poetry', {})
+    if poetry and not meta:
+        meta['name'] = poetry.get('name')
+        meta['version'] = poetry.get('version')
+        meta['authors'] = poetry.get('authors', [])
+        meta['keywords'] = poetry.get('keywords', []) or []
+        meta['license'] = poetry.get('license')
+# Merge optional repo-level zenodo metadata file if present
+zenodo_file = 'zenodo-metadata.json'
+if os.path.exists(zenodo_file):
+    with open(zenodo_file,'r') as f:
+        extra = json.load(f)
+    meta.update(extra)
+# Assemble Zenodo metadata payload
+payload = {
+  'metadata': {
+    'title': f"{meta.get('name','') or os.environ.get('RELEASE_NAME')} {os.environ.get('RELEASE_TAG')}",
+    'upload_type': 'software',
+    'description': os.environ.get('RELEASE_BODY','').strip() or f'Release {os.environ.get("RELEASE_TAG")}',
+    'creators': [],
+    'version': meta.get('version',''),
+    'keywords': meta.get('keywords',[]),
+    'license': meta.get('license','')
+  }
+}
+for a in meta.get('authors',[]):
+    name = a
+    # If author is in the form 'Name <email>' or 'Name (affiliation) <email>', keep name only
+    if '<' in a:
+        name = a.split('<',1)[0].strip()
+    if '(' in name:
+        name = name.split('(')[0].strip()
+    payload['metadata']['creators'].append({'name': name})
+# Allow overriding/adding fields from zenodo-metadata.json under 'metadata' key
+if os.path.exists(zenodo_file):
+    with open(zenodo_file,'r') as f:
+        extra = json.load(f)
+    payload['metadata'].update(extra.get('metadata',{}))
+# Save payload
+os.makedirs('.zenodo', exist_ok=True)
+with open('.zenodo/payload.json','w') as f:
+    json.dump(payload, f, indent=2)
+print('Zenodo metadata payload written to .zenodo/payload.json')
+PY
+
+      - name: Publish release to Zenodo (optional)
+        if: ${{ secrets.ZENODO_TOKEN != '' }}
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
+          ZENODO_URL: ${{ secrets.ZENODO_URL || 'https://zenodo.org' }}
+          DRY_RUN: ${{ env.ZENODO_DRY_RUN || 'false' }}
+        run: |
+          set -euo pipefail
+          payload_file=.zenodo/payload.json
+          if [ ! -f "$payload_file" ]; then
+            echo "Payload $payload_file missing"
+            exit 1
+          fi
+
+          echo "Zenodo payload preview:" >&2
+          jq . "$payload_file" >&2 || true
+
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "DRY RUN mode: skipping Zenodo upload and publish (deposition not created)."
+            exit 0
+          fi
+
+          echo "Creating Zenodo deposition at $ZENODO_URL..."
+          resp=$(curl -s -X POST "$ZENODO_URL/api/deposit/depositions" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $ZENODO_TOKEN" \
+            -d @"$payload_file")
+
+          depo_id=$(echo "$resp" | jq -r '.id')
+          if [ "$depo_id" = "null" ] || [ -z "$depo_id" ]; then
+            echo "Zenodo deposition creation failed: $resp"
+            exit 1
+          fi
+          echo "Zenodo deposition id: $depo_id"
+
+          for f in dist/*; do
+            echo "Uploading $f to Zenodo deposition $depo_id..."
+            curl -s -X PUT "$ZENODO_URL/api/deposit/depositions/$depo_id/files?name=$(basename "$f")" \
+              -H "Authorization: Bearer $ZENODO_TOKEN" \
+              --data-binary @"$f"
+          done
+
+          # Publish deposition
+          pub_resp=$(curl -s -X POST "$ZENODO_URL/api/deposit/depositions/$depo_id/actions/publish" \
+            -H "Authorization: Bearer $ZENODO_TOKEN")
+          echo "$pub_resp" | jq .
+
+          doi_url=$(echo "$pub_resp" | jq -r '.doi_url // .links.doi')
+          echo "Zenodo DOI/URL: $doi_url"
+
+          if [ -n "$doi_url" ] && [ "$doi_url" != "null" ]; then
+            gh api repos/${{ github.repository }}/releases/${{ github.event.release.id }}/comments -F body="Zenodo archive published: $doi_url" || true
+          fi
+      - name: Finished
+        run: echo "Release workflow completed." 
