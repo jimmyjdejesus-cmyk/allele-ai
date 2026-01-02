@@ -1,0 +1,153 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # TEMP DEBUG: gather logs from all matrix entries
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node 20 (for OpenSpec)
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install OpenSpec CLI
+      run: |
+        npm install -g openspec
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache pip
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-${{ matrix.python-version }}-
+          ${{ runner.os }}-pip-
+
+    - name: Enable action debug output (TEMP DEBUG)
+      env:
+        ACTIONS_STEP_DEBUG: true
+        ACTIONS_RUNNER_DEBUG: true
+      run: echo "Enabled ACTIONS_STEP_DEBUG and ACTIONS_RUNNER_DEBUG"
+
+    - name: Install dependencies (verbose, capture logs) # TEMP DEBUG
+      run: |
+        set -euo pipefail
+        python -m pip install --upgrade pip
+        # Install only the dev extras in the matrix to keep matrix jobs fast and avoid optional heavy deps
+        pip install -v -e .[dev] 2>&1 | tee pip-install-${{ matrix.python-version }}.log
+        # Best-effort typing stub installs: attempt and warn if unavailable (do not fail the job)
+        python - <<'PY'
+import subprocess, sys
+pkgs = [
+    "types-tensorflow",
+    "types-tiktoken",
+    "types-scipy",
+    "types-scikit-learn",
+    "types-psutil",
+    "types-pandas",
+]
+for pkg in pkgs:
+    print(f"Attempting to install {pkg}")
+    r = subprocess.run([sys.executable, "-m", "pip", "install", pkg], capture_output=True, text=True)
+    print(r.stdout)
+    if r.returncode != 0:
+        print(f"WARNING: failed to install {pkg}: {r.stderr}", file=sys.stderr)
+PY
+
+    - name: Upload pip install logs (TEMP DEBUG)
+      uses: actions/upload-artifact@v4
+      with:
+        name: pip-install-log-${{ matrix.python-version }}
+        path: pip-install-${{ matrix.python-version }}.log
+
+    - name: Lint with ruff
+      run: ruff check src/ tests/
+
+    - name: Type check with mypy
+      run: mypy src/
+
+    - name: Run tests
+      run: pytest --cov=allele --cov-report=xml
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.xml
+        flags: unittests
+        fail_ci_if_error: false
+
+  codespell:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Remove generated benchmark results (avoid spurious codespell)
+      run: rm -rf benchmark_results || true
+
+    - name: Codespell (custom)
+      run: |
+        python -m pip install --upgrade pip
+        pip install codespell
+        # Run codespell while skipping generated benchmark outputs and common binary files
+        codespell -q 3 --skip="benchmark_results/**,*.pyc,*.json,*.jsonl,*.lock"
+
+  # Dedicated job to install heavy/optional extras in an isolated run
+  heavy-deps:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install heavy extras (docs,all)
+      run: |
+        set -euo pipefail
+        python -m pip install --upgrade pip
+        pip install -v -e .[docs,all] 2>&1 | tee pip-install-heavy.log
+
+    - name: Upload pip install logs (heavy)
+      uses: actions/upload-artifact@v4
+      with:
+        name: pip-install-log-heavy
+        path: pip-install-heavy.log
+
+  workflow-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install yamllint
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install yamllint
+
+    - name: Lint workflow YAML files
+      run: |
+        yamllint .github/workflows || true

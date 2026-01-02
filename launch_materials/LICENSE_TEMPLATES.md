@@ -6,13 +6,13 @@ Use these templates to create the PDF license files for your customers.
 
 ## COMMERCIAL DEVELOPER LICENSE AGREEMENT
 
-**Licensor:** Bravetto AI Systems (Allele)
+**Licensor:** Bravetto AI Systems (Phylogenic)
 **Licensee:** [Purchaser Name/Company]
-**Product:** Allele Phylogenic Agent SDK
+**Product:** Phylogenic Phylogenic Agent SDK
 **Effective Date:** [Date of Purchase]
 
 ### 1. Grant of License
-Subject to the terms of this Agreement, Licensor grants Licensee a perpetual, non-exclusive, non-transferable, worldwide license to use the Allele SDK ("Software") for commercial purposes.
+Subject to the terms of this Agreement, Licensor grants Licensee a perpetual, non-exclusive, non-transferable, worldwide license to use the Phylogenic SDK ("Software") for commercial purposes.
 
 ### 2. Commercial Rights
 Licensee is granted the right to:
@@ -35,9 +35,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## ENTERPRISE / AGENCY LICENSE AGREEMENT
 
-**Licensor:** Bravetto AI Systems (Allele)
+**Licensor:** Bravetto AI Systems (Phylogenic)
 **Licensee:** [Purchaser Name/Company]
-**Product:** Allele Phylogenic Agent SDK (Enterprise Edition)
+**Product:** Phylogenic Phylogenic Agent SDK (Enterprise Edition)
 **Effective Date:** [Date of Purchase]
 
 ### 1. Grant of License

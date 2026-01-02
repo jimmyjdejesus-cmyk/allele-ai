@@ -1,9 +1,9 @@
-# Allele Documentation
+# Phylogenic Documentation
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](https://github.com/allele-ai/allele/blob/main/LICENSE)
-[![PyPI](https://img.shields.io/badge/PyPI-allele-blue)](https://pypi.org/project/allele/)
-[![Documentation Status](https://readthedocs.org/projects/allele/badge/?version=latest)](https://allele.readthedocs.io/en/latest/?badge=latest)
+[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](https://github.com/phylogenic-ai/phylogenic/blob/main/LICENSE)
+[![PyPI](https://img.shields.io/badge/PyPI-phylogenic-blue)](https://pypi.org/project/phylogenic/)
+[![Documentation Status](https://readthedocs.org/projects/phylogenic/badge/?version=latest)](https://phylogenic.readthedocs.io/en/latest/?badge=latest)
 
 **Beyond Prompt Engineering. Evolve Genetically Optimized Personalities with Liquid Memory & Real LLM Conversations.**
 
@@ -13,7 +13,7 @@
 
 Traditional Agents are brittle. They hallucinate, drift, and forget.
 
-**Allele changes the substrate.**
+**Phylogenic changes the substrate.**
 
 We replaced static prompts with **8-Trait Genetic Code** and **Liquid Neural Networks (LNNs)**.
 
@@ -30,12 +30,12 @@ We replaced static prompts with **8-Trait Genetic Code** and **Liquid Neural Net
 
 ## The Solution
 
-**Allele treats Agent personalities like DNA, not text.**
+**Phylogenic treats Agent personalities like DNA, not text.**
 
 Instead of writing prompts, you define a **Genome** with 8 evolved traits:
 
 ```python
-from allele import ConversationalGenome, create_agent, AgentConfig
+from phylogenic import ConversationalGenome, create_agent, AgentConfig
 
 # Define personality as genetic code
 genome = ConversationalGenome(
@@ -66,7 +66,7 @@ async for response in agent.chat("I need help"):
 ## 🚀 **Production-Ready Integration: Real AI, Real Results**
 
 ### **Real LLM Conversational AI**
-Allele connects to **actual AI services** - not mocks or simulations:
+Phylogenic connects to **actual AI services** - not mocks or simulations:
 
 ```python
 # Multi-provider support
@@ -121,12 +121,12 @@ context = await kraken.process_sequence(conversation)
 ## Installation
 
 ```bash
-pip install allele
+pip install phylogenic
 
 # With LLM providers
-pip install allele[openai]    # OpenAI GPT
-pip install allele[anthropic] # Anthropic Claude
-pip install allele[ollama]    # Ollama (local/cloud)
+pip install phylogenic[openai]    # OpenAI GPT
+pip install phylogenic[anthropic] # Anthropic Claude
+pip install phylogenic[ollama]    # Ollama (local/cloud)
 ```
 
 ---
@@ -139,7 +139,7 @@ pip install allele[ollama]    # Ollama (local/cloud)
 - [**Configuration**](configuration.md) - Setup and configuration options
 - [**LLM Integration**](LLM_INTEGRATION.md) - Multi-provider AI connectivity
 - [**Testing**](TESTING.md) - Testing frameworks and benchmarks
-- [**Whitepaper**](whitepaper/allele_whitepaper.md) - Research and technical details
+- [**Whitepaper**](whitepaper/phylogenic_whitepaper.md) - Research and technical details
 
 ---
 

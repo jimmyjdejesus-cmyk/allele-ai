@@ -1,12 +1,12 @@
 # Evolution Guide
 
-The Allele Evolution Engine implements genetic algorithms for breeding and evolving conversational genomes with expressed traits like empathy, creativity, technical knowledge, and engagement. This guide covers the core concepts, usage patterns, and configuration options.
+The Phylogenic Evolution Engine implements genetic algorithms for breeding and evolving conversational genomes with expressed traits like empathy, creativity, technical knowledge, and engagement. This guide covers the core concepts, usage patterns, and configuration options.
 
 ## Core Concepts
 
 ### Genetic Encoding
 
-Allele genes encode personality as 8 quantized traits (0.0 to 1.0):
+Phylogenic genes encode personality as 8 quantized traits (0.0 to 1.0):
 
 - **empathy**: Emotional understanding and compassion
 - **technical_knowledge**: Technical depth and accuracy
@@ -29,7 +29,7 @@ The engine uses standard genetic operators:
 ## Basic Usage
 
 ```python
-from allele import EvolutionEngine, EvolutionConfig, ConversationalGenome
+from phylogenic import EvolutionEngine, EvolutionConfig, ConversationalGenome
 
 # Configure evolution parameters
 config = EvolutionConfig(

@@ -9,36 +9,36 @@ Usage:
     python scripts/generate_figures.py
 """
 
+import json
 import os
 import sys
-import json
-import numpy as np
+from datetime import datetime
+from pathlib import Path
+
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
-from pathlib import Path
-from typing import Dict, List, Any
-from datetime import datetime
 
 # Add src to path for importing allele modules
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from allele.kraken_lnn import KrakenLNN
+from phylogenic.kraken_lnn import KrakenLNN
 from tests.test_utils import generate_test_sequence
 
 
 def set_plot_style():
     """Set consistent plotting style for whitepaper figures."""
-    plt.rcParams['figure.figsize'] = (10, 6)
-    plt.rcParams['font.size'] = 12
-    plt.rcParams['axes.labelsize'] = 12
-    plt.rcParams['axes.titlesize'] = 14
-    plt.rcParams['legend.fontsize'] = 10
-    plt.rcParams['xtick.labelsize'] = 10
-    plt.rcParams['ytick.labelsize'] = 10
+    plt.rcParams["figure.figsize"] = (10, 6)
+    plt.rcParams["font.size"] = 12
+    plt.rcParams["axes.labelsize"] = 12
+    plt.rcParams["axes.titlesize"] = 14
+    plt.rcParams["legend.fontsize"] = 10
+    plt.rcParams["xtick.labelsize"] = 10
+    plt.rcParams["ytick.labelsize"] = 10
 
     # Use a professional color palette
-    plt.style.use('seaborn-v0_8-whitegrid')
+    plt.style.use("seaborn-v0_8-whitegrid")
 
     # Set random seed for reproducible colors
     np.random.seed(2025)
@@ -68,20 +68,24 @@ def generate_kraken_performance_figure(save_path: str = None) -> str:
 
             # Time processing
             import time
+
             start_time = time.time()
 
             import asyncio
+
             result = asyncio.run(lnn.process_sequence(sequence))
 
             processing_time = time.time() - start_time
 
-            if result['success']:
-                results.append({
-                    'reservoir_size': size,
-                    'sequence_length': seq_len,
-                    'processing_time_ms': processing_time * 1000,
-                    'connectivity': connectivity
-                })
+            if result["success"]:
+                results.append(
+                    {
+                        "reservoir_size": size,
+                        "sequence_length": seq_len,
+                        "processing_time_ms": processing_time * 1000,
+                        "connectivity": connectivity,
+                    }
+                )
 
             # Clean up
             del lnn
@@ -94,27 +98,31 @@ def generate_kraken_performance_figure(save_path: str = None) -> str:
 
         # Create heatmap-style plot
         pivot_table = df.pivot_table(
-            values='processing_time_ms',
-            index='reservoir_size',
-            columns='sequence_length',
-            aggfunc='mean'
+            values="processing_time_ms",
+            index="reservoir_size",
+            columns="sequence_length",
+            aggfunc="mean",
         )
 
         sns.heatmap(
             pivot_table,
             annot=True,
-            fmt='.1f',
-            cmap='viridis_r',
+            fmt=".1f",
+            cmap="viridis_r",
             ax=ax,
-            cbar_kws={'label': 'Processing Time (ms)'}
+            cbar_kws={"label": "Processing Time (ms)"},
         )
 
-        ax.set_title('Kraken LNN Processing Time vs Reservoir Size and Sequence Length', fontsize=14, fontweight='bold')
-        ax.set_xlabel('Sequence Length', fontsize=12)
-        ax.set_ylabel('Reservoir Size', fontsize=12)
+        ax.set_title(
+            "Kraken LNN Processing Time vs Reservoir Size and Sequence Length",
+            fontsize=14,
+            fontweight="bold",
+        )
+        ax.set_xlabel("Sequence Length", fontsize=12)
+        ax.set_ylabel("Reservoir Size", fontsize=12)
 
     if save_path:
-        fig.savefig(save_path, dpi=300, bbox_inches='tight')
+        fig.savefig(save_path, dpi=300, bbox_inches="tight")
         plt.close(fig)
         print(f"✅ Kraken performance figure saved to {save_path}")
 
@@ -138,11 +146,13 @@ def generate_memory_usage_figure(save_path: str = None) -> str:
         connections_memory = size * size * 0.01  # For sparse connectivity
         total_estimated = base_memory + connections_memory
 
-        memory_estimates.append({
-            'reservoir_size': size,
-            'estimated_memory_kb': total_estimated,
-            'estimated_memory_mb': total_estimated / 1024
-        })
+        memory_estimates.append(
+            {
+                "reservoir_size": size,
+                "estimated_memory_kb": total_estimated,
+                "estimated_memory_mb": total_estimated / 1024,
+            }
+        )
 
     # Create figure
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
@@ -150,23 +160,27 @@ def generate_memory_usage_figure(save_path: str = None) -> str:
     df = pd.DataFrame(memory_estimates)
 
     # Linear scale plot
-    ax1.plot(df['reservoir_size'], df['estimated_memory_kb'], 'o-', linewidth=2, markersize=8)
-    ax1.set_xlabel('Reservoir Size', fontsize=12)
-    ax1.set_ylabel('Memory Usage (KB)', fontsize=12)
-    ax1.set_title('Linear Scale', fontsize=12, fontweight='bold')
+    ax1.plot(
+        df["reservoir_size"], df["estimated_memory_kb"], "o-", linewidth=2, markersize=8
+    )
+    ax1.set_xlabel("Reservoir Size", fontsize=12)
+    ax1.set_ylabel("Memory Usage (KB)", fontsize=12)
+    ax1.set_title("Linear Scale", fontsize=12, fontweight="bold")
     ax1.grid(True, alpha=0.3)
 
     # Log scale plot
-    ax2.loglog(df['reservoir_size'], df['estimated_memory_kb'], 's-', linewidth=2, markersize=8)
-    ax2.set_xlabel('Reservoir Size', fontsize=12)
-    ax2.set_ylabel('Memory Usage (KB)', fontsize=12)
-    ax2.set_title('Log-Log Scale', fontsize=12, fontweight='bold')
+    ax2.loglog(
+        df["reservoir_size"], df["estimated_memory_kb"], "s-", linewidth=2, markersize=8
+    )
+    ax2.set_xlabel("Reservoir Size", fontsize=12)
+    ax2.set_ylabel("Memory Usage (KB)", fontsize=12)
+    ax2.set_title("Log-Log Scale", fontsize=12, fontweight="bold")
     ax2.grid(True, alpha=0.3)
 
-    fig.suptitle('Kraken LNN Memory Usage Scaling', fontsize=16, fontweight='bold')
+    fig.suptitle("Kraken LNN Memory Usage Scaling", fontsize=16, fontweight="bold")
 
     if save_path:
-        fig.savefig(save_path, dpi=300, bbox_inches='tight')
+        fig.savefig(save_path, dpi=300, bbox_inches="tight")
         plt.close(fig)
         print(f"✅ Memory usage figure saved to {save_path}")
 
@@ -182,10 +196,16 @@ def generate_benchmark_comparison_figure(save_path: str = None) -> str:
 
     # Mock benchmark data (in real implementation, collect from actual benchmarks)
     benchmark_data = {
-        'Test Type': ['LSM Processing', 'Memory Consolidation', 'Sequence Learning', 'Reservoir Scaling', 'Memory Cleanup'],
-        'Baseline (ms)': [10, 50, 100, 200, 25],
-        'Optimized (ms)': [8, 35, 75, 150, 18],
-        'Improvement %': [20, 30, 25, 25, 28]
+        "Test Type": [
+            "LSM Processing",
+            "Memory Consolidation",
+            "Sequence Learning",
+            "Reservoir Scaling",
+            "Memory Cleanup",
+        ],
+        "Baseline (ms)": [10, 50, 100, 200, 25],
+        "Optimized (ms)": [8, 35, 75, 150, 18],
+        "Improvement %": [20, 30, 25, 25, 28],
     }
 
     df = pd.DataFrame(benchmark_data)
@@ -194,40 +214,52 @@ def generate_benchmark_comparison_figure(save_path: str = None) -> str:
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
 
     # Performance comparison
-    tests = df['Test Type']
+    tests = df["Test Type"]
     x = range(len(tests))
 
-    ax1.bar(x, df['Baseline (ms)'], width=0.35, label='Baseline', alpha=0.8)
-    ax1.bar([i + 0.35 for i in x], df['Optimized (ms)'], width=0.35, label='Optimized', alpha=0.8)
+    ax1.bar(x, df["Baseline (ms)"], width=0.35, label="Baseline", alpha=0.8)
+    ax1.bar(
+        [i + 0.35 for i in x],
+        df["Optimized (ms)"],
+        width=0.35,
+        label="Optimized",
+        alpha=0.8,
+    )
 
-    ax1.set_xlabel('Benchmark Test', fontsize=12)
-    ax1.set_ylabel('Execution Time (ms)', fontsize=12)
-    ax1.set_title('Performance Improvements', fontsize=14, fontweight='bold')
+    ax1.set_xlabel("Benchmark Test", fontsize=12)
+    ax1.set_ylabel("Execution Time (ms)", fontsize=12)
+    ax1.set_title("Performance Improvements", fontsize=14, fontweight="bold")
     ax1.set_xticks([i + 0.175 for i in x])
-    ax1.set_xticklabels(tests, rotation=45, ha='right')
+    ax1.set_xticklabels(tests, rotation=45, ha="right")
     ax1.legend()
     ax1.grid(True, alpha=0.3)
 
     # Improvement percentage
-    colors = ['green' if x > 20 else 'orange' for x in df['Improvement %']]
-    bars = ax2.bar(df['Test Type'], df['Improvement %'], color=colors, alpha=0.7)
+    colors = ["green" if x > 20 else "orange" for x in df["Improvement %"]]
+    bars = ax2.bar(df["Test Type"], df["Improvement %"], color=colors, alpha=0.7)
 
-    ax2.set_xlabel('Benchmark Test', fontsize=12)
-    ax2.set_ylabel('Improvement (%)', fontsize=12)
-    ax2.set_title('Performance Improvement (%)', fontsize=14, fontweight='bold')
-    ax2.set_ylim(0, max(df['Improvement %']) * 1.2)
-    ax2.tick_params(axis='x', rotation=45)
+    ax2.set_xlabel("Benchmark Test", fontsize=12)
+    ax2.set_ylabel("Improvement (%)", fontsize=12)
+    ax2.set_title("Performance Improvement (%)", fontsize=14, fontweight="bold")
+    ax2.set_ylim(0, max(df["Improvement %"]) * 1.2)
+    ax2.tick_params(axis="x", rotation=45)
 
     # Add value labels on bars
-    for bar, value in zip(bars, df['Improvement %']):
-        ax2.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,
-                '.0f', ha='center', va='bottom', fontweight='bold')
+    for bar, _value in zip(bars, df["Improvement %"]):
+        ax2.text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height() + 1,
+            ".0f",
+            ha="center",
+            va="bottom",
+            fontweight="bold",
+        )
 
-    fig.suptitle('Kraken LNN Benchmark Comparisons', fontsize=16, fontweight='bold')
+    fig.suptitle("Kraken LNN Benchmark Comparisons", fontsize=16, fontweight="bold")
     plt.tight_layout()
 
     if save_path:
-        fig.savefig(save_path, dpi=300, bbox_inches='tight')
+        fig.savefig(save_path, dpi=300, bbox_inches="tight")
         plt.close(fig)
         print(f"✅ Benchmark comparison figure saved to {save_path}")
 
@@ -264,12 +296,30 @@ def generate_fitness_evolution_figure(save_path: str = None) -> str:
     # Create figure
     fig, ax = plt.subplots(1, 1, figsize=(10, 6))
 
-    ax.plot(generations, best_fitness, 'o-', linewidth=2, markersize=8, label='Best Fitness', color='#1f77b4')
-    ax.plot(generations, avg_fitness, 's-', linewidth=2, markersize=6, label='Average Fitness', color='#ff7f0e')
+    ax.plot(
+        generations,
+        best_fitness,
+        "o-",
+        linewidth=2,
+        markersize=8,
+        label="Best Fitness",
+        color="#1f77b4",
+    )
+    ax.plot(
+        generations,
+        avg_fitness,
+        "s-",
+        linewidth=2,
+        markersize=6,
+        label="Average Fitness",
+        color="#ff7f0e",
+    )
 
-    ax.set_xlabel('Generation', fontsize=12)
-    ax.set_ylabel('Fitness Score', fontsize=12)
-    ax.set_title('Evolution Fitness Progress Over Generations', fontsize=14, fontweight='bold')
+    ax.set_xlabel("Generation", fontsize=12)
+    ax.set_ylabel("Fitness Score", fontsize=12)
+    ax.set_title(
+        "Evolution Fitness Progress Over Generations", fontsize=14, fontweight="bold"
+    )
     ax.set_ylim(0, 1.0)
     ax.legend()
     ax.grid(True, alpha=0.3)
@@ -278,10 +328,17 @@ def generate_fitness_evolution_figure(save_path: str = None) -> str:
     z = np.polyfit(list(generations), best_fitness, 2)
     p = np.poly1d(z)
     trend_x = np.linspace(min(generations), max(generations), 100)
-    ax.plot(trend_x, p(trend_x), '--', alpha=0.7, color='#1f77b4', label='Best Fitness Trend')
+    ax.plot(
+        trend_x,
+        p(trend_x),
+        "--",
+        alpha=0.7,
+        color="#1f77b4",
+        label="Best Fitness Trend",
+    )
 
     if save_path:
-        fig.savefig(save_path, dpi=300, bbox_inches='tight')
+        fig.savefig(save_path, dpi=300, bbox_inches="tight")
         plt.close(fig)
         print(f"✅ Fitness evolution figure saved to {save_path}")
 
@@ -300,10 +357,10 @@ def generate_all_figures(output_dir: str = "figures"):
     set_plot_style()
 
     figures = {
-        'kraken_performance.png': generate_kraken_performance_figure,
-        'memory_usage.png': generate_memory_usage_figure,
-        'benchmark_comparison.png': generate_benchmark_comparison_figure,
-        'fitness_evolution.png': generate_fitness_evolution_figure
+        "kraken_performance.png": generate_kraken_performance_figure,
+        "memory_usage.png": generate_memory_usage_figure,
+        "benchmark_comparison.png": generate_benchmark_comparison_figure,
+        "fitness_evolution.png": generate_fitness_evolution_figure,
     }
 
     generated_files = []
@@ -319,14 +376,14 @@ def generate_all_figures(output_dir: str = "figures"):
 
     # Generate metadata file
     metadata = {
-        'generation_timestamp': datetime.now().isoformat(),
-        'random_seed': 2024,
-        'figures': generated_files,
-        'description': 'Reproducible figures for Allele whitepaper'
+        "generation_timestamp": datetime.now().isoformat(),
+        "random_seed": 2024,
+        "figures": generated_files,
+        "description": "Reproducible figures for Allele whitepaper",
     }
 
     metadata_file = output_path / "figures_metadata.json"
-    with open(metadata_file, 'w') as f:
+    with open(metadata_file, "w") as f:
         json.dump(metadata, f, indent=2)
 
     print(f"✅ Generated {len(generated_files)} figures in {output_dir}")
@@ -335,7 +392,7 @@ def generate_all_figures(output_dir: str = "figures"):
     return generated_files
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("🚀 Allele Whitepaper Figure Generation")
     print(f"Started at: {datetime.now()}")
 
@@ -351,5 +408,4 @@ if __name__ == '__main__':
         print(f"❌ Figure generation failed: {e}")
         sys.exit(1)
 
-    print("
-✅ All whitepaper figures are ready for inclusion!"
+    print("✅ All whitepaper figures are ready for inclusion!")

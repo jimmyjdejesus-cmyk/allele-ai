@@ -1,0 +1,5677 @@
+{
+  "timestamp": "2025-12-31T18:58:14.902844",
+  "completed": [
+    "qwen2.5:0.5b::baseline::mmlu",
+    "qwen2.5:0.5b::baseline::hellaswag",
+    "qwen2.5:0.5b::baseline::gsm8k",
+    "qwen2.5:0.5b::baseline::arc_easy",
+    "qwen2.5:0.5b::baseline::truthfulqa_mc2",
+    "qwen2.5:0.5b::technical_expert::mmlu",
+    "qwen2.5:0.5b::technical_expert::hellaswag",
+    "qwen2.5:0.5b::technical_expert::gsm8k",
+    "qwen2.5:0.5b::technical_expert::arc_easy",
+    "qwen2.5:0.5b::technical_expert::truthfulqa_mc2",
+    "qwen2.5:0.5b::creative_thinker::mmlu",
+    "qwen2.5:0.5b::creative_thinker::hellaswag",
+    "qwen2.5:0.5b::creative_thinker::gsm8k",
+    "qwen2.5:0.5b::creative_thinker::arc_easy",
+    "qwen2.5:0.5b::creative_thinker::truthfulqa_mc2",
+    "qwen2.5:0.5b::concise_analyst::mmlu",
+    "qwen2.5:0.5b::concise_analyst::hellaswag",
+    "qwen2.5:0.5b::concise_analyst::gsm8k",
+    "qwen2.5:0.5b::concise_analyst::arc_easy",
+    "qwen2.5:0.5b::concise_analyst::truthfulqa_mc2",
+    "qwen2.5:0.5b::balanced::mmlu",
+    "qwen2.5:0.5b::balanced::hellaswag",
+    "qwen2.5:0.5b::balanced::gsm8k",
+    "qwen2.5:0.5b::balanced::arc_easy",
+    "qwen2.5:0.5b::balanced::truthfulqa_mc2",
+    "qwen2.5:0.5b::high_context::mmlu",
+    "qwen2.5:0.5b::high_context::hellaswag",
+    "qwen2.5:0.5b::high_context::gsm8k",
+    "qwen2.5:0.5b::high_context::arc_easy",
+    "qwen2.5:0.5b::high_context::truthfulqa_mc2",
+    "qwen2.5:0.5b::technical_expert+cot::mmlu",
+    "qwen2.5:0.5b::technical_expert+cot::hellaswag",
+    "qwen2.5:0.5b::technical_expert+cot::gsm8k",
+    "qwen2.5:0.5b::technical_expert+cot::arc_easy",
+    "qwen2.5:0.5b::technical_expert+cot::truthfulqa_mc2",
+    "qwen2.5:0.5b::creative_thinker+cot::mmlu",
+    "qwen2.5:0.5b::creative_thinker+cot::hellaswag",
+    "qwen2.5:0.5b::creative_thinker+cot::gsm8k",
+    "qwen2.5:0.5b::creative_thinker+cot::arc_easy",
+    "qwen2.5:0.5b::creative_thinker+cot::truthfulqa_mc2",
+    "qwen2.5:0.5b::concise_analyst+cot::mmlu",
+    "qwen2.5:0.5b::concise_analyst+cot::hellaswag",
+    "qwen2.5:0.5b::concise_analyst+cot::gsm8k",
+    "qwen2.5:0.5b::concise_analyst+cot::arc_easy",
+    "qwen2.5:0.5b::concise_analyst+cot::truthfulqa_mc2",
+    "qwen2.5:0.5b::balanced+cot::mmlu",
+    "qwen2.5:0.5b::balanced+cot::hellaswag",
+    "qwen2.5:0.5b::balanced+cot::gsm8k",
+    "qwen2.5:0.5b::balanced+cot::arc_easy",
+    "qwen2.5:0.5b::balanced+cot::truthfulqa_mc2",
+    "qwen2.5:0.5b::high_context+cot::mmlu",
+    "qwen2.5:0.5b::high_context+cot::hellaswag",
+    "qwen2.5:0.5b::high_context+cot::gsm8k",
+    "qwen2.5:0.5b::high_context+cot::arc_easy",
+    "qwen2.5:0.5b::high_context+cot::truthfulqa_mc2",
+    "qwen2.5:0.5b::cot::mmlu",
+    "qwen2.5:0.5b::cot::hellaswag",
+    "qwen2.5:0.5b::cot::gsm8k",
+    "qwen2.5:0.5b::cot::arc_easy",
+    "qwen2.5:0.5b::cot::truthfulqa_mc2",
+    "llama3.2:1b::baseline::mmlu",
+    "llama3.2:1b::baseline::hellaswag",
+    "llama3.2:1b::baseline::gsm8k",
+    "llama3.2:1b::baseline::arc_easy",
+    "llama3.2:1b::baseline::truthfulqa_mc2",
+    "llama3.2:1b::technical_expert::mmlu",
+    "llama3.2:1b::technical_expert::hellaswag",
+    "llama3.2:1b::technical_expert::gsm8k",
+    "llama3.2:1b::technical_expert::arc_easy",
+    "llama3.2:1b::technical_expert::truthfulqa_mc2",
+    "llama3.2:1b::creative_thinker::mmlu",
+    "llama3.2:1b::creative_thinker::hellaswag",
+    "llama3.2:1b::creative_thinker::gsm8k",
+    "llama3.2:1b::creative_thinker::arc_easy",
+    "llama3.2:1b::creative_thinker::truthfulqa_mc2",
+    "llama3.2:1b::concise_analyst::mmlu",
+    "llama3.2:1b::concise_analyst::hellaswag",
+    "llama3.2:1b::concise_analyst::gsm8k",
+    "llama3.2:1b::concise_analyst::arc_easy",
+    "llama3.2:1b::concise_analyst::truthfulqa_mc2",
+    "llama3.2:1b::balanced::mmlu",
+    "llama3.2:1b::balanced::hellaswag",
+    "llama3.2:1b::balanced::gsm8k",
+    "llama3.2:1b::balanced::arc_easy",
+    "llama3.2:1b::balanced::truthfulqa_mc2",
+    "llama3.2:1b::high_context::mmlu",
+    "llama3.2:1b::high_context::hellaswag",
+    "llama3.2:1b::high_context::gsm8k",
+    "llama3.2:1b::high_context::arc_easy",
+    "llama3.2:1b::high_context::truthfulqa_mc2",
+    "llama3.2:1b::technical_expert+cot::mmlu",
+    "llama3.2:1b::technical_expert+cot::hellaswag",
+    "llama3.2:1b::technical_expert+cot::gsm8k",
+    "llama3.2:1b::technical_expert+cot::arc_easy",
+    "llama3.2:1b::technical_expert+cot::truthfulqa_mc2",
+    "llama3.2:1b::creative_thinker+cot::mmlu",
+    "llama3.2:1b::creative_thinker+cot::hellaswag",
+    "llama3.2:1b::creative_thinker+cot::gsm8k",
+    "llama3.2:1b::creative_thinker+cot::arc_easy",
+    "llama3.2:1b::creative_thinker+cot::truthfulqa_mc2",
+    "llama3.2:1b::concise_analyst+cot::mmlu",
+    "llama3.2:1b::concise_analyst+cot::hellaswag",
+    "llama3.2:1b::concise_analyst+cot::gsm8k",
+    "llama3.2:1b::concise_analyst+cot::arc_easy",
+    "llama3.2:1b::concise_analyst+cot::truthfulqa_mc2",
+    "llama3.2:1b::balanced+cot::mmlu",
+    "llama3.2:1b::balanced+cot::hellaswag",
+    "llama3.2:1b::balanced+cot::gsm8k",
+    "llama3.2:1b::balanced+cot::arc_easy",
+    "llama3.2:1b::balanced+cot::truthfulqa_mc2",
+    "llama3.2:1b::high_context+cot::mmlu",
+    "llama3.2:1b::high_context+cot::hellaswag",
+    "llama3.2:1b::high_context+cot::gsm8k",
+    "llama3.2:1b::high_context+cot::arc_easy",
+    "llama3.2:1b::high_context+cot::truthfulqa_mc2",
+    "llama3.2:1b::cot::mmlu",
+    "llama3.2:1b::cot::hellaswag",
+    "llama3.2:1b::cot::gsm8k",
+    "llama3.2:1b::cot::arc_easy",
+    "llama3.2:1b::cot::truthfulqa_mc2",
+    "gemma2:2b::baseline::mmlu",
+    "gemma2:2b::baseline::hellaswag",
+    "gemma2:2b::baseline::gsm8k",
+    "gemma2:2b::baseline::arc_easy",
+    "gemma2:2b::baseline::truthfulqa_mc2",
+    "gemma2:2b::technical_expert::mmlu",
+    "gemma2:2b::technical_expert::hellaswag",
+    "gemma2:2b::technical_expert::gsm8k",
+    "gemma2:2b::technical_expert::arc_easy",
+    "gemma2:2b::technical_expert::truthfulqa_mc2",
+    "gemma2:2b::creative_thinker::mmlu",
+    "gemma2:2b::creative_thinker::hellaswag",
+    "gemma2:2b::creative_thinker::gsm8k",
+    "gemma2:2b::creative_thinker::arc_easy",
+    "gemma2:2b::creative_thinker::truthfulqa_mc2",
+    "gemma2:2b::concise_analyst::mmlu",
+    "gemma2:2b::concise_analyst::hellaswag",
+    "gemma2:2b::concise_analyst::gsm8k",
+    "gemma2:2b::concise_analyst::arc_easy",
+    "gemma2:2b::concise_analyst::truthfulqa_mc2",
+    "gemma2:2b::balanced::mmlu",
+    "gemma2:2b::balanced::hellaswag",
+    "gemma2:2b::balanced::gsm8k",
+    "gemma2:2b::balanced::arc_easy",
+    "gemma2:2b::balanced::truthfulqa_mc2",
+    "gemma2:2b::high_context::mmlu",
+    "gemma2:2b::high_context::hellaswag",
+    "gemma2:2b::high_context::gsm8k",
+    "gemma2:2b::high_context::arc_easy",
+    "gemma2:2b::high_context::truthfulqa_mc2",
+    "gemma2:2b::technical_expert+cot::mmlu",
+    "gemma2:2b::technical_expert+cot::hellaswag",
+    "gemma2:2b::technical_expert+cot::gsm8k",
+    "gemma2:2b::technical_expert+cot::arc_easy",
+    "gemma2:2b::technical_expert+cot::truthfulqa_mc2",
+    "gemma2:2b::creative_thinker+cot::mmlu",
+    "gemma2:2b::creative_thinker+cot::hellaswag",
+    "gemma2:2b::creative_thinker+cot::gsm8k",
+    "gemma2:2b::creative_thinker+cot::arc_easy",
+    "gemma2:2b::creative_thinker+cot::truthfulqa_mc2",
+    "gemma2:2b::concise_analyst+cot::mmlu",
+    "gemma2:2b::concise_analyst+cot::hellaswag",
+    "gemma2:2b::concise_analyst+cot::gsm8k",
+    "gemma2:2b::concise_analyst+cot::arc_easy",
+    "gemma2:2b::concise_analyst+cot::truthfulqa_mc2",
+    "gemma2:2b::balanced+cot::mmlu",
+    "gemma2:2b::balanced+cot::hellaswag",
+    "gemma2:2b::balanced+cot::gsm8k",
+    "gemma2:2b::balanced+cot::arc_easy",
+    "gemma2:2b::balanced+cot::truthfulqa_mc2",
+    "gemma2:2b::high_context+cot::mmlu",
+    "gemma2:2b::high_context+cot::hellaswag",
+    "gemma2:2b::high_context+cot::gsm8k",
+    "gemma2:2b::high_context+cot::arc_easy",
+    "gemma2:2b::high_context+cot::truthfulqa_mc2",
+    "gemma2:2b::cot::mmlu",
+    "gemma2:2b::cot::hellaswag",
+    "gemma2:2b::cot::gsm8k",
+    "gemma2:2b::cot::arc_easy",
+    "gemma2:2b::cot::truthfulqa_mc2"
+  ],
+  "results": [
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "baseline",
+        "benchmark": "mmlu",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 0.8666666666666667,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.8666666666666667,
+            "acc": 0.8666666666666667,
+            "correct": 13,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 10.307476282119751,
+      "error": null,
+      "timestamp": "2025-12-31T18:18:42.505494"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "baseline",
+        "benchmark": "hellaswag",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 15.461229085922241,
+      "error": null,
+      "timestamp": "2025-12-31T18:18:57.967680"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "baseline",
+        "benchmark": "gsm8k",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 3.75803542137146,
+      "error": null,
+      "timestamp": "2025-12-31T18:19:01.726985"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "baseline",
+        "benchmark": "arc_easy",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 0.85,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.85,
+            "acc": 0.85,
+            "correct": 17,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 11.415127277374268,
+      "error": null,
+      "timestamp": "2025-12-31T18:19:13.143263"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "baseline",
+        "benchmark": "truthfulqa_mc2",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 0.75,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.75,
+            "acc": 0.75,
+            "correct": 15,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 10.754851579666138,
+      "error": null,
+      "timestamp": "2025-12-31T18:19:23.899268"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "technical_expert",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 12,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 8.478133916854858,
+      "error": null,
+      "timestamp": "2025-12-31T18:19:32.379102"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "technical_expert",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 14.668771266937256,
+      "error": null,
+      "timestamp": "2025-12-31T18:19:47.049008"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "technical_expert",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 4.756734371185303,
+      "error": null,
+      "timestamp": "2025-12-31T18:19:51.807256"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "technical_expert",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 16,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 13.49724268913269,
+      "error": null,
+      "timestamp": "2025-12-31T18:20:05.305977"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "technical_expert",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 0.9,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.9,
+            "acc": 0.9,
+            "correct": 18,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 11.358044862747192,
+      "error": null,
+      "timestamp": "2025-12-31T18:20:16.665331"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "creative_thinker",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 0.8666666666666667,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.8666666666666667,
+            "acc": 0.8666666666666667,
+            "correct": 13,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 7.578319549560547,
+      "error": null,
+      "timestamp": "2025-12-31T18:20:24.245257"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "creative_thinker",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 14.98985481262207,
+      "error": null,
+      "timestamp": "2025-12-31T18:20:39.236690"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "creative_thinker",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 4.7181596755981445,
+      "error": null,
+      "timestamp": "2025-12-31T18:20:43.956507"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "creative_thinker",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 0.75,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.75,
+            "acc": 0.75,
+            "correct": 15,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 11.963063716888428,
+      "error": null,
+      "timestamp": "2025-12-31T18:20:55.921126"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "creative_thinker",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 0.7,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.7,
+            "acc": 0.7,
+            "correct": 14,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 10.627357006072998,
+      "error": null,
+      "timestamp": "2025-12-31T18:21:06.550373"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "concise_analyst",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 0.8666666666666667,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.8666666666666667,
+            "acc": 0.8666666666666667,
+            "correct": 13,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 7.55255913734436,
+      "error": null,
+      "timestamp": "2025-12-31T18:21:14.104608"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "concise_analyst",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 15.136988401412964,
+      "error": null,
+      "timestamp": "2025-12-31T18:21:29.243704"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "concise_analyst",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 4.2445714473724365,
+      "error": null,
+      "timestamp": "2025-12-31T18:21:33.490240"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "concise_analyst",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 0.85,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.85,
+            "acc": 0.85,
+            "correct": 17,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 11.435275793075562,
+      "error": null,
+      "timestamp": "2025-12-31T18:21:44.927442"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "concise_analyst",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 0.75,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.75,
+            "acc": 0.75,
+            "correct": 15,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 9.901464223861694,
+      "error": null,
+      "timestamp": "2025-12-31T18:21:54.831554"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "balanced",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.7333333333333333,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.7333333333333333,
+            "acc": 0.7333333333333333,
+            "correct": 11,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 7.894568920135498,
+      "error": null,
+      "timestamp": "2025-12-31T18:22:02.728373"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "balanced",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 14.632184982299805,
+      "error": null,
+      "timestamp": "2025-12-31T18:22:17.363522"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "balanced",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.8888888888888888,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.8888888888888888,
+            "acc": 0.8888888888888888,
+            "correct": 8,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 5.2492241859436035,
+      "error": null,
+      "timestamp": "2025-12-31T18:22:22.615084"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "balanced",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 16,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 10.588788270950317,
+      "error": null,
+      "timestamp": "2025-12-31T18:22:33.206677"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "balanced",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 16,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 10.871256351470947,
+      "error": null,
+      "timestamp": "2025-12-31T18:22:44.080269"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "high_context",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.8666666666666667,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.8666666666666667,
+            "acc": 0.8666666666666667,
+            "correct": 13,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 8.874709606170654,
+      "error": null,
+      "timestamp": "2025-12-31T18:22:52.957707"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "high_context",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 14.745787620544434,
+      "error": null,
+      "timestamp": "2025-12-31T18:23:07.706143"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "high_context",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 4.596126556396484,
+      "error": null,
+      "timestamp": "2025-12-31T18:23:12.305415"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "high_context",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 16,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 11.219731092453003,
+      "error": null,
+      "timestamp": "2025-12-31T18:23:23.528261"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "high_context",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 16,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 11.746144771575928,
+      "error": null,
+      "timestamp": "2025-12-31T18:23:35.277068"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "technical_expert+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 0.7333333333333333,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.7333333333333333,
+            "acc": 0.7333333333333333,
+            "correct": 11,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 12.09819769859314,
+      "error": null,
+      "timestamp": "2025-12-31T18:23:47.378210"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "technical_expert+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 19.45868992805481,
+      "error": null,
+      "timestamp": "2025-12-31T18:24:06.840233"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "technical_expert+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 0.8888888888888888,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.8888888888888888,
+            "acc": 0.8888888888888888,
+            "correct": 8,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 5.725123405456543,
+      "error": null,
+      "timestamp": "2025-12-31T18:24:12.568468"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "technical_expert+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 0.55,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.55,
+            "acc": 0.55,
+            "correct": 11,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.981269598007202,
+      "error": null,
+      "timestamp": "2025-12-31T18:24:29.552964"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "technical_expert+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 0.65,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.65,
+            "acc": 0.65,
+            "correct": 13,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 14.871845722198486,
+      "error": null,
+      "timestamp": "2025-12-31T18:24:44.428168"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 0.9333333333333332,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.9333333333333332,
+            "acc": 0.9333333333333332,
+            "correct": 14,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 11.504279851913452,
+      "error": null,
+      "timestamp": "2025-12-31T18:24:55.935961"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 19.095896244049072,
+      "error": null,
+      "timestamp": "2025-12-31T18:25:15.035352"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 0.8888888888888888,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.8888888888888888,
+            "acc": 0.8888888888888888,
+            "correct": 8,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 5.921881437301636,
+      "error": null,
+      "timestamp": "2025-12-31T18:25:20.960705"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 0.6,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.6,
+            "acc": 0.6,
+            "correct": 12,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.598386764526367,
+      "error": null,
+      "timestamp": "2025-12-31T18:25:37.562559"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 0.7,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.7,
+            "acc": 0.7,
+            "correct": 14,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 15.464767456054688,
+      "error": null,
+      "timestamp": "2025-12-31T18:25:53.031241"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 0.9333333333333332,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.9333333333333332,
+            "acc": 0.9333333333333332,
+            "correct": 14,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 10.614843130111694,
+      "error": null,
+      "timestamp": "2025-12-31T18:26:03.650587"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 19.221787214279175,
+      "error": null,
+      "timestamp": "2025-12-31T18:26:22.876188"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 0.8888888888888888,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.8888888888888888,
+            "acc": 0.8888888888888888,
+            "correct": 8,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 6.254687070846558,
+      "error": null,
+      "timestamp": "2025-12-31T18:26:29.137461"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 0.85,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.85,
+            "acc": 0.85,
+            "correct": 17,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 17.08634662628174,
+      "error": null,
+      "timestamp": "2025-12-31T18:26:46.228781"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 0.65,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.65,
+            "acc": 0.65,
+            "correct": 13,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 15.733060359954834,
+      "error": null,
+      "timestamp": "2025-12-31T18:27:01.979169"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "balanced+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 12,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 10.969758749008179,
+      "error": null,
+      "timestamp": "2025-12-31T18:27:12.953155"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "balanced+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 18.769039154052734,
+      "error": null,
+      "timestamp": "2025-12-31T18:27:31.726367"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "balanced+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 5.87569522857666,
+      "error": null,
+      "timestamp": "2025-12-31T18:27:37.606437"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "balanced+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.65,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.65,
+            "acc": 0.65,
+            "correct": 13,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 17.789945363998413,
+      "error": null,
+      "timestamp": "2025-12-31T18:27:55.400639"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "balanced+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.75,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.75,
+            "acc": 0.75,
+            "correct": 15,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 15.249556064605713,
+      "error": null,
+      "timestamp": "2025-12-31T18:28:10.654520"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "high_context+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 12,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 10.45591139793396,
+      "error": null,
+      "timestamp": "2025-12-31T18:28:21.115997"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "high_context+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 18.98669981956482,
+      "error": null,
+      "timestamp": "2025-12-31T18:28:40.106978"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "high_context+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 5.483882904052734,
+      "error": null,
+      "timestamp": "2025-12-31T18:28:45.599709"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "high_context+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.7,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.7,
+            "acc": 0.7,
+            "correct": 14,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.813430547714233,
+      "error": null,
+      "timestamp": "2025-12-31T18:29:02.418413"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "high_context+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.7,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.7,
+            "acc": 0.7,
+            "correct": 14,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 14.377124547958374,
+      "error": null,
+      "timestamp": "2025-12-31T18:29:16.800827"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "cot",
+        "benchmark": "mmlu",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 12,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 11.893442392349243,
+      "error": null,
+      "timestamp": "2025-12-31T18:29:28.699944"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "cot",
+        "benchmark": "hellaswag",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 18.885865688323975,
+      "error": null,
+      "timestamp": "2025-12-31T18:29:47.591294"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "cot",
+        "benchmark": "gsm8k",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 5.840147018432617,
+      "error": null,
+      "timestamp": "2025-12-31T18:29:53.436549"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "cot",
+        "benchmark": "arc_easy",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 0.65,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.65,
+            "acc": 0.65,
+            "correct": 13,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.75914478302002,
+      "error": null,
+      "timestamp": "2025-12-31T18:30:10.201356"
+    },
+    {
+      "config": {
+        "model": "qwen2.5:0.5b",
+        "personality": "cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 0.75,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.75,
+            "acc": 0.75,
+            "correct": 15,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 14.147552728652954,
+      "error": null,
+      "timestamp": "2025-12-31T18:30:24.354651"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "baseline",
+        "benchmark": "mmlu",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 0.9333333333333332,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.9333333333333332,
+            "acc": 0.9333333333333332,
+            "correct": 14,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 11.024564743041992,
+      "error": null,
+      "timestamp": "2025-12-31T18:30:35.388533"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "baseline",
+        "benchmark": "hellaswag",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 0.9,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.9,
+            "acc": 0.9,
+            "correct": 18,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 8.90459942817688,
+      "error": null,
+      "timestamp": "2025-12-31T18:30:44.299150"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "baseline",
+        "benchmark": "gsm8k",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 0.33333333333333326,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.33333333333333326,
+            "acc": 0.33333333333333326,
+            "correct": 3,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 1.9309077262878418,
+      "error": null,
+      "timestamp": "2025-12-31T18:30:46.236488"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "baseline",
+        "benchmark": "arc_easy",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 11.10802960395813,
+      "error": null,
+      "timestamp": "2025-12-31T18:30:57.350926"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "baseline",
+        "benchmark": "truthfulqa_mc2",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 0.9,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.9,
+            "acc": 0.9,
+            "correct": 18,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 6.731635808944702,
+      "error": null,
+      "timestamp": "2025-12-31T18:31:04.088669"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "technical_expert",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 0.9333333333333332,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.9333333333333332,
+            "acc": 0.9333333333333332,
+            "correct": 14,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 7.128606557846069,
+      "error": null,
+      "timestamp": "2025-12-31T18:31:11.223047"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "technical_expert",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 16,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 9.999075651168823,
+      "error": null,
+      "timestamp": "2025-12-31T18:31:21.227610"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "technical_expert",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 0.33333333333333326,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.33333333333333326,
+            "acc": 0.33333333333333326,
+            "correct": 3,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 2.0429751873016357,
+      "error": null,
+      "timestamp": "2025-12-31T18:31:23.279472"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "technical_expert",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 12.410606145858765,
+      "error": null,
+      "timestamp": "2025-12-31T18:31:35.696493"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "technical_expert",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 0.9,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.9,
+            "acc": 0.9,
+            "correct": 18,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 6.89604640007019,
+      "error": null,
+      "timestamp": "2025-12-31T18:31:42.599521"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "creative_thinker",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 0.9333333333333332,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.9333333333333332,
+            "acc": 0.9333333333333332,
+            "correct": 14,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 6.46558690071106,
+      "error": null,
+      "timestamp": "2025-12-31T18:31:49.072755"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "creative_thinker",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 0.85,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.85,
+            "acc": 0.85,
+            "correct": 17,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 9.879169702529907,
+      "error": null,
+      "timestamp": "2025-12-31T18:31:58.958539"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "creative_thinker",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 0.33333333333333326,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.33333333333333326,
+            "acc": 0.33333333333333326,
+            "correct": 3,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 2.019130229949951,
+      "error": null,
+      "timestamp": "2025-12-31T18:32:00.985962"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "creative_thinker",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 11.110220909118652,
+      "error": null,
+      "timestamp": "2025-12-31T18:32:12.104111"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "creative_thinker",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 0.9,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.9,
+            "acc": 0.9,
+            "correct": 18,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 6.849689960479736,
+      "error": null,
+      "timestamp": "2025-12-31T18:32:18.960095"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "concise_analyst",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 0.9333333333333332,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.9333333333333332,
+            "acc": 0.9333333333333332,
+            "correct": 14,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 6.952821969985962,
+      "error": null,
+      "timestamp": "2025-12-31T18:32:25.919818"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "concise_analyst",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 0.85,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.85,
+            "acc": 0.85,
+            "correct": 17,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 9.931827783584595,
+      "error": null,
+      "timestamp": "2025-12-31T18:32:35.860736"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "concise_analyst",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 0.33333333333333326,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.33333333333333326,
+            "acc": 0.33333333333333326,
+            "correct": 3,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 2.0192012786865234,
+      "error": null,
+      "timestamp": "2025-12-31T18:32:37.887060"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "concise_analyst",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 10.95578908920288,
+      "error": null,
+      "timestamp": "2025-12-31T18:32:48.859899"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "concise_analyst",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 0.9,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.9,
+            "acc": 0.9,
+            "correct": 18,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 6.947590112686157,
+      "error": null,
+      "timestamp": "2025-12-31T18:32:55.817033"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "balanced",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.9333333333333332,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.9333333333333332,
+            "acc": 0.9333333333333332,
+            "correct": 14,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 7.016175270080566,
+      "error": null,
+      "timestamp": "2025-12-31T18:33:02.840236"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "balanced",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.9,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.9,
+            "acc": 0.9,
+            "correct": 18,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 9.545960664749146,
+      "error": null,
+      "timestamp": "2025-12-31T18:33:12.393445"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "balanced",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.33333333333333326,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.33333333333333326,
+            "acc": 0.33333333333333326,
+            "correct": 3,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 2.080207347869873,
+      "error": null,
+      "timestamp": "2025-12-31T18:33:14.480692"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "balanced",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 11.995568990707397,
+      "error": null,
+      "timestamp": "2025-12-31T18:33:26.486068"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "balanced",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.9,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.9,
+            "acc": 0.9,
+            "correct": 18,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 6.948506116867065,
+      "error": null,
+      "timestamp": "2025-12-31T18:33:33.442212"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "high_context",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.9333333333333332,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.9333333333333332,
+            "acc": 0.9333333333333332,
+            "correct": 14,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 6.637025833129883,
+      "error": null,
+      "timestamp": "2025-12-31T18:33:40.087625"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "high_context",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 9.743792533874512,
+      "error": null,
+      "timestamp": "2025-12-31T18:33:49.839553"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "high_context",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.33333333333333326,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.33333333333333326,
+            "acc": 0.33333333333333326,
+            "correct": 3,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 2.0419623851776123,
+      "error": null,
+      "timestamp": "2025-12-31T18:33:51.888965"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "high_context",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 12.288066864013672,
+      "error": null,
+      "timestamp": "2025-12-31T18:34:04.184184"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "high_context",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.9,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.9,
+            "acc": 0.9,
+            "correct": 18,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 7.14885950088501,
+      "error": null,
+      "timestamp": "2025-12-31T18:34:11.342782"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "technical_expert+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 12,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 16.07938051223755,
+      "error": null,
+      "timestamp": "2025-12-31T18:34:27.430805"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "technical_expert+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 24.233298540115356,
+      "error": null,
+      "timestamp": "2025-12-31T18:34:51.672840"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "technical_expert+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 5.071619749069214,
+      "error": null,
+      "timestamp": "2025-12-31T18:34:56.752187"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "technical_expert+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 16,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 24.1146821975708,
+      "error": null,
+      "timestamp": "2025-12-31T18:35:20.884925"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "technical_expert+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 16,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 20.223506212234497,
+      "error": null,
+      "timestamp": "2025-12-31T18:35:41.116436"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 12,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 16.618009567260742,
+      "error": null,
+      "timestamp": "2025-12-31T18:35:57.741885"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 24.105967044830322,
+      "error": null,
+      "timestamp": "2025-12-31T18:36:21.857265"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 4.8684539794921875,
+      "error": null,
+      "timestamp": "2025-12-31T18:36:26.733975"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 0.85,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.85,
+            "acc": 0.85,
+            "correct": 17,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 22.886622428894043,
+      "error": null,
+      "timestamp": "2025-12-31T18:36:49.629535"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 0.7,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.7,
+            "acc": 0.7,
+            "correct": 14,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 21.001066207885742,
+      "error": null,
+      "timestamp": "2025-12-31T18:37:10.638602"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 0.9333333333333332,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.9333333333333332,
+            "acc": 0.9333333333333332,
+            "correct": 14,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 16.057103395462036,
+      "error": null,
+      "timestamp": "2025-12-31T18:37:26.704264"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 24.10788059234619,
+      "error": null,
+      "timestamp": "2025-12-31T18:37:50.820410"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 4.7500128746032715,
+      "error": null,
+      "timestamp": "2025-12-31T18:37:55.579186"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 16,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 23.733269453048706,
+      "error": null,
+      "timestamp": "2025-12-31T18:38:19.321849"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 0.85,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.85,
+            "acc": 0.85,
+            "correct": 17,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 20.106764793395996,
+      "error": null,
+      "timestamp": "2025-12-31T18:38:39.437301"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "balanced+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.9333333333333332,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.9333333333333332,
+            "acc": 0.9333333333333332,
+            "correct": 14,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 16.20505666732788,
+      "error": null,
+      "timestamp": "2025-12-31T18:38:55.651382"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "balanced+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 23.40403151512146,
+      "error": null,
+      "timestamp": "2025-12-31T18:39:19.065563"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "balanced+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 4.596836566925049,
+      "error": null,
+      "timestamp": "2025-12-31T18:39:23.671027"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "balanced+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 22.617072343826294,
+      "error": null,
+      "timestamp": "2025-12-31T18:39:46.303137"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "balanced+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 16,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 21.238372564315796,
+      "error": null,
+      "timestamp": "2025-12-31T18:40:07.552345"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "high_context+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.9333333333333332,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.9333333333333332,
+            "acc": 0.9333333333333332,
+            "correct": 14,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 16.63648009300232,
+      "error": null,
+      "timestamp": "2025-12-31T18:40:24.198568"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "high_context+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 24.497363567352295,
+      "error": null,
+      "timestamp": "2025-12-31T18:40:48.710266"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "high_context+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 4.807700157165527,
+      "error": null,
+      "timestamp": "2025-12-31T18:40:53.527137"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "high_context+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.8,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.8,
+            "acc": 0.8,
+            "correct": 16,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 23.011192321777344,
+      "error": null,
+      "timestamp": "2025-12-31T18:41:16.547347"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "high_context+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.9,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.9,
+            "acc": 0.9,
+            "correct": 18,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 21.141111612319946,
+      "error": null,
+      "timestamp": "2025-12-31T18:41:37.698653"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "cot",
+        "benchmark": "mmlu",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 0.8666666666666667,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 0.8666666666666667,
+            "acc": 0.8666666666666667,
+            "correct": 13,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 16.054080963134766,
+      "error": null,
+      "timestamp": "2025-12-31T18:41:53.762627"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "cot",
+        "benchmark": "hellaswag",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 23.22366762161255,
+      "error": null,
+      "timestamp": "2025-12-31T18:42:16.995494"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "cot",
+        "benchmark": "gsm8k",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 4.868993282318115,
+      "error": null,
+      "timestamp": "2025-12-31T18:42:21.873932"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "cot",
+        "benchmark": "arc_easy",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 0.85,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 0.85,
+            "acc": 0.85,
+            "correct": 17,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 23.504049062728882,
+      "error": null,
+      "timestamp": "2025-12-31T18:42:45.387531"
+    },
+    {
+      "config": {
+        "model": "llama3.2:1b",
+        "personality": "cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 0.85,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.85,
+            "acc": 0.85,
+            "correct": 17,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 19.90105676651001,
+      "error": null,
+      "timestamp": "2025-12-31T18:43:05.298131"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "baseline",
+        "benchmark": "mmlu",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 16.857810735702515,
+      "error": null,
+      "timestamp": "2025-12-31T18:43:22.165866"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "baseline",
+        "benchmark": "hellaswag",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 17.247207164764404,
+      "error": null,
+      "timestamp": "2025-12-31T18:43:39.423107"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "baseline",
+        "benchmark": "gsm8k",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 1.7815489768981934,
+      "error": null,
+      "timestamp": "2025-12-31T18:43:41.214299"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "baseline",
+        "benchmark": "arc_easy",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 20.83044457435608,
+      "error": null,
+      "timestamp": "2025-12-31T18:44:02.061933"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "baseline",
+        "benchmark": "truthfulqa_mc2",
+        "traits": null,
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 12.51840353012085,
+      "error": null,
+      "timestamp": "2025-12-31T18:44:14.590501"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "technical_expert",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 11.986204624176025,
+      "error": null,
+      "timestamp": "2025-12-31T18:44:26.590445"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "technical_expert",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.4002742767334,
+      "error": null,
+      "timestamp": "2025-12-31T18:44:43.000698"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "technical_expert",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 1.7877521514892578,
+      "error": null,
+      "timestamp": "2025-12-31T18:44:44.798562"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "technical_expert",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 20.941274881362915,
+      "error": null,
+      "timestamp": "2025-12-31T18:45:05.756100"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "technical_expert",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 12.388921737670898,
+      "error": null,
+      "timestamp": "2025-12-31T18:45:18.156722"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "creative_thinker",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 12.404134035110474,
+      "error": null,
+      "timestamp": "2025-12-31T18:45:30.574415"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "creative_thinker",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 18.241989850997925,
+      "error": null,
+      "timestamp": "2025-12-31T18:45:48.827089"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "creative_thinker",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 1.7907063961029053,
+      "error": null,
+      "timestamp": "2025-12-31T18:45:50.628088"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "creative_thinker",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 21.44116449356079,
+      "error": null,
+      "timestamp": "2025-12-31T18:46:12.086462"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "creative_thinker",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 12.33115816116333,
+      "error": null,
+      "timestamp": "2025-12-31T18:46:24.427852"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "concise_analyst",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 12.248483180999756,
+      "error": null,
+      "timestamp": "2025-12-31T18:46:36.688860"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "concise_analyst",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.86595106124878,
+      "error": null,
+      "timestamp": "2025-12-31T18:46:53.564818"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "concise_analyst",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 1.7839927673339844,
+      "error": null,
+      "timestamp": "2025-12-31T18:46:55.359477"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "concise_analyst",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 21.3742892742157,
+      "error": null,
+      "timestamp": "2025-12-31T18:47:16.755110"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "concise_analyst",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 12.141185998916626,
+      "error": null,
+      "timestamp": "2025-12-31T18:47:28.906708"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "balanced",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 11.936294555664062,
+      "error": null,
+      "timestamp": "2025-12-31T18:47:40.856485"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "balanced",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.188401460647583,
+      "error": null,
+      "timestamp": "2025-12-31T18:47:57.056774"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "balanced",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 1.7722773551940918,
+      "error": null,
+      "timestamp": "2025-12-31T18:47:58.842769"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "balanced",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 22.255159378051758,
+      "error": null,
+      "timestamp": "2025-12-31T18:48:21.108999"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "balanced",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 12.260481357574463,
+      "error": null,
+      "timestamp": "2025-12-31T18:48:33.379930"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "high_context",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 11.832377195358276,
+      "error": null,
+      "timestamp": "2025-12-31T18:48:45.222724"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "high_context",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.41179871559143,
+      "error": null,
+      "timestamp": "2025-12-31T18:49:01.645213"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "high_context",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 0.7777777777777779,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.7777777777777779,
+            "acc": 0.7777777777777779,
+            "correct": 7,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 1.7725296020507812,
+      "error": null,
+      "timestamp": "2025-12-31T18:49:03.431684"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "high_context",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 21.414863109588623,
+      "error": null,
+      "timestamp": "2025-12-31T18:49:24.858656"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "high_context",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": false
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 12.668607473373413,
+      "error": null,
+      "timestamp": "2025-12-31T18:49:37.538758"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "technical_expert+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 14.298648834228516,
+      "error": null,
+      "timestamp": "2025-12-31T18:49:51.848266"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "technical_expert+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 24.14887309074402,
+      "error": null,
+      "timestamp": "2025-12-31T18:50:16.007820"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "technical_expert+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 0.8888888888888888,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.8888888888888888,
+            "acc": 0.8888888888888888,
+            "correct": 8,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 7.949643611907959,
+      "error": null,
+      "timestamp": "2025-12-31T18:50:23.971736"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "technical_expert+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 25.043373584747314,
+      "error": null,
+      "timestamp": "2025-12-31T18:50:49.026498"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "technical_expert+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.2,
+          "technical_knowledge": 0.99,
+          "creativity": 0.3,
+          "conciseness": 0.95,
+          "context_awareness": 0.9,
+          "adaptability": 0.5,
+          "engagement": 0.2,
+          "personability": 0.2
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.440704345703125,
+      "error": null,
+      "timestamp": "2025-12-31T18:51:05.479444"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 15.976587295532227,
+      "error": null,
+      "timestamp": "2025-12-31T18:51:21.467186"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 24.96323561668396,
+      "error": null,
+      "timestamp": "2025-12-31T18:51:46.444065"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 7.727003335952759,
+      "error": null,
+      "timestamp": "2025-12-31T18:51:54.186351"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 22.897460460662842,
+      "error": null,
+      "timestamp": "2025-12-31T18:52:17.094966"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "creative_thinker+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.7,
+          "technical_knowledge": 0.6,
+          "creativity": 0.99,
+          "conciseness": 0.4,
+          "context_awareness": 0.7,
+          "adaptability": 0.9,
+          "engagement": 0.8,
+          "personability": 0.7
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.04868745803833,
+      "error": null,
+      "timestamp": "2025-12-31T18:52:33.155163"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 15.143824338912964,
+      "error": null,
+      "timestamp": "2025-12-31T18:52:48.310880"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 24.19796347618103,
+      "error": null,
+      "timestamp": "2025-12-31T18:53:12.520448"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 7.782717227935791,
+      "error": null,
+      "timestamp": "2025-12-31T18:53:20.325001"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 20.950854539871216,
+      "error": null,
+      "timestamp": "2025-12-31T18:53:41.288025"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "concise_analyst+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.3,
+          "technical_knowledge": 0.85,
+          "creativity": 0.4,
+          "conciseness": 0.99,
+          "context_awareness": 0.8,
+          "adaptability": 0.6,
+          "engagement": 0.3,
+          "personability": 0.3
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.662957906723022,
+      "error": null,
+      "timestamp": "2025-12-31T18:53:57.966671"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "balanced+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 13.930880069732666,
+      "error": null,
+      "timestamp": "2025-12-31T18:54:11.909342"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "balanced+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 23.974692344665527,
+      "error": null,
+      "timestamp": "2025-12-31T18:54:35.899408"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "balanced+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 7.732765436172485,
+      "error": null,
+      "timestamp": "2025-12-31T18:54:43.645310"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "balanced+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 21.60366702079773,
+      "error": null,
+      "timestamp": "2025-12-31T18:55:05.264233"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "balanced+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.5,
+          "technical_knowledge": 0.7,
+          "creativity": 0.5,
+          "conciseness": 0.6,
+          "context_awareness": 0.7,
+          "adaptability": 0.7,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 15.680396795272827,
+      "error": null,
+      "timestamp": "2025-12-31T18:55:20.956995"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "high_context+cot",
+        "benchmark": "mmlu",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 16.056398630142212,
+      "error": null,
+      "timestamp": "2025-12-31T18:55:37.028842"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "high_context+cot",
+        "benchmark": "hellaswag",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 25.72889256477356,
+      "error": null,
+      "timestamp": "2025-12-31T18:56:02.770274"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "high_context+cot",
+        "benchmark": "gsm8k",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 0.8888888888888888,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 0.8888888888888888,
+            "acc": 0.8888888888888888,
+            "correct": 8,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 7.437505722045898,
+      "error": null,
+      "timestamp": "2025-12-31T18:56:10.226104"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "high_context+cot",
+        "benchmark": "arc_easy",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 22.23768901824951,
+      "error": null,
+      "timestamp": "2025-12-31T18:56:32.477313"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "high_context+cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": {
+          "empathy": 0.6,
+          "technical_knowledge": 0.8,
+          "creativity": 0.5,
+          "conciseness": 0.7,
+          "context_awareness": 0.99,
+          "adaptability": 0.8,
+          "engagement": 0.5,
+          "personability": 0.5
+        },
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 17.197345733642578,
+      "error": null,
+      "timestamp": "2025-12-31T18:56:49.690770"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "cot",
+        "benchmark": "mmlu",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "mmlu": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 15,
+            "total": 15
+          }
+        }
+      },
+      "execution_time": 13.623814582824707,
+      "error": null,
+      "timestamp": "2025-12-31T18:57:03.327425"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "cot",
+        "benchmark": "hellaswag",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "hellaswag": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 24.930598974227905,
+      "error": null,
+      "timestamp": "2025-12-31T18:57:28.274529"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "cot",
+        "benchmark": "gsm8k",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "gsm8k": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 9,
+            "total": 9
+          }
+        }
+      },
+      "execution_time": 7.7524049282073975,
+      "error": null,
+      "timestamp": "2025-12-31T18:57:36.040892"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "cot",
+        "benchmark": "arc_easy",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 1.0,
+      "raw_results": {
+        "results": {
+          "arc_easy": {
+            "acc,none": 1.0,
+            "acc": 1.0,
+            "correct": 20,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 22.2417471408844,
+      "error": null,
+      "timestamp": "2025-12-31T18:57:58.300078"
+    },
+    {
+      "config": {
+        "model": "gemma2:2b",
+        "personality": "cot",
+        "benchmark": "truthfulqa_mc2",
+        "traits": null,
+        "cot_mode": true
+      },
+      "score": 0.95,
+      "raw_results": {
+        "results": {
+          "truthfulqa_mc2": {
+            "acc,none": 0.95,
+            "acc": 0.95,
+            "correct": 19,
+            "total": 20
+          }
+        }
+      },
+      "execution_time": 16.583448886871338,
+      "error": null,
+      "timestamp": "2025-12-31T18:58:14.898107"
+    }
+  ]
+}

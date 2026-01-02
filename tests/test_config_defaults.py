@@ -1,6 +1,6 @@
-from allele import settings
-from allele.genome import ConversationalGenome
-from allele.kraken_lnn import KrakenLNN
+from phylogenic import settings
+from phylogenic.genome import ConversationalGenome
+from phylogenic.kraken_lnn import KrakenLNN
 
 
 def test_genome_defaults_from_settings():

@@ -1,37 +1,37 @@
 # Commercial License Exception for GNU AGPL v3
 
-This document grants you a commercial license exception to the GNU Affero General Public License (AGPL) v3 terms for the Allele software.
+This document grants you a commercial license exception to the GNU Affero General Public License (AGPL) v3 terms for the Phylogenic software.
 
-## About Allele
+## About Phylogenic
 
-Allele is a production-ready SDK for creating genome-based conversational AI agents with 8 evolved traits, Kraken Liquid Neural Networks, and evolutionary optimization.
+Phylogenic is a production-ready SDK for creating genome-based conversational AI agents with 8 evolved traits, Kraken Liquid Neural Networks, and evolutionary optimization.
 
 ## Licensing Overview
 
-The open-source version of Allele is licensed under the GNU AGPL v3, which ensures that the research remains open and accessible to the scientific community. However, this license creates certain obligations for commercial use.
+The open-source version of Phylogenic is licensed under the GNU AGPL v3, which ensures that the research remains open and accessible to the scientific community. However, this license creates certain obligations for commercial use.
 
 ## Commercial Use Exception
 
 By purchasing and complying with this Commercial License, you are granted a permanent exception to the AGPL v3 copyleft requirements, allowing you to:
 
 ### ✅ What You Can Do
-1. **Use Allele in proprietary/closed-source software** without making your entire application open-source
+1. **Use Phylogenic in proprietary/closed-source software** without making your entire application open-source
 2. **Modify the source code** without distributing your changes
 3. **Receive priority support and updates**
-4. **Embed Allele** into your SaaS products, enterprises applications, or any commercial software
-5. **Distribute your proprietary applications** that use Allele without source code disclosure
+4. **Embed Phylogenic** into your SaaS products, enterprises applications, or any commercial software
+5. **Distribute your proprietary applications** that use Phylogenic without source code disclosure
 
 ### ❌ What You Cannot Do
 1. **Sub-license** this exception to third parties
-2. **Re-sell** the Allele codebase as your own
-3. **Claim** ownership of the Allele intellectual property
+2. **Re-sell** the Phylogenic codebase as your own
+3. **Claim** ownership of the Phylogenic intellectual property
 4. **Violate** the terms of this license agreement
 
 ## License Terms
 
 **License Duration:** Perpetual (as long as you comply with these terms)
 
-**License Scope:** This exception applies exclusively to the Allele codebase and does not extend to any other software or libraries.
+**License Scope:** This exception applies exclusively to the Phylogenic codebase and does not extend to any other software or libraries.
 
 **Support and Updates:** License holders receive priority technical support and access to updates for 1 year from purchase date.
 
@@ -55,4 +55,4 @@ This agreement is governed by the laws of [Your Jurisdiction] and any disputes s
 
 Copyright (C) 2025 Bravetto AI Systems & Jimmy De Jesus
 
-This Commercial License Exception is granted exclusively by the copyright holders of Allele.
+This Commercial License Exception is granted exclusively by the copyright holders of Phylogenic.

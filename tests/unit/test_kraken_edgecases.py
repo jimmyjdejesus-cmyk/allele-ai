@@ -1,10 +1,9 @@
 """Edge case and boundary tests for Kraken LNN to prevent OOM and ensure robustness."""
 
-import pytest
 import numpy as np
-from unittest.mock import patch
+import pytest
 
-from allele.kraken_lnn import KrakenLNN, LiquidStateMachine, AdaptiveWeightMatrix
+from phylogenic.kraken_lnn import KrakenLNN, LiquidDynamics, LiquidStateMachine
 from tests.test_utils import generate_test_sequence
 
 
@@ -18,7 +17,9 @@ class TestKrakenEdgeCases:
         assert lnn.reservoir_size == 10
 
         # Large reservoir should work but warn (implementation should handle)
-        large_lnn = KrakenLNN(reservoir_size=1000, connectivity=0.01)  # Lower connectivity for large reservoir
+        large_lnn = KrakenLNN(
+            reservoir_size=1000, connectivity=0.01
+        )  # Lower connectivity for large reservoir
         assert large_lnn.reservoir_size == 1000
 
         # Test memory estimation for different sizes
@@ -26,12 +27,13 @@ class TestKrakenEdgeCases:
         large_sequence = generate_test_sequence(20)
 
         import asyncio
+
         result_small = asyncio.run(lnn.process_sequence(small_sequence))
-        assert result_small['success'] is True
+        assert result_small["success"] is True
 
         # Large reservoir with large sequence might take longer but shouldn't OOM
         result_large = asyncio.run(large_lnn.process_sequence(large_sequence))
-        assert result_large['success'] is True
+        assert result_large["success"] is True
 
     def test_reservoir_bounds_clamping(self):
         """Test that reservoir states are properly bounded."""
@@ -55,8 +57,8 @@ class TestKrakenEdgeCases:
         lsm = LiquidStateMachine(reservoir_size=50, connectivity=0.1)
 
         # Initially get weight bounds
-        min_weight_before = np.min(lsm.adaptive_weights.weights)
-        max_weight_before = np.max(lsm.adaptive_weights.weights)
+        np.min(lsm.adaptive_weights.weights)
+        np.max(lsm.adaptive_weights.weights)
 
         # Process sequence that could cause weight explosion
         explosive_sequence = [1.0] * 100  # Same input repeatedly
@@ -83,6 +85,7 @@ class TestKrakenEdgeCases:
         max_entries = lnn.temporal_memory.max_entries
 
         import asyncio
+
         for i in range(max_entries + 10):  # Overfill
             seq = generate_test_sequence(3, seed=i)
             asyncio.run(lnn.process_sequence(seq, memory_consolidation=False))
@@ -92,7 +95,7 @@ class TestKrakenEdgeCases:
         # Test consolidation with empty additional memory
         empty_seq = []
         result = asyncio.run(lnn.process_sequence(empty_seq, memory_consolidation=True))
-        assert result['success'] is True
+        assert result["success"] is True
 
         # Memory should be consolidated (potentially fewer entries)
         final_count = len(lnn.temporal_memory.memories)
@@ -113,15 +116,16 @@ class TestKrakenEdgeCases:
         sequence = generate_test_sequence(10)
 
         import asyncio
+
         result_high = asyncio.run(high_conn.process_sequence(sequence))
         result_low = asyncio.run(low_conn.process_sequence(sequence))
 
         # Both should succeed
-        assert result_high['success'] is True
-        assert result_low['success'] is True
+        assert result_high["success"] is True
+        assert result_low["success"] is True
 
         # Results should differ due to connectivity
-        assert result_high['liquid_outputs'] != result_low['liquid_outputs']
+        assert result_high["liquid_outputs"] != result_low["liquid_outputs"]
 
     def test_zero_and_negative_sequence_values(self):
         """Test handling of zero and negative values in sequences."""
@@ -131,25 +135,25 @@ class TestKrakenEdgeCases:
         zero_sequence = [0.0, 0.0, 0.0]
         output_zeros = lsm.process_sequence(zero_sequence)
 
-        assert isinstance(output_zeros, np.ndarray)
-        assert output_zeros.shape[0] == len(zero_sequence)
-        assert np.all(np.isfinite(output_zeros))
+        assert isinstance(output_zeros, list)
+        assert len(output_zeros) == len(zero_sequence)
+        assert np.all(np.isfinite(np.array(output_zeros)))
 
         # Test with negatives
         negative_sequence = [-0.5, -0.2, -0.8, -0.1]
         output_negatives = lsm.process_sequence(negative_sequence)
 
-        assert isinstance(output_negatives, np.ndarray)
-        assert output_negatives.shape[0] == len(negative_sequence)
-        assert np.all(np.isfinite(output_negatives))
+        assert isinstance(output_negatives, list)
+        assert len(output_negatives) == len(negative_sequence)
+        assert np.all(np.isfinite(np.array(output_negatives)))
 
         # Test mixed zero/negative
         mixed_sequence = [0.0, -0.5, 0.5, -1.0, 1.0]
         output_mixed = lsm.process_sequence(mixed_sequence)
 
-        assert isinstance(output_mixed, np.ndarray)
-        assert output_mixed.shape[0] == len(mixed_sequence)
-        assert np.all(np.isfinite(output_mixed))
+        assert isinstance(output_mixed, list)
+        assert len(output_mixed) == len(mixed_sequence)
+        assert np.all(np.isfinite(np.array(output_mixed)))
 
     @pytest.mark.asyncio
     async def test_empty_sequence_handling(self):
@@ -159,14 +163,15 @@ class TestKrakenEdgeCases:
         # Empty sequence should be handled gracefully
         result = await lnn.process_sequence([])
 
-        assert result['success'] is True
-        assert result['liquid_outputs'] == []
-        assert len(result['reservoir_state']) == lnn.reservoir_size
+        assert result["success"] is True
+        assert result["liquid_outputs"] == []
+        assert len(result["reservoir_state"]) == lnn.reservoir_size
 
     def test_large_sequence_memory_efficiency(self):
         """Test that large sequences don't cause excessive memory usage."""
-        import psutil
         import os
+
+        import psutil
 
         lnn = KrakenLNN(reservoir_size=200, connectivity=0.05)
 
@@ -178,6 +183,7 @@ class TestKrakenEdgeCases:
         large_sequence = generate_test_sequence(500, pattern="sine")
 
         import asyncio
+
         result = asyncio.run(lnn.process_sequence(large_sequence))
 
         # Get final memory usage
@@ -186,7 +192,7 @@ class TestKrakenEdgeCases:
 
         # Memory increase should be reasonable (< 100MB for GH runners)
         assert memory_increase < 200.0  # Allow some buffer
-        assert result['success'] is True
+        assert result["success"] is True
 
     def test_reservoir_state_normalization(self):
         """Test that reservoir states remain normalized."""
@@ -196,7 +202,7 @@ class TestKrakenEdgeCases:
         # Process sequence that could cause state drift
         sequence = generate_test_sequence(50, pattern="random")
 
-        initial_state_norm = np.linalg.norm(lsm.state)
+        np.linalg.norm(lsm.state)
 
         lsm.process_sequence(sequence)
 
@@ -214,7 +220,9 @@ class TestKrakenEdgeCases:
         connectivity = 0.15
         reservoir_size = 100
 
-        lsm = LiquidStateMachine(reservoir_size=reservoir_size, connectivity=connectivity)
+        lsm = LiquidStateMachine(
+            reservoir_size=reservoir_size, connectivity=connectivity
+        )
 
         # Count non-zero connections
         non_zero_weights = np.count_nonzero(lsm.adaptive_weights.weights)
@@ -238,14 +246,14 @@ class TestKrakenEdgeCases:
         seq = generate_test_sequence(5)
         await lnn.process_sequence(seq, memory_consolidation=False)
 
-        assert len(lnn.temporal_memory.memories) == 1
+        assert len(lnn.temporal_memory) == 1
 
         # Consolidate with minimal data
         result = await lnn.process_sequence(seq, memory_consolidation=True)
 
-        assert result['success'] is True
+        assert result["success"] is True
         # Should still have at least one memory entry
-        assert len(lnn.temporal_memory.memories) >= 1
+        assert len(lnn.temporal_memory) >= 1
 
     def test_numerical_stability_under_extreme_loads(self):
         """Test numerical stability under extreme computational loads."""
@@ -261,9 +269,9 @@ class TestKrakenEdgeCases:
             result = asyncio.run(lnn.process_sequence(seq))
 
             # Each result should be valid
-            assert result['success'] is True
-            assert np.all(np.isfinite(result['reservoir_state']))
-            assert np.all(np.isfinite(result['liquid_outputs']))
+            assert result["success"] is True
+            assert np.all(np.isfinite(result["reservoir_state"]))
+            assert np.all(np.isfinite(result["liquid_outputs"]))
 
         # Final state should still be valid
         assert np.all(np.isfinite(lnn.liquid_reservoir.state))
@@ -304,11 +312,11 @@ class TestKrakenEdgeCases:
         # This should complete without OOM (though may be slow)
         result = await lnn.process_sequence(very_large_sequence)
 
-        assert result['success'] is True
-        assert len(result['liquid_outputs']) == len(very_large_sequence)
+        assert result["success"] is True
+        assert len(result["liquid_outputs"]) == len(very_large_sequence)
 
         # Memory should still be finite
-        assert np.all(np.isfinite(result['reservoir_state']))
+        assert np.all(np.isfinite(result["reservoir_state"]))
 
     def test_reservoir_drift_prevention(self):
         """Test that reservoir state drift is prevented."""
@@ -350,7 +358,9 @@ class TestKrakenEdgeCases:
     def test_adaptive_memory_scaling(self):
         """Test that memory usage scales appropriately with reservoir size."""
         small_lnn = KrakenLNN(reservoir_size=10, connectivity=0.1)
-        large_lnn = KrakenLNN(reservoir_size=100, connectivity=0.05)  # Lower connectivity for scaling
+        large_lnn = KrakenLNN(
+            reservoir_size=100, connectivity=0.05
+        )  # Lower connectivity for scaling
 
         sequence = generate_test_sequence(20)
 
@@ -360,13 +370,13 @@ class TestKrakenEdgeCases:
         result_large = asyncio.run(large_lnn.process_sequence(sequence))
 
         # Both should succeed
-        assert result_small['success'] is True
-        assert result_large['success'] is True
+        assert result_small["success"] is True
+        assert result_large["success"] is True
 
         # Output lengths should match input
-        assert len(result_small['liquid_outputs']) == len(sequence)
-        assert len(result_large['liquid_outputs']) == len(sequence)
+        assert len(result_small["liquid_outputs"]) == len(sequence)
+        assert len(result_large["liquid_outputs"]) == len(sequence)
 
         # States should be appropriately sized
-        assert len(result_small['reservoir_state']) == 10
-        assert len(result_large['reservoir_state']) == 100
+        assert len(result_small["reservoir_state"]) == 10
+        assert len(result_large["reservoir_state"]) == 100

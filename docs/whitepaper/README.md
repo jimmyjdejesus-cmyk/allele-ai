@@ -1,11 +1,11 @@
-# Allele White Paper Documentation
+# Phylogenic White Paper Documentation
 
-This directory contains the academic white paper for the Allele genome-based conversational AI system, suitable for DOI publication.
+This directory contains the academic white paper for the Phylogenic genome-based conversational AI system, suitable for DOI publication.
 
 ## Files
 
-- **`allele_whitepaper.md`** - Main white paper in Markdown format (readable, version-controlled)
-- **`allele_whitepaper.tex`** - LaTeX version for publication (IEEE format)
+- **`phylogenic_whitepaper.md`** - Main white paper in Markdown format (readable, version-controlled)
+- **`phylogenic_whitepaper.tex`** - LaTeX version for publication (IEEE format)
 - **`references.bib`** - BibTeX bibliography with all citations
 - **`appendix_a_experimental_data.md`** - Detailed experimental data and benchmarks
 
@@ -32,10 +32,10 @@ To compile the LaTeX version to PDF:
 
 ```bash
 cd docs/whitepaper
-pdflatex allele_whitepaper.tex
-bibtex allele_whitepaper
-pdflatex allele_whitepaper.tex
-pdflatex allele_whitepaper.tex
+pdflatex phylogenic_whitepaper.tex
+bibtex phylogenic_whitepaper
+pdflatex phylogenic_whitepaper.tex
+pdflatex phylogenic_whitepaper.tex
 ```
 
 Required LaTeX packages:
@@ -66,7 +66,7 @@ The paper is formatted for generic academic submission. For specific venues:
 If citing this work:
 
 ```
-De Jesus, J. (2024). Allele: Genome-Based Conversational AI Agents 
+De Jesus, J. (2024). Phylogenic: Genome-Based Conversational AI Agents 
 with Evolutionary Optimization and Liquid Neural Networks. 
 Bravetto AI Systems.
 ```
@@ -75,5 +75,5 @@ Bravetto AI Systems.
 
 For questions or collaboration:
 - Email: jimmydejesus1129@gmail.com
-- Repository: https://github.com/bravetto/allele
+- Repository: https://github.com/bravetto/phylogenic-ai
 

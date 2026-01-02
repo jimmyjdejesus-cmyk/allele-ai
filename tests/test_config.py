@@ -1,6 +1,6 @@
-from allele import settings
-from allele.agent import AgentConfig
-from allele.evolution import EvolutionConfig
+from phylogenic import settings
+from phylogenic.agent import AgentConfig
+from phylogenic.evolution import EvolutionConfig
 
 
 def test_settings_load_defaults():

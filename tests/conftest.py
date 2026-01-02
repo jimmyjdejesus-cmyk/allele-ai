@@ -1,10 +1,21 @@
 """Pytest configuration and fixtures for Allele testing."""
 
-import pytest
 import asyncio
-import aiohttp
 import os
-from typing import List, Optional
+import sys
+from typing import List
+
+import aiohttp
+import pytest
+
+# Ensure the repository root and src/ are on sys.path so tests can import helpers
+# using absolute imports like `from tests.test_utils import ...` and `from phylogenic...`
+# during CI runs.
+repo_root = os.getcwd()
+sys.path.insert(0, repo_root)
+src_path = os.path.join(repo_root, "src")
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
 
 
 @pytest.fixture(scope="session")
@@ -20,7 +31,10 @@ async def ollama_available_models() -> List[str]:
     """Get available Ollama models."""
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.get("http://localhost:11434/api/tags", timeout=aiohttp.ClientTimeout(total=5)) as response:
+            async with session.get(
+                "http://localhost:11434/api/tags",
+                timeout=aiohttp.ClientTimeout(total=5),
+            ) as response:
                 if response.status == 200:
                     data = await response.json()
                     return [model.get("name", "") for model in data.get("models", [])]
@@ -43,7 +57,9 @@ async def ensure_gemma_models(ollama_available_models):
             async with session.post(
                 "http://localhost:11434/api/pull",
                 json={"name": test_model},
-                timeout=aiohttp.ClientTimeout(total=120)  # 2 minute timeout for pulling
+                timeout=aiohttp.ClientTimeout(
+                    total=120
+                ),  # 2 minute timeout for pulling
             ) as response:
                 if response.status == 200:
                     # Pull successful
@@ -69,13 +85,14 @@ async def local_ollama_config(ensure_gemma_models):
     """Configuration for local Ollama testing."""
     gemma_model = ensure_gemma_models
     if gemma_model and isinstance(gemma_model, str):
-        from allele.agent import AgentConfig
+        from phylogenic.agent import AgentConfig
+
         return AgentConfig(
             llm_provider="ollama",
             model_name=gemma_model,
             api_key="",  # Ollama doesn't require API key
             temperature=0.1,  # Low creativity for predictable testing
-            request_timeout=30
+            request_timeout=30,
         )
     else:
         pytest.skip("No gemma models available locally and could not pull")
@@ -84,19 +101,20 @@ async def local_ollama_config(ensure_gemma_models):
 @pytest.fixture
 def mock_genome():
     """Create a test genome for consistent testing."""
-    from allele.genome import ConversationalGenome
+    from phylogenic.genome import ConversationalGenome
+
     return ConversationalGenome(
         genome_id="test_genome",
         traits={
-            'empathy': 0.8,
-            'engagement': 0.7,
-            'technical_knowledge': 0.6,
-            'creativity': 0.9,
-            'conciseness': 0.5,
-            'context_awareness': 0.8,
-            'adaptability': 0.7,
-            'personability': 0.8
-        }
+            "empathy": 0.8,
+            "engagement": 0.7,
+            "technical_knowledge": 0.6,
+            "creativity": 0.9,
+            "conciseness": 0.5,
+            "context_awareness": 0.8,
+            "adaptability": 0.7,
+            "personability": 0.8,
+        },
     )
 
 
@@ -104,32 +122,35 @@ def mock_genome():
 def custom_genome():
     """Alias fixture for a reusable test genome used across tests."""
     from tests.test_utils import generate_random_genome
+
     return generate_random_genome("custom_genome", seed=42)
 
 
 @pytest.fixture
 def default_genome():
     """Default genome with library defaults."""
-    from allele import ConversationalGenome
+    from phylogenic import ConversationalGenome
+
     return ConversationalGenome(genome_id="default_genome")
 
 
 @pytest.fixture
 def technical_genome():
     """Genome skewed toward technical knowledge for targeted tests."""
-    from allele import ConversationalGenome
+    from phylogenic import ConversationalGenome
+
     return ConversationalGenome(
         genome_id="technical",
         traits={
-            'technical_knowledge': 0.98,
-            'empathy': 0.2,
-            'engagement': 0.3,
-            'creativity': 0.2,
-            'conciseness': 0.6,
-            'context_awareness': 0.4,
-            'adaptability': 0.5,
-            'personability': 0.3
-        }
+            "technical_knowledge": 0.98,
+            "empathy": 0.2,
+            "engagement": 0.3,
+            "creativity": 0.2,
+            "conciseness": 0.6,
+            "context_awareness": 0.4,
+            "adaptability": 0.5,
+            "personability": 0.3,
+        },
     )
 
 
@@ -137,13 +158,15 @@ def technical_genome():
 def fitness_function():
     """Simple fitness function for evolution tests."""
     from tests.test_utils import generate_fitness_function
+
     return generate_fitness_function()
 
 
 @pytest.fixture
 def evolution_config():
     """Lightweight evolution config for tests."""
-    from allele.evolution import EvolutionConfig
+    from phylogenic.evolution import EvolutionConfig
+
     return EvolutionConfig(population_size=20, generations=5, mutation_rate=0.1)
 
 
@@ -151,6 +174,7 @@ def evolution_config():
 def population_of_genomes():
     """Generate a small population for testing."""
     from tests.test_utils import generate_population
+
     return generate_population(20, seed=1)
 
 
@@ -158,32 +182,37 @@ def population_of_genomes():
 def sample_sequence():
     """Short sample sequence for LNN tests."""
     from tests.test_utils import generate_test_sequence
+
     return generate_test_sequence(20, seed=123)
 
 
 @pytest.fixture
 def kraken_lnn():
     """Instantiate a Kraken LNN for runtime tests."""
-    from allele.kraken_lnn import KrakenLNN
+    from phylogenic.kraken_lnn import KrakenLNN
+
     return KrakenLNN(reservoir_size=100, connectivity=0.1)
 
 
 @pytest.fixture
 def agent_config():
     """Default AgentConfig for runtime tests."""
-    from allele.agent import AgentConfig
+    from phylogenic.agent import AgentConfig
+
     return AgentConfig()
 
 
 @pytest.fixture
 def evolution_engine(evolution_config):
     """Instantiate an EvolutionEngine for runtime tests."""
-    from allele.evolution import EvolutionEngine
+    from phylogenic.evolution import EvolutionEngine
+
     return EvolutionEngine(evolution_config)
 
 
 @pytest.fixture
 def custom_liquid_dynamics():
     """Custom LiquidDynamics instance used in Kraken LNN tests."""
-    from allele.kraken_lnn import LiquidDynamics
+    from phylogenic.kraken_lnn import LiquidDynamics
+
     return LiquidDynamics(viscosity=0.15, temperature=1.2, pressure=0.9)

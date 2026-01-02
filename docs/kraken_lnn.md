@@ -1,6 +1,6 @@
 # Kraken LNN - Liquid Neural Networks
 
-Kraken LNN (Liquid Neural Network) implements advanced temporal processing and adaptive memory capabilities in Allele conversational agents. Built on reservoir computing principles, Kraken provides temporal coherence, adaptive dynamics, and real-time learning for maintaining conversation context.
+Kraken LNN (Liquid Neural Network) implements advanced temporal processing and adaptive memory capabilities in Phylogenic conversational agents. Built on reservoir computing principles, Kraken provides temporal coherence, adaptive dynamics, and real-time learning for maintaining conversation context.
 
 ## Core Concepts
 
@@ -45,7 +45,7 @@ self.adaptive_weights.weights += (
 ### Processing Temporal Sequences
 
 ```python
-from allele import KrakenLNN, LiquidDynamics
+from phylogenic import KrakenLNN, LiquidDynamics
 
 # Configure liquid dynamics
 dynamics = LiquidDynamics(
@@ -443,4 +443,4 @@ async def adaptive_conversation(kraken, genome):
         print(response)
 ```
 
-Kraken LNN provides sophisticated temporal processing that enables Allele agents to maintain rich conversational context, adapt in real-time, and exhibit fluid, natural interaction patterns that traditional static memory systems cannot achieve.
+Kraken LNN provides sophisticated temporal processing that enables Phylogenic agents to maintain rich conversational context, adapt in real-time, and exhibit fluid, natural interaction patterns that traditional static memory systems cannot achieve.

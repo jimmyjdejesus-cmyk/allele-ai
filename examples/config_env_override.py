@@ -1,12 +1,18 @@
 """
 Example: Using central settings and environment overrides
 
-This example shows two ways to configure: environment variables and programmatic override
+This example shows two ways to configure: environment variables and
+programmatic override
 """
 
 import os
 
-from allele import settings, AgentConfig, EvolutionConfig, ConversationalGenome, KrakenLNN
+from phylogenic import (
+    AgentConfig,
+    ConversationalGenome,
+    KrakenLNN,
+    settings,
+)
 
 
 def main():
@@ -18,9 +24,10 @@ def main():
     print("  Agent model from AgentConfig:", agent_cfg.model_name)
 
     print("\nOverride via environment variable (AGENT__MODEL_NAME)")
-    os.environ['AGENT__MODEL_NAME'] = 'environment-gpt'
+    os.environ["AGENT__MODEL_NAME"] = "environment-gpt"
     # Recreate runtime settings so pydantic BaseSettings picks up the new env var
-    from allele.config import AlleleSettings
+    from phylogenic.config import AlleleSettings
+
     new_settings = AlleleSettings()
 
     agent_cfg_env = AgentConfig.from_settings(new_settings)
@@ -29,10 +36,12 @@ def main():
     # Programmatic override
     print("\nProgrammatic override: create custom AlleleSettings instance")
     custom_settings = AlleleSettings()
-    custom_settings.agent.model_name = 'custom-gpt'
+    custom_settings.agent.model_name = "custom-gpt"
 
     agent_cfg_custom = AgentConfig.from_settings(custom_settings)
-    print("  Agent model from AgentConfig custom settings:", agent_cfg_custom.model_name)
+    print(
+        "  Agent model from AgentConfig custom settings:", agent_cfg_custom.model_name
+    )
 
     # Genome default traits
     g = ConversationalGenome.from_settings("example_settings_genome")
@@ -43,5 +52,5 @@ def main():
     print("\nKraken reservoir size:", k.reservoir_size)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

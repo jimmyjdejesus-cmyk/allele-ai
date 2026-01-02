@@ -2,7 +2,7 @@
 
 ## Overview
 
-Allele's real integration testing framework validates actual LLM behavioral transformation and API connectivity with production-grade testing that uses real AI services, not mocks or stubs.
+Phylogenic's real integration testing framework validates actual LLM behavioral transformation and API connectivity with production-grade testing that uses real AI services, not mocks or stubs.
 
 ## Key Innovation: Zero-Mock Testing
 
@@ -18,7 +18,7 @@ def test_fake_chat(mock_openai_response):
     pass
 ```
 
-**Allele Testing**: Real API calls with actual AI
+**Phylogenic Testing**: Real API calls with actual AI
 ```python
 # ✅ Real testing
 @pytest.mark.asyncio
@@ -213,7 +213,7 @@ with patch_quota_exceeded():
 
 ### Test Coverage Validation
 ```bash
-pytest --cov=allele --cov-report=term-missing tests/test_llm_integration.py
+pytest --cov=phylogenic --cov-report=term-missing tests/test_llm_integration.py
 ```
 
 ### Behavioral Consistency Scoring
@@ -320,7 +320,7 @@ def test_custom_personality(genome_config):
 
 ## Summary
 
-Allele's real integration testing framework provides:
+Phylogenic's real integration testing framework provides:
 
 - **✅ Zero-Mock Validation** - Actual AI service interaction
 - **✅ Behavioral Transformation Proof** - Genome changes LLM responses

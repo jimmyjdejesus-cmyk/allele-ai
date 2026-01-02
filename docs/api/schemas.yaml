@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
-  title: Allele SDK Common Schemas
+  title: Phylogenic SDK Common Schemas
   version: 1.0.0
-  description: Shared schema components for Allele SDK APIs
+  description: Shared schema components for Phylogenic SDK APIs
   license:
     name: AGPL-3.0
     url: https://www.gnu.org/licenses/agpl-3.0.html
@@ -489,208 +489,230 @@ components:
           items:
             type: string
 
-    # === ERROR SCHEMAS ===
+    # === ML ANALYTICS TYPES ===
 
-    ErrorResponse:
+    AlertSeverity:
+      type: string
+      enum:
+        - INFO
+        - WARNING
+        - ERROR
+        - CRITICAL
+      description: Alert severity levels
+      example: ERROR
+
+    ComponentType:
+      type: string
+      enum:
+        - EVOLUTION_ENGINE
+        - KRAKEN_LNN
+        - NLP_AGENT
+        - LLM_CLIENT
+        - GENOME
+        - SYSTEM
+      description: System component types
+      example: EVOLUTION_ENGINE
+
+    MLMetric:
       type: object
-      title: Error Response
-      description: Standardized error response
+      title: ML Metric
+      description: Machine learning metric with timestamp and component information
       properties:
-        error:
-          type: string
-          description: Error type/category
-          enum:
-            - validation_error
-            - authentication_error
-            - rate_limit_error
-            - quota_exceeded
-            - model_not_available
-            - generation_error
-            - evolution_error
-            - genome_error
-            - agent_error
-            - internal_server_error
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: object
-          additionalProperties: true
-          description: Additional error context
-        correlation_id:
-          type: string
-          description: Request correlation ID
         timestamp:
           type: string
           format: date-time
+          description: ISO format timestamp
+        component_type:
+          $ref: '#/components/schemas/ComponentType'
+        component_id:
+          type: string
+          description: Component identifier
+        metric_name:
+          type: string
+          description: Metric name
+          example: "fitness_score"
+        value:
+          type: number
+          format: float
+          description: Metric value
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional metric metadata
       required:
-        - error
-        - message
         - timestamp
+        - component_type
+        - component_id
+        - metric_name
+        - value
 
-    ValidationError:
-      allOf:
-        - $ref: '#/components/schemas/ErrorResponse'
-        - type: object
-          properties:
-            error:
-              enum: [validation_error]
-            validation_errors:
-              type: array
-              items:
-                type: object
-                properties:
-                  field:
-                    type: string
-                  value:
-                    type: string
-                  message:
-                    type: string
-                required:
-                  - field
-                  - message
+    AnomalyType:
+      type: string
+      enum:
+        - performance_degradation
+        - resource_spike
+        - memory_leak
+        - cpu_overload
+        - latency_spike
+        - error_rate_spike
+        - throughput_drop
+        - unusual_pattern
+      description: Types of anomalies that can be detected
+      example: "performance_degradation"
 
-    # === PAGINATION ===
-
-    PaginationMeta:
+    AnomalyResult:
       type: object
-      title: Pagination Metadata
-      description: Pagination information for list endpoints
+      title: Anomaly Detection Result
+      description: Result from anomaly detection
       properties:
-        page:
-          type: integer
-          minimum: 1
-        page_size:
-          type: integer
-          minimum: 1
-        total_pages:
-          type: integer
-          minimum: 0
-        total_items:
-          type: integer
-          minimum: 0
-        has_next:
-          type: boolean
-        has_previous:
-          type: boolean
-
-    PagedResponse:
-      type: object
-      title: Paginated Response
-      description: Base structure for paginated list responses
-      properties:
-        data:
+        timestamp:
+          type: string
+          format: date-time
+        component_type:
+          $ref: '#/components/schemas/ComponentType'
+        component_id:
+          type: string
+        metric_name:
+          type: string
+        anomaly_type:
+          $ref: '#/components/schemas/AnomalyType'
+        anomaly_score:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 1.0
+        confidence:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 1.0
+        severity:
+          $ref: '#/components/schemas/AlertSeverity'
+        actual_value:
+          type: number
+          format: float
+        expected_value:
+          type: number
+          format: float
+        deviation:
+          type: number
+          format: float
+        threshold:
+          type: number
+          format: float
+        context:
+          type: object
+          additionalProperties: true
+        recommendations:
           type: array
-          description: Array of items
-        pagination:
-          $ref: '#/components/schemas/PaginationMeta'
+          items:
+            type: string
+        model_name:
+          type: string
+        model_version:
+          type: string
       required:
-        - data
-        - pagination
+        - timestamp
+        - component_type
+        - component_id
+        - metric_name
+        - anomaly_type
+        - anomaly_score
+        - confidence
+        - severity
+        - actual_value
+        - expected_value
+        - deviation
+        - threshold
 
-  # === REQUEST/RESPONSE PATTERNS ===
+    PredictionType:
+      type: string
+      enum:
+        - performance_forecast
+        - resource_usage
+        - error_probability
+        - capacity_planning
+        - performance_trend
+        - anomaly_risk
+      description: Types of predictions that can be made
+      example: "performance_forecast"
 
-  parameters:
-    genomeId:
-      name: genome_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Unique identifier of the genome
-      example: "support_agent_v1"
+    PredictionResult:
+      type: object
+      title: Prediction Result
+      description: Result from predictive analytics
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        prediction_type:
+          $ref: '#/components/schemas/PredictionType'
+        component_type:
+          $ref: '#/components/schemas/ComponentType'
+        component_id:
+          type: string
+        metric_name:
+          type: string
+        predicted_value:
+          type: number
+          format: float
+        confidence_interval:
+          type: array
+          items:
+            type: number
+            format: float
+          minItems: 2
+          maxItems: 2
+          description: Lower and upper bounds of confidence interval
+        prediction_horizon_minutes:
+          type: integer
+          minimum: 1
+        model_name:
+          type: string
+        model_version:
+          type: string
+        model_accuracy:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 1.0
+        feature_importance:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+        prediction_explanation:
+          type: string
+      required:
+        - timestamp
+        - prediction_type
+        - component_type
+        - component_id
+        - metric_name
+        - predicted_value
+        - confidence_interval
+        - prediction_horizon_minutes
 
-    agentId:
-      name: agent_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Unique identifier of the agent
-      example: "agent_12345"
-
-    PageParam:
-      name: page
-      in: query
-      schema:
-        type: integer
-        minimum: 1
-        default: 1
-      description: Page number for pagination
-
-    PageSizeParam:
-      name: page_size
-      in: query
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 100
-        default: 20
-      description: Number of items per page
-
-  # === COMMON RESPONSES ===
-
-  responses:
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationError'
-
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            error: "authentication_error"
-            message: "API key required"
-            timestamp: "2025-12-10T17:00:00Z"
-
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            error: "not_found"
-            message: "Genome not found"
-            timestamp: "2025-12-10T17:00:00Z"
-
-    TooManyRequests:
-      description: Rate limit exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            error: "rate_limit_error"
-            message: "Too many requests"
-            details:
-              retry_after_seconds: 60
-            timestamp: "2025-12-10T17:00:00Z"
-
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            error: "internal_server_error"
-            message: "Unexpected error occurred"
-            timestamp: "2025-12-10T17:00:00Z"
-
-    ServiceUnavailable:
-      description: Service temporarily unavailable
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            error: "service_unavailable"
-            message: "LLM provider temporarily unavailable"
-            timestamp: "2025-12-10T17:00:00Z"
+    AlertCluster:
+      type: object
+      title: Alert Cluster
+      description: Cluster of related alerts
+      properties:
+        cluster_id:
+          type: string
+          description: Unique cluster identifier
+        cluster_type:
+          type: string
+          enum: [root_cause, cascading, independent]
+          description: Type of alert cluster
+        alerts:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+          description: List of alerts in cluster
+        common_attributes:
+          type: object
+          additionalProperties: true
+          description: Common attributes across alerts
+        root_cause_candidates:

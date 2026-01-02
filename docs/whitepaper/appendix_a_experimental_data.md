@@ -162,7 +162,7 @@ Population Size: 50, Generations: 20
 
 ### Prompt Engineering Baseline
 
-| Metric | Prompt Engineering | Allele Genome | Improvement |
+| Metric | Prompt Engineering | Phylogenic Genome | Improvement |
 |--------|-------------------|---------------|-------------|
 | Setup Time | 2-4 hours | 10-15 minutes | 85% faster |
 | Optimization Time | 4-8 hours | 30-60 minutes | 90% faster |
@@ -173,7 +173,7 @@ Population Size: 50, Generations: 20
 
 ### Performance Comparison
 
-| Operation | Prompt Engineering | Allele | Notes |
+| Operation | Prompt Engineering | Phylogenic | Notes |
 |-----------|-------------------|--------|-------|
 | Personality Change | Manual edit | Genetic operation | Automated |
 | Optimization | Trial-and-error | Systematic evolution | Principled |
@@ -192,7 +192,7 @@ All experiments were conducted on:
 
 Test results are available in the `tests/` directory and can be reproduced by running:
 ```bash
-pytest tests/ --cov=allele --cov-report=html
+pytest tests/ --cov=phylogenic --cov-report=html
 pytest tests/test_performance.py --benchmark-only
 ```
 

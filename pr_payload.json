@@ -1,6 +1,0 @@
-{
-  "title": "feat: Complete deep conversational testing feature",
-  "head": "feature/deep-conversational-testing", 
-  "base": "dev",
-  "body": "## Summary\nComplete deep conversational testing functionality for the allele project.\n\n## Code Review Focus\n**For Gemini Code Assist:** Please provide detailed technical feedback on:\n\n### Code Quality & Architecture\n- Review the actual code implementation in the modified files\n- Assess code quality, readability, and maintainability\n- Check for proper error handling and edge cases\n- Evaluate architectural decisions and design patterns\n\n### Functionality & Testing\n- Verify that the deep conversational testing features work as intended\n- Review test coverage and test quality\n- Check for potential bugs or logical issues\n- Assess integration with existing codebase\n\n### Performance & Best Practices\n- Look for performance optimizations or bottlenecks\n- Check adherence to project coding standards\n- Review resource usage and memory management\n- Assess security considerations\n\n## Changes\n- Added PR creation plan documentation\n- Integrated mcp-servers for enhanced testing capabilities  \n- Updated OpenSpec specifications for feature completion\n- Ready for detailed code review\n\n## Reviewers\n- @jimmyjdejesus-cmyk\n- Gemini Code Assist"
-}

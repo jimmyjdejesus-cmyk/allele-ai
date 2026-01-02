@@ -10,7 +10,7 @@
 
 ## BODY
 
-**TL;DR:** I was tired of prompt engineering failing at scale. So I built **Allele**, a Python SDK that treats Agent personalities like DNA, not text. It uses Genetic Algorithms to "breed" better agents and Liquid Neural Networks for temporal memory.
+**TL;DR:** I was tired of prompt engineering failing at scale. So I built **Phylogenic**, a Python SDK that treats Agent personalities like DNA, not text. It uses Genetic Algorithms to "breed" better agents and Liquid Neural Networks for temporal memory.
 
 ---
 
@@ -26,7 +26,7 @@ You fine-tune, but it costs $2000 and takes 3 weeks.
 
 ---
 
-### The Solution: Allele (Phylogenic AI Agents)
+### The Solution: Phylogenic (Phylogenic AI Agents)
 
 Instead of prompts, you define a **Genome** with 8 traits (Empathy, Conciseness, Creativity, etc.).
 
@@ -40,7 +40,7 @@ The SDK then:
 ### Quick Example
 
 ```python
-from allele import ConversationalGenome, EvolutionEngine
+from phylogenic import ConversationalGenome, EvolutionEngine
 
 # Define personality as genetic code (not a prompt!)
 genome = ConversationalGenome(
@@ -119,7 +119,7 @@ Agent Output
 ### What's Different from Other Agent Frameworks?
 
 **vs. LangChain/AutoGPT:**
-- They focus on tools/chains. Allele focuses on personality.
+- They focus on tools/chains. Phylogenic focuses on personality.
 
 **vs. Prompt Engineering:**
 - Prompts are strings. Genomes are data structures you can version, evolve, and compose.
@@ -153,7 +153,7 @@ I'm a [student/researcher/developer] who got frustrated with:
 2. Agents that work in testing but drift in production
 3. No way to systematically optimize agent personalities
 
-So I spent [X months] building Allele. It's based on:
+So I spent [X months] building Phylogenic. It's based on:
 - **Reservoir Computing** (MIT research on Liquid Neural Networks)
 - **Genetic Algorithms** (proven optimization technique)
 - **Phylogenic Modeling** (biological evolution applied to AI)
@@ -193,10 +193,10 @@ So I spent [X months] building Allele. It's based on:
 
 ### Links
 
-- **GitHub**: https://github.com/bravetto/allele
-- **PyPI**: `pip install allele`
-- **Docs**: https://github.com/bravetto/allele#readme
-- **Examples**: https://github.com/bravetto/allele/tree/main/examples
+- **GitHub**: https://github.com/bravetto/phylogenic
+- **PyPI**: `pip install phylogenic`
+- **Docs**: https://github.com/bravetto/phylogenic#readme
+- **Examples**: https://github.com/bravetto/phylogenic/tree/main/examples
 
 ---
 
@@ -240,10 +240,10 @@ A: LNNs are real research from MIT (Reservoir Computing). Google "Liquid Neural 
 A: You can! But genomes give you version control, reproducibility, and automatic optimization. Try evolving 50 prompts manually vs 50 genomes automatically.
 
 **Q: Does this work with local models?**
-A: Yes! Allele is LLM-agnostic. Works with Ollama (llama, mistral, etc.) out of the box.
+A: Yes! Phylogenic is LLM-agnostic. Works with Ollama (llama, mistral, etc.) out of the box.
 
 **Q: Can I see the code?**
-A: It's all on GitHub (MIT license). Check out `src/allele/genome.py` for the core system.
+A: It's all on GitHub (MIT license). Check out `src/phylogenic/genome.py` for the core system.
 
 ---
 
@@ -251,12 +251,12 @@ A: It's all on GitHub (MIT license). Check out `src/allele/genome.py` for the co
 
 Try it:
 ```bash
-pip install allele
+pip install phylogenic
 ```
 
 Build something cool:
 ```python
-from allele import ConversationalGenome, create_agent
+from phylogenic import ConversationalGenome, create_agent
 
 genome = ConversationalGenome("my_agent", traits={...})
 agent = await create_agent(genome)

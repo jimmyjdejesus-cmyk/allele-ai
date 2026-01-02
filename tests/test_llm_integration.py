@@ -1,16 +1,16 @@
 """Unit and integration tests for LLM functionality."""
 
-import pytest
-import asyncio
 import os
-from unittest.mock import Mock, AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
-from allele.llm_client import LLMConfig, LLMClient
-from allele.llm_openai import OpenAIClient
-from allele.llm_ollama import OllamaClient
-from allele.llm_exceptions import LLMInitializationError, LLMAuthenticationError
-from allele.agent import AgentConfig, NLPAgent
-from allele import ConversationalGenome
+import pytest
+
+from phylogenic import ConversationalGenome
+from phylogenic.agent import AgentConfig, NLPAgent
+from phylogenic.llm_client import LLMClient, LLMConfig
+from phylogenic.llm_exceptions import LLMAuthenticationError
+from phylogenic.llm_ollama import OllamaClient
+from phylogenic.llm_openai import OpenAIClient
 
 
 class TestLLMIntegration:
@@ -22,12 +22,12 @@ class TestLLMIntegration:
         api_key = os.getenv("TEST_OLLAMA_API_KEY")
         if not api_key:
             pytest.skip("TEST_OLLAMA_API_KEY not set")
-        os.environ['OLLAMA_API_KEY'] = api_key
+        os.environ["OLLAMA_API_KEY"] = api_key
 
     def teardown_method(self):
         """Clean up environment variables."""
-        if 'OLLAMA_API_KEY' in os.environ:
-            del os.environ['OLLAMA_API_KEY']
+        if "OLLAMA_API_KEY" in os.environ:
+            del os.environ["OLLAMA_API_KEY"]
 
     @pytest.fixture
     def mock_llm_config(self):
@@ -39,7 +39,7 @@ class TestLLMIntegration:
             temperature=0.7,
             max_tokens=1000,
             timeout=30,
-            max_retries=2
+            max_retries=2,
         )
 
     @pytest.fixture
@@ -49,7 +49,7 @@ class TestLLMIntegration:
             llm_provider="openai",
             api_key="sk-test-key-123",
             fallback_to_mock=True,
-            model_name="gpt-4-turbo-preview"
+            model_name="gpt-4-turbo-preview",
         )
 
     @pytest.fixture
@@ -58,19 +58,21 @@ class TestLLMIntegration:
         return ConversationalGenome(
             genome_id="test_genome_001",
             traits={
-                'empathy': 0.8,
-                'engagement': 0.7,
-                'technical_knowledge': 0.6,
-                'creativity': 0.9,
-                'conciseness': 0.5,
-                'context_awareness': 0.8,
-                'adaptability': 0.7,
-                'personability': 0.8
-            }
+                "empathy": 0.8,
+                "engagement": 0.7,
+                "technical_knowledge": 0.6,
+                "creativity": 0.9,
+                "conciseness": 0.5,
+                "context_awareness": 0.8,
+                "adaptability": 0.7,
+                "personability": 0.8,
+            },
         )
 
     @pytest.mark.asyncio
-    async def test_openai_client_initialization_failure_invalid_key(self, mock_llm_config):
+    async def test_openai_client_initialization_failure_invalid_key(
+        self, mock_llm_config
+    ):
         """Test OpenAI client fails with invalid API key format."""
         mock_llm_config.api_key = "invalid-key-format"
 
@@ -83,16 +85,14 @@ class TestLLMIntegration:
     def test_llm_config_validation(self):
         """Test LLM configuration validation."""
         # Valid config should not raise
-        config = LLMConfig(
-            provider="openai",
-            model="gpt-4",
-            api_key="sk-valid-key-123"
-        )
+        config = LLMConfig(provider="openai", model="gpt-4", api_key="sk-valid-key-123")
         assert config is not None
 
         # Invalid temperature
         with pytest.raises(ValueError):
-            LLMConfig(provider="openai", model="gpt-4", api_key="sk-key", temperature=3.0)
+            LLMConfig(
+                provider="openai", model="gpt-4", api_key="sk-key", temperature=3.0
+            )
 
         # Invalid max_tokens
         with pytest.raises(ValueError):
@@ -101,7 +101,7 @@ class TestLLMIntegration:
     @pytest.mark.asyncio
     async def test_openai_client_mock_initialization_success(self, mock_llm_config):
         """Test OpenAI client initialization with mocked OpenAI library."""
-        with patch('openai.AsyncOpenAI') as mock_openai:
+        with patch("openai.AsyncOpenAI") as mock_openai:
             # Setup mock OpenAI client
             mock_client = AsyncMock()
             mock_openai.return_value = mock_client
@@ -123,13 +123,13 @@ class TestLLMIntegration:
             # Verify OpenAI client was created with correct parameters
             mock_openai.assert_called_once()
             call_args = mock_openai.call_args
-            assert call_args[1]['api_key'] == mock_llm_config.api_key
-            assert call_args[1]['timeout'] == mock_llm_config.timeout
+            assert call_args[1]["api_key"] == mock_llm_config.api_key
+            assert call_args[1]["timeout"] == mock_llm_config.timeout
 
     @pytest.mark.asyncio
     async def test_openai_client_estimates_cost(self, mock_llm_config):
         """Test cost estimation functionality."""
-        with patch('allele.llm_openai.AsyncOpenAI'):
+        with patch("phylogenic.llm_openai.AsyncOpenAI"):
             client = OpenAIClient(mock_llm_config)
 
             # Test GPT-4 cost estimation
@@ -141,14 +141,14 @@ class TestLLMIntegration:
         """Test AgentConfig includes all LLM-related fields."""
         config = mock_agent_config
 
-        assert hasattr(config, 'llm_provider')
-        assert hasattr(config, 'api_key')
-        assert hasattr(config, 'fallback_to_mock')
-        assert hasattr(config, 'request_timeout')
-        assert hasattr(config, 'rate_limit_requests_per_minute')
-        assert hasattr(config, 'conversation_memory')
-        assert hasattr(config, 'context_window')
-        assert hasattr(config, 'max_context_length')
+        assert hasattr(config, "llm_provider")
+        assert hasattr(config, "api_key")
+        assert hasattr(config, "fallback_to_mock")
+        assert hasattr(config, "request_timeout")
+        assert hasattr(config, "rate_limit_requests_per_minute")
+        assert hasattr(config, "conversation_memory")
+        assert hasattr(config, "context_window")
+        assert hasattr(config, "max_context_length")
 
     def test_agent_config_validation(self):
         """Test AgentConfig validation works."""
@@ -189,7 +189,7 @@ class TestLLMIntegration:
                 provider="ollama",
                 model=model_name,
                 base_url="https://ollama.com",
-                api_key=""
+                api_key="",
             )
 
             client = OllamaClient(config)
@@ -232,7 +232,7 @@ class TestLLMIntegration:
                 llm_provider="ollama",
                 model_name=model_name,
                 temperature=0.1,  # Low creativity for predictable testing
-                max_tokens=50    # Limit response length for faster testing
+                max_tokens=50,  # Limit response length for faster testing
             )
 
             try:
@@ -270,20 +270,35 @@ class TestLLMIntegration:
     @pytest.mark.asyncio
     async def test_agent_initialization_requires_api_key(self):
         """Test agent initialization fails without API key."""
-        genome = ConversationalGenome("test", {'empathy': 0.5, 'engagement': 0.5, 'technical_knowledge': 0.5,
-                                              'creativity': 0.5, 'conciseness': 0.5, 'context_awareness': 0.5,
-                                              'adaptability': 0.5, 'personability': 0.5})
+        genome = ConversationalGenome(
+            "test",
+            {
+                "empathy": 0.5,
+                "engagement": 0.5,
+                "technical_knowledge": 0.5,
+                "creativity": 0.5,
+                "conciseness": 0.5,
+                "context_awareness": 0.5,
+                "adaptability": 0.5,
+                "personability": 0.5,
+            },
+        )
 
-        # Use a fake API key for agent creation, then clear environment for initialization
-        config = AgentConfig(llm_provider="openai", api_key="sk-fake-key", fallback_to_mock=False)
+        # Use a fake API key for agent creation, then clear environment
+        # for initialization
+        config = AgentConfig(
+            llm_provider="openai", api_key="sk-fake-key", fallback_to_mock=False
+        )
 
-        with patch('allele.agent.NLPAgent._resolve_api_key', return_value="sk-fake-key"):
+        with patch(
+            "phylogenic.agent.NLPAgent._resolve_api_key", return_value="sk-fake-key"
+        ):
             agent = NLPAgent(genome, config)
 
         # Mock the environment to not have API keys during initialization
-        with patch.dict('os.environ', {}, clear=True):
+        with patch.dict("os.environ", {}, clear=True):
             # Mock os.getenv to return None for OPENAI_API_KEY
-            with patch('os.getenv', side_effect=lambda key, default=None: None):
+            with patch("os.getenv", side_effect=lambda key, default=None: None):
                 # Should fail to initialize without API key available during init
                 with pytest.raises(ValueError, match="API key not found"):
                     await agent.initialize()
@@ -298,7 +313,9 @@ class TestLLMIntegration:
             await agent.initialize()
             assert agent.is_initialized
         except Exception:
-            pytest.skip(f"Could not initialize agent with {local_ollama_config.model_name}")
+            pytest.skip(
+                f"Could not initialize agent with {local_ollama_config.model_name}"
+            )
 
         prompt = agent._create_system_prompt()
 
@@ -318,7 +335,7 @@ class TestLLMIntegration:
         agent = NLPAgent(mock_genome, config)
 
         # Initialize with mock setup
-        with patch('allele.llm_openai.AsyncOpenAI'):
+        with patch("phylogenic.llm_openai.AsyncOpenAI"):
             agent.llm_client = AsyncMock(spec=LLMClient)
             agent.llm_client.chat_completion.side_effect = Exception("LLM failure")
             agent.is_initialized = True
@@ -336,16 +353,24 @@ class TestLLMIntegration:
 
     def test_conversation_turn_creation(self):
         """Test conversation turn creation and structure."""
-        genome = ConversationalGenome("test_genome", {
-            'empathy': 0.5, 'engagement': 0.5, 'technical_knowledge': 0.5,
-            'creativity': 0.5, 'conciseness': 0.5, 'context_awareness': 0.5,
-            'adaptability': 0.5, 'personability': 0.5
-        })
+        genome = ConversationalGenome(
+            "test_genome",
+            {
+                "empathy": 0.5,
+                "engagement": 0.5,
+                "technical_knowledge": 0.5,
+                "creativity": 0.5,
+                "conciseness": 0.5,
+                "context_awareness": 0.5,
+                "adaptability": 0.5,
+                "personability": 0.5,
+            },
+        )
         config = AgentConfig(llm_provider="ollama", model_name="llama2:latest")
         agent = NLPAgent(genome, config)
 
         # Mock agent to be initialized for testing (use Ollama for simplicity)
-        with patch('allele.llm_ollama.AsyncOllama', create=True):
+        with patch("phylogenic.llm_ollama.AsyncOllama", create=True):
             agent.llm_client = AsyncMock(spec=LLMClient)
             agent.is_initialized = True
 
@@ -357,24 +382,28 @@ class TestLLMIntegration:
         agent_response = "I'm doing well, thank you!"
 
         # Add user turn
-        agent.conversation_buffer.append(Mock(
-            user_input=user_message,
-            agent_response="",
-            timestamp="2025-01-01T12:00:00.000000+00:00",
-            context_embedding=None,
-            response_quality_score=0.0,
-            evolutionary_adaptations=None
-        ))
+        agent.conversation_buffer.append(
+            Mock(
+                user_input=user_message,
+                agent_response="",
+                timestamp="2025-01-01T12:00:00.000000+00:00",
+                context_embedding=None,
+                response_quality_score=0.0,
+                evolutionary_adaptations=None,
+            )
+        )
 
         # Add agent turn
-        agent.conversation_buffer.append(Mock(
-            user_input="",
-            agent_response=agent_response,
-            timestamp="2025-01-01T12:00:01.000000+00:00",
-            context_embedding=None,
-            response_quality_score=0.8,
-            evolutionary_adaptations=None
-        ))
+        agent.conversation_buffer.append(
+            Mock(
+                user_input="",
+                agent_response=agent_response,
+                timestamp="2025-01-01T12:00:01.000000+00:00",
+                context_embedding=None,
+                response_quality_score=0.8,
+                evolutionary_adaptations=None,
+            )
+        )
 
         # Test conversation buffer structure
         assert len(agent.conversation_buffer) == 2
@@ -390,18 +419,20 @@ class TestLLMIntegration:
         config = AgentConfig(fallback_to_mock=True)
         agent = NLPAgent(mock_genome, config)
 
-        with patch('allele.llm_openai.AsyncOpenAI'):
+        with patch("phylogenic.llm_openai.AsyncOpenAI"):
             agent.llm_client = AsyncMock(spec=LLMClient)
-            agent.llm_client.chat_completion = AsyncMock(return_value=iter(["Response"]))
+            agent.llm_client.chat_completion = AsyncMock(
+                return_value=iter(["Response"])
+            )
             agent.is_initialized = True
 
             # Perform a chat operation
             await agent.chat("Test message")
 
             # Check that metrics were initialized
-            assert 'total_requests' in agent.performance_metrics
-            assert 'uptime_start' in agent.performance_metrics
-            assert agent.performance_metrics['total_requests'] >= 0
+            assert "total_requests" in agent.performance_metrics
+            assert "uptime_start" in agent.performance_metrics
+            assert agent.performance_metrics["total_requests"] >= 0
 
     @pytest.mark.asyncio
     async def test_agent_configuration_defaults(self):
@@ -424,30 +455,30 @@ class TestLLMIntegration:
         pricing = OpenAIClient.MODEL_PRICING
 
         # Check some known models
-        assert 'gpt-4' in pricing
-        assert 'gpt-4-turbo' in pricing
-        assert 'gpt-3.5-turbo' in pricing
+        assert "gpt-4" in pricing
+        assert "gpt-4-turbo" in pricing
+        assert "gpt-3.5-turbo" in pricing
 
         # Check pricing structure
-        for model, prices in pricing.items():
-            assert 'input' in prices
-            assert 'output' in prices
-            assert isinstance(prices['input'], float)
-            assert isinstance(prices['output'], float)
+        for _model, prices in pricing.items():
+            assert "input" in prices
+            assert "output" in prices
+            assert isinstance(prices["input"], float)
+            assert isinstance(prices["output"], float)
 
     @pytest.mark.asyncio
     async def test_llm_client_context_manager(self):
         """Test LLM client can be used as context manager."""
         config = LLMConfig(
-            provider="openai",
-            model="gpt-4-turbo-preview",
-            api_key="sk-test-key"
+            provider="openai", model="gpt-4-turbo-preview", api_key="sk-test-key"
         )
 
-        with patch('allele.llm_openai.AsyncOpenAI') as mock_openai:
+        with patch("phylogenic.llm_openai.AsyncOpenAI") as mock_openai:
             mock_client = AsyncMock()
             mock_openai.return_value = mock_client
-            mock_client.models.list.return_value = Mock(data=[Mock(id="gpt-4-turbo-preview")])
+            mock_client.models.list.return_value = Mock(
+                data=[Mock(id="gpt-4-turbo-preview")]
+            )
 
             async with OpenAIClient(config) as client:
                 assert client.initialized
@@ -476,12 +507,10 @@ class TestLLMIntegration:
     async def test_openai_available_models_caching(self):
         """Test that available models are cached properly."""
         config = LLMConfig(
-            provider="openai",
-            model="gpt-4-turbo-preview",
-            api_key="sk-test-key"
+            provider="openai", model="gpt-4-turbo-preview", api_key="sk-test-key"
         )
 
-        with patch('allele.llm_openai.AsyncOpenAI') as mock_openai:
+        with patch("phylogenic.llm_openai.AsyncOpenAI") as mock_openai:
             mock_client = AsyncMock()
             mock_openai.return_value = mock_client
 

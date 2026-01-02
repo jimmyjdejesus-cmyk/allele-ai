@@ -4,9 +4,9 @@ Use this content to populate your Gumroad product pages.
 
 ---
 
-## 1. Allele AI Toolkit ($97)
+## 1. Phylogenic AI Toolkit ($97)
 
-**Name:** Allele AI Toolkit - Phylogenic Agent SDK
+**Name:** Phylogenic AI Toolkit - Phylogenic Agent SDK
 
 **Short Description (for card/feed):**
 10 production-ready agent templates + evolution recipes and a 45-minute video walkthrough. Breed reproducible AI personalities in minutes.
@@ -16,27 +16,27 @@ Use this content to populate your Gumroad product pages.
 **Summary / Description:**
 > **Don't Write Prompts. Breed Agents.**
 >
-> Traditional agents drift, hallucinate, and forget. The Allele Toolkit gives you the genetic code to build stable, evolvable AI personalities that persist.
+> Traditional agents drift, hallucinate, and forget. The Phylogenic Toolkit gives you the genetic code to build stable, evolvable AI personalities that persist.
 >
 > **What You Get:**
 > *   **10 Production-Ready Genomes (JSON):** Pre-tuned personalities for Support, Sales, Coding, Creative Writing, and more.
 > *   **10 Evolution Recipes:** Python scripts to evolve your own agents for specific metrics (conciseness, empathy, etc.).
 > *   **Genome Optimization Cheat Sheet (PDF):** A quick reference guide to the 8-trait system.
-> *   **45-Minute Video Walkthrough:** Step-by-step guide to integrating Allele with OpenAI and Ollama.
+> *   **45-Minute Video Walkthrough:** Step-by-step guide to integrating Phylogenic with OpenAI and Ollama.
 > *   **Commercial License:** Use in projects with up to $100k/year revenue.
 >
 > **Bonus:**
 > *   30-Day Access to the Private Discord Community.
 
 **Files to Upload:**
-*   `allele_toolkit_v1.zip` (containing templates/, recipes/, cheatsheet.pdf)
+*   `phylogenic_toolkit_v1.zip` (containing templates/, recipes/, cheatsheet.pdf)
 *   `welcome_guide.pdf`
 
 ---
 
-## 2. Allele Evolution Course ($197)
+## 2. Phylogenic Evolution Course ($197)
 
-**Name:** Allele Evolution Course - Master Phylogenic AI
+**Name:** Phylogenic Evolution Course - Master Phylogenic AI
 
 **Short Description:**
 Master genomic agent design with 20 lessons (6 hours), 30 templates, and deep-dive code walkthroughs.
@@ -71,7 +71,7 @@ Master genomic agent design with 20 lessons (6 hours), 30 templates, and deep-di
 
 ## 3. Commercial Developer License ($497)
 
-**Name:** Allele Developer License - Commercial Rights
+**Name:** Phylogenic Developer License - Commercial Rights
 
 **Short Description:**
 Unlimited commercial rights, priority support, and annotated source code for professional developers and startups.
@@ -79,12 +79,12 @@ Unlimited commercial rights, priority support, and annotated source code for pro
 **Call to Action:** Get License
 
 **Summary / Description:**
-> **Build Your Business on Allele.**
+> **Build Your Business on Phylogenic.**
 >
-> The Developer License removes the revenue cap and gives you the rights to build, rebrand, and sell commercial applications powered by Allele.
+> The Developer License removes the revenue cap and gives you the rights to build, rebrand, and sell commercial applications powered by Phylogenic.
 >
 > **License Features:**
-> *   **Unlimited Commercial Revenue:** No caps on the revenue you generate using Allele.
+> *   **Unlimited Commercial Revenue:** No caps on the revenue you generate using Phylogenic.
 > *   **Rebranding Rights:** White-label the agent output for your clients.
 > *   **Priority Support:** Direct email access to the engineering team (24h SLA).
 > *   **Annotated Source Code:** Deep comments and architecture notes for extending the core SDK.
@@ -96,7 +96,7 @@ Unlimited commercial rights, priority support, and annotated source code for pro
 > *   Enterprise Developers needing official support.
 
 **Files to Upload:**
-*   `Allele_Commercial_License.pdf` (Your legal license document)
+*   `Phylogenic_Commercial_License.pdf` (Your legal license document)
 *   `annotated_source_v1.zip`
 *   `priority_support_instructions.txt`
 
@@ -104,7 +104,7 @@ Unlimited commercial rights, priority support, and annotated source code for pro
 
 ## 4. Enterprise License ($997)
 
-**Name:** Allele Enterprise License - Agency & SaaS
+**Name:** Phylogenic Enterprise License - Agency & SaaS
 
 **Short Description:**
 Everything in Developer + white-glove onboarding, 3 hours of custom genome development, and architecture consultation.
@@ -127,5 +127,5 @@ Everything in Developer + white-glove onboarding, 3 hours of custom genome devel
 > *   White-glove setup assistance to ensure your infrastructure is ready.
 
 **Files to Upload:**
-*   `Allele_Enterprise_License.pdf`
+*   `Phylogenic_Enterprise_License.pdf`
 *   `consultation_booking_link.pdf`

@@ -11,7 +11,7 @@ This document discusses the different configuration approaches we implemented an
 ### 1. **Hardcoded Defaults (Pattern A)**
 
 ```python
-from allele import AgentConfig, ConversationalGenome, create_agent
+from phylogenic import AgentConfig, ConversationalGenome, create_agent
 
 # Direct instantiation with explicit values
 config = AgentConfig(
@@ -54,7 +54,7 @@ agent = await create_agent(genome, config)
 ### 2. **Central Settings with Factory Methods (Pattern B - Recommended)**
 
 ```python
-from allele import settings, AgentConfig, ConversationalGenome, create_agent
+from phylogenic import settings, AgentConfig, ConversationalGenome, create_agent
 
 # Load from central settings
 config = AgentConfig.from_settings()
@@ -112,7 +112,7 @@ KRAKEN__RESERVOIR_SIZE=150
 ```
 
 ```python
-from allele import AgentConfig
+from phylogenic import AgentConfig
 
 # Automatically loads from environment/.env
 config = AgentConfig.from_settings()
@@ -145,7 +145,7 @@ print(config.model_name)  # "gpt-4-turbo" from .env
 ### 4. **Hybrid Approach (Pattern D)**
 
 ```python
-from allele import settings, AgentConfig
+from phylogenic import settings, AgentConfig
 
 # Start with central settings
 base = AgentConfig.from_settings()
@@ -282,7 +282,7 @@ Would be better for:
 **What we chose:** Global singleton `settings` object exported from package.
 
 ```python
-from allele import settings
+from phylogenic import settings
 print(settings.agent.model_name)
 ```
 
@@ -295,7 +295,7 @@ print(settings.agent.model_name)
 
 2. **Context managers**
    ```python
-   with allele_settings(custom):
+   with phylogenic_settings(custom):
        config = AgentConfig.from_settings()
    ```
 
@@ -307,7 +307,7 @@ print(settings.agent.model_name)
 
 **But we also support:**
 ```python
-custom_settings = AlleleSettings(...)
+custom_settings = PhylogenicSettings(...)
 config = AgentConfig.from_settings(custom_settings)
 ```
 
@@ -365,12 +365,12 @@ AGENT__TEMPERATURE=0.7
 **Or load YAML into settings:**
 ```python
 import yaml
-from allele.config import AlleleSettings, AgentSettings
+from phylogenic.config import PhylogenicSettings, AgentSettings
 
 with open('config.yaml') as f:
     config = yaml.safe_load(f)
 
-settings = AlleleSettings(
+settings = PhylogenicSettings(
     agent=AgentSettings(**config['agent'])
 )
 ```
@@ -408,7 +408,7 @@ settings = AlleleSettings(
 
 ## Recommendations by Use Case
 
-### For Libraries/SDKs (like Allele)
+### For Libraries/SDKs (like Phylogenic)
 ✅ **Provide both patterns:**
 - Direct construction for simplicity
 - Central settings for power users
@@ -435,7 +435,7 @@ config = AgentConfig.from_settings()
 ### For Testing
 ✅ **Use custom settings instances:**
 ```python
-test_settings = AlleleSettings(
+test_settings = PhylogenicSettings(
     agent=AgentSettings(model_name="mock-model")
 )
 config = AgentConfig.from_settings(test_settings)

@@ -1,0 +1,2 @@
+# Ignore generated benchmark result files (they contain model output and many typos)
+benchmark_results/

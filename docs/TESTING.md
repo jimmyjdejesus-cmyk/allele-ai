@@ -1,8 +1,8 @@
-# Allele Runtime Testing Documentation
+# Phylogenic Runtime Testing Documentation
 
 ## Overview
 
-Comprehensive runtime testing suite for the Allele genome-based conversational AI system, including unit, integration, performance, and stress tests.
+Comprehensive runtime testing suite for the Phylogenic genome-based conversational AI system, including unit, integration, performance, and stress tests.
 
 ## Test Structure
 
@@ -10,7 +10,7 @@ Comprehensive runtime testing suite for the Allele genome-based conversational A
 
 - **`tests/conftest.py`** - Shared pytest fixtures and configuration
 - **`tests/test_utils.py`** - Testing utilities and helper functions
-- **`tests/test_allele_genome.py`** - Original unit tests (enhanced)
+- **`tests/test_phylogenic_genome.py`** - Original unit tests (enhanced)
 - **`tests/test_genome_runtime.py`** - Runtime tests for genome operations
 - **`tests/test_evolution_runtime.py`** - Runtime tests for evolution engine
 - **`tests/test_kraken_lnn_runtime.py`** - Runtime tests for Kraken LNN
@@ -30,7 +30,7 @@ pytest tests/
 ### With Coverage
 
 ```bash
-pytest tests/ --cov=allele --cov-report=html
+pytest tests/ --cov=phylogenic --cov-report=html
 ```
 
 ### Specific Test Categories
@@ -151,7 +151,7 @@ Tests are designed for CI/CD:
 - name: Run tests
   run: |
     pip install -e ".[dev]"
-    pytest tests/ --cov=allele --cov-report=xml
+    pytest tests/ --cov=phylogenic --cov-report=xml
 ```
 
 ## Debugging

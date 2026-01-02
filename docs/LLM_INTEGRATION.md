@@ -2,12 +2,12 @@
 
 ## Overview
 
-The Allele SDK now includes production-ready Large Language Model (LLM) integration, enabling real conversational AI with genome-based personality traits.
+The Phylogenic SDK now includes production-ready Large Language Model (LLM) integration, enabling real conversational AI with genome-based personality traits.
 
 ## Quick Start
 
 ```python
-from allele import ConversationalGenome, AgentConfig, NLPAgent
+from phylogenic import ConversationalGenome, AgentConfig, NLPAgent
 import os
 
 # Set your API key
@@ -50,7 +50,7 @@ OPENAI_API_KEY=sk-your-api-key-here
 ### Agent Configuration
 
 ```python
-from allele import AgentConfig
+from phylogenic import AgentConfig
 
 config = AgentConfig(
     # LLM Provider
@@ -108,7 +108,7 @@ os.environ["OLLAMA_API_KEY"] = "your-ollama-cloud-key"
 
 ## Behavioral AI: LLMs That *Change* Behavior
 
-**Key Innovation**: Allele doesn't just *call* LLMs - it *transforms* LLM behavior through genetic personality encoding.
+**Key Innovation**: Phylogenic doesn't just *call* LLMs - it *transforms* LLM behavior through genetic personality encoding.
 
 ### Genome-Based Behavioral Transformation
 
@@ -288,7 +288,7 @@ config = AgentConfig(request_timeout=120)
 ```python
 # Enable debug logging
 import logging
-logging.getLogger('allele.llm_client').setLevel(logging.DEBUG)
+logging.getLogger('phylogenic.llm_client').setLevel(logging.DEBUG)
 ```
 
 ## Advanced Usage

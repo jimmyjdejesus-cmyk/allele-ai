@@ -1,10 +1,10 @@
-# Allele SDK API Specifications
+# Phylogenic SDK API Specifications
 
-This directory contains comprehensive **OpenAPI 3.1 specifications** for the Allele SDK, providing formal API contracts for all interfaces and integrations.
+This directory contains comprehensive **OpenAPI 3.1 specifications** for the Phylogenic SDK, providing formal API contracts for all interfaces and integrations.
 
 ## 📋 API Specification Overview
 
-Allele is a Python SDK for genome-based conversational AI, but these OpenAPI specs document how external systems can integrate with, monitor, and manage Allele deployments through REST APIs.
+Phylogenic is a Python SDK for genome-based conversational AI, but these OpenAPI specs document how external systems can integrate with, monitor, and manage Phylogenic deployments through REST APIs.
 
 ### Core API Specifications
 
@@ -62,7 +62,7 @@ graph TB
     E --> J[(Genome DB)]
     F --> K[(Evolution DB)]
 
-    C --> L[Allele SDK Core]
+    C --> L[Phylogenic SDK Core]
     D --> L
     E --> L
     F --> L
@@ -96,8 +96,8 @@ All specifications reference **shared schemas** in [`schemas.yaml`](schemas.yaml
 
 ```bash
 # Example: Bearer token auth
-curl -H "Authorization: Bearer $ALLELE_API_TOKEN" \
-     https://api.allele.ai/v1/agents
+curl -H "Authorization: Bearer $PHYLOGENIC_API_TOKEN" \
+     https://api.phylogenic.ai/v1/agents
 ```
 
 **Required Headers:**
@@ -149,9 +149,9 @@ GET /evolution/runs?status=completed&algorithm=elitist_ga
 
 ```python
 # Python client example
-from allele_client import AlleleApi
+from phylogenic_client import PhylogenicApi
 
-client = AlleleApi(base_url="https://api.allele.ai/v1")
+client = PhylogenicApi(base_url="https://api.phylogenic.ai/v1")
 
 # Create a customer service agent
 agent = client.create_agent({
@@ -170,7 +170,7 @@ health = client.get_agent_status(agent["agent_id"])
 
 ```javascript
 // WebSocket client for streaming chat
-const ws = new WebSocket('wss://api.allele.ai/v1/conversation/live');
+const ws = new WebSocket('wss://api.phylogenic.ai/v1/conversation/live');
 
 ws.onmessage = (event) => {
     const update = JSON.parse(event.data);
@@ -184,12 +184,12 @@ ws.onmessage = (event) => {
 
 ```bash
 # Export genome for backup
-curl -X POST https://api.allele.ai/v1/genomes/customer_service_v2/export \
+curl -X POST https://api.phylogenic.ai/v1/genomes/customer_service_v2/export \
   -d '{"format": "yaml"}' \
   --output genome_backup.yaml
 
 # Import genome from file
-curl -X POST https://api.allele.ai/v1/genomes/import \
+curl -X POST https://api.phylogenic.ai/v1/genomes/import \
   -F "config_file=@genome_backup.yaml"
 ```
 
@@ -240,7 +240,7 @@ openapi-generator-cli generate \
   -i docs/api/conversation.yaml \
   -g python \
   -o test/generated \
-  --additional-properties=packageName=allele_api_tests
+  --additional-properties=packageName=phylogenic_api_tests
 ```
 
 ### Mock Server
@@ -257,7 +257,7 @@ prism mock docs/api/agent.yaml --host 0.0.0.0 --port 4010
 # Example Pact contract
 pact:
   consumer: "MyApp"
-  provider: "AlleleAPI"
+  provider: "PhylogenicAPI"
   interactions:
     - description: "Create customer service agent"
       request:
@@ -275,10 +275,10 @@ pact:
 
 ```bash
 # API health endpoint
-curl https://api.allele.ai/v1/agents/health
+curl https://api.phylogenic.ai/v1/agents/health
 
 # Configuration health
-curl https://api.allele.ai/v1/config/health
+curl https://api.phylogenic.ai/v1/config/health
 ```
 
 ### Metrics Integration
@@ -315,7 +315,7 @@ FROM python:3.11-slim
 COPY docs/api/ /app/docs/api/
 
 # Install dependencies
-RUN pip install allele-sdk
+RUN pip install phylogenic-sdk
 
 # Health check via API
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s \
@@ -330,13 +330,13 @@ EXPOSE 8000
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: allele-api-specs
+  name: phylogenic-api-specs
 data:
   schemas.yaml: |
     # OpenAPI specs embedded as ConfigMaps
     openapi: 3.1.0
     info:
-      title: Allele Schemas
+      title: Phylogenic Schemas
       version: 1.0.0
 ```
 
@@ -368,7 +368,7 @@ info:
 ## 📚 Additional Resources
 
 ### Related Documentation
-- [Allele SDK Documentation](../README.md)
+- [Phylogenic SDK Documentation](../README.md)
 - [Configuration Guide](../docs/configuration.md)
 - [LLM Integration Guide](../docs/LLM_INTEGRATION.md)
 
@@ -387,5 +387,5 @@ info:
 
 **Need Help?**
 - 📧 Email: jimmydejesus1129@gmail.com
-- 📖 Documentation: [Allele SDK Docs](../docs/)
-- 🔗 Repository: [GitHub](https://github.com/allele-ai/allele)
+- 📖 Documentation: [Phylogenic SDK Docs](../docs/)
+- 🔗 Repository: [GitHub](https://github.com/phylogenic-ai/phylogenic)

@@ -1,6 +1,6 @@
 # API Reference
 
-Allele provides comprehensive REST APIs for programmatic access to all functionality. These APIs enable integration with external systems, monitoring, and management of Allele deployments.
+Phylogenic provides comprehensive REST APIs for programmatic access to all functionality. These APIs enable integration with external systems, monitoring, and management of Phylogenic deployments.
 
 ## OpenAPI Specifications
 
@@ -69,7 +69,7 @@ API Gateway/Load Balancer
 └─────────────────────────────────────┘
      ↓
 ┌─────────────────────────────────────┐
-│      Allele SDK Core Engine         │
+│      Phylogenic SDK Core Engine         │
 │ - Genome Library                    │
 │ - Evolution Engine                  │
 │ - Kraken LNN                        │
@@ -97,16 +97,16 @@ All API endpoints require authentication via Bearer tokens:
 
 ```bash
 # Set API token
-export ALLELE_API_TOKEN="your_token_here"
+export PHYLOGENIC_API_TOKEN="your_token_here"
 
 # Example authenticated request
-curl -H "Authorization: Bearer $ALLELE_API_TOKEN" \
-     https://api.allele.ai/v1/agents
+curl -H "Authorization: Bearer $PHYLOGENIC_API_TOKEN" \
+     https://api.phylogenic.ai/v1/agents
 ```
 
 ### Core Data Models
 
-The APIs work with Allele's fundamental data structures:
+The APIs work with Phylogenic's fundamental data structures:
 
 #### Conversational Genome
 8-trait personality encoding representing agent characteristics:
@@ -157,7 +157,7 @@ Consistent error response structure:
     "issue": "must be between 0 and 2"
   },
   "correlation_id": "req_12345",
-  "timestamp": "2025-12-10T19:00:00Z"
+  "timestamp": "2026-01-01T19:00:00Z"
 }
 ```
 
@@ -167,7 +167,7 @@ All list endpoints support pagination:
 
 ```bash
 # Get first 20 agents, page 1
-curl "https://api.allele.ai/v1/agents?page=1&page_size=20"
+curl "https://api.phylogenic.ai/v1/agents?page=1&page_size=20"
 
 # Response includes pagination metadata
 {
@@ -191,7 +191,7 @@ curl "https://api.allele.ai/v1/agents?page=1&page_size=20"
 # Python client example
 import requests
 
-class AlleleClient:
+class PhylogenicClient:
     def __init__(self, base_url, api_token):
         self.base_url = base_url
         self.headers = {"Authorization": f"Bearer {api_token}"}
@@ -220,7 +220,7 @@ class AlleleClient:
         return response.json()
 
 # Usage
-client = AlleleClient("https://api.allele.ai/v1", "your_token")
+client = PhylogenicClient("https://api.phylogenic.ai/v1", "your_token")
 
 agent = client.create_agent("support_agent_v1", {
     "llm_provider": "openai",
@@ -235,9 +235,9 @@ response = client.chat(agent["agent_id"], "Help me reset my password")
 ```javascript
 // WebSocket streaming for live chat
 function startStreamingChat(agentId) {
-    const wsUrl = `wss://api.allele.ai/v1/agents/${agentId}/chat/stream`;
+    const wsUrl = `wss://api.phylogenic.ai/v1/agents/${agentId}/chat/stream`;
     const ws = new WebSocket(wsUrl, [], {
-        headers: { "Authorization": `Bearer ${ALLELE_API_TOKEN}` }
+        headers: { "Authorization": `Bearer ${PHYLOGENIC_API_TOKEN}` }
     });
 
     ws.onmessage = (event) => {
@@ -319,10 +319,10 @@ prism mock docs/api/agent.yaml --host 0.0.0.0 --port 4010
 
 ```python
 # Using generated client
-from allele_api_client import ApiClient, Configuration
+from phylogenic_api_client import ApiClient, Configuration
 
 config = Configuration()
-config.api_key = {"Authorization": ALLELE_API_TOKEN}
+config.api_key = {"Authorization": PHYLOGENIC_API_TOKEN}
 client = ApiClient(config)
 
 # Test agent creation
@@ -345,7 +345,7 @@ FROM python:3.11-slim
 COPY docs/api/ /app/docs/api/
 
 # Install dependencies
-RUN pip install allele-sdk fastapi uvicorn
+RUN pip install phylogenic-sdk fastapi uvicorn
 
 # Expose API port
 EXPOSE 8000
@@ -354,7 +354,7 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s \
   CMD curl -f http://localhost:8000/v1/agents/health || exit 1
 
-CMD ["uvicorn", "allele.api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "phylogenic.api:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
 See the [`docs/api/README.md`](./api/README.md) for additional usage examples, tooling recommendations, and advanced integration patterns.

@@ -1,0 +1,33 @@
+name: Pages smoke test
+
+on:
+  workflow_run:
+    workflows:
+      - Build and deploy MkDocs to GitHub Pages
+    types:
+      - completed
+
+jobs:
+  smoke:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check deployed site is reachable
+        env:
+          PAGES_URL: https://jimmyjdejesus-cmyk.github.io/allele-ai/
+        run: |
+          set -euo pipefail
+          echo "Checking $PAGES_URL"
+
+          # Pages may take a short moment to become reachable after deploy.
+          for i in $(seq 1 12); do
+            if curl -fsSL "$PAGES_URL" > /dev/null; then
+              echo "OK"
+              exit 0
+            fi
+            echo "Not ready yet (attempt $i/12); sleeping 10s..."
+            sleep 10
+          done
+
+          echo "Site did not become reachable in time: $PAGES_URL" >&2
+          exit 1

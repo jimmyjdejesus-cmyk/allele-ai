@@ -3,7 +3,7 @@ info:
   title: Allele Configuration Management API
   version: 1.0.0
   description: |
-    REST API endpoints for managing Allele SDK configuration, environment variables,
+    REST API endpoints for managing Phylogenic SDK configuration, environment variables,
     settings management, and runtime configuration across all components.
     Supports centralized configuration management with environment variable overrides,
     validation, and deployment-specific configurations.
@@ -31,7 +31,7 @@ paths:
   /config/settings:
     get:
       summary: Get Current Settings
-      description: Retrieve the current global configuration settings for the Allele SDK.
+      description: Retrieve the current global configuration settings for the Phylogenic SDK.
       operationId: getGlobalSettings
       tags:
         - Configuration
@@ -1125,7 +1125,7 @@ paths:
           examples:
             config_export:
               value: |
-                # Allele SDK Configuration
+                # Phylogenic SDK Configuration
                 # Generated: 2025-12-10T19:00:00Z
                 AGENT__LLM_PROVIDER=openai
                 AGENT__MODEL_NAME=gpt-4-turbo-preview

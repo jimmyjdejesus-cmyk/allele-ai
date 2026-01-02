@@ -12,7 +12,7 @@ Beyond Prompt Engineering. Evolve Genetically Optimized Personalities with Liqui
 
 Traditional Agents are brittle. They hallucinate, drift, and forget.
 
-**Allele changes the substrate.**
+**Phylogenic changes the substrate.**
 
 We replaced static prompts with **8-Trait Genetic Code** and **Liquid Neural Networks (LNNs)**.
 
@@ -28,9 +28,9 @@ Prompting is guessing. You tweak one word, the entire personality breaks. Vector
 
 **You've been building agents wrong.**
 
-### The Solution (What Allele Does)
+### The Solution (What Phylogenic Does)
 
-Allele treats AI Agent personalities like **DNA, not text.**
+Phylogenic treats AI Agent personalities like **DNA, not text.**
 
 Instead of brittle system prompts, you define a **Genome** with 8 quantified traits:
 
@@ -167,7 +167,7 @@ High precision + context awareness → No false positives
 ### Tier 1: Core SDK - $0 (Free Forever)
 **What:** Open-source MIT package
 **Get:**
-- pip install allele
+- pip install phylogenic
 - All core features
 - Community support (GitHub issues)
 
@@ -281,7 +281,7 @@ MODULE 4: MONETIZATION
 ## FAQs
 
 **Q: Is this just another LLM wrapper?**
-A: No. Allele is a genome-based personality framework. The LLM is just the "brain" - Allele provides the personality layer.
+A: No. Phylogenic is a genome-based personality framework. The LLM is just the "brain" - Phylogenic provides the personality layer.
 
 **Q: Do I need to fine-tune models?**
 A: No! Genomes work with any LLM out of the box (GPT-4, Claude, Ollama).
@@ -290,7 +290,7 @@ A: No! Genomes work with any LLM out of the box (GPT-4, Claude, Ollama).
 A: Prompts are strings. Genomes are data structures that can be versioned, evolved, and composed.
 
 **Q: Can I use local models (Ollama)?**
-A: Yes! Allele is LLM-agnostic. Works with OpenAI, Anthropic, Ollama, or custom endpoints.
+A: Yes! Phylogenic is LLM-agnostic. Works with OpenAI, Anthropic, Ollama, or custom endpoints.
 
 **Q: What if I'm not a Python expert?**
 A: If you can `pip install` and run basic Python, you're good. Examples are copy-paste ready.
@@ -311,7 +311,7 @@ A: YES! MIT license. No restrictions on commercial use.
 ### Free Tier CTA:
 **"Start breeding agents in 5 minutes →"**
 ```bash
-pip install allele
+pip install phylogenic
 ```
 
 ### Paid Tier CTA:

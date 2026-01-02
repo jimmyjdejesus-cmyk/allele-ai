@@ -1,9 +1,9 @@
-# Supplemental Materials: Allele Genome-Based Conversational AI
+# Supplemental Materials: Phylogenic Genome-Based Conversational AI
 
 ## Code and Data Availability
 
 All source code, experimental data, and analysis scripts are available at:
-**GitHub Repository**: https://github.com/jimmyjdejesus-cmyk/allele
+**GitHub Repository**: https://github.com/jimmyjdejesus-cmyk/phylogenic
 **DOI (forthcoming)**: Zenodo archive pending publication
 
 ## Computational Requirements
@@ -121,8 +121,8 @@ All hypothesis tests were performed using Python scipy.stats with:
 ### Environment Setup
 ```bash
 # Clone repository
-git clone https://github.com/jimmyjdejesus-cmyk/allele.git
-cd allele
+git clone https://github.com/jimmyjdejesus-cmyk/phylogenic.git
+cd phylogenic
 
 # Install dependencies
 pip install -e .[dev]
@@ -140,7 +140,7 @@ pytest tests/ --benchmark-only
 jupyter notebook notebooks/statistical_analysis.ipynb
 
 # Performance profiling
-python -m cProfile src/allele/evolution.py
+python -m cProfile src/phylogenic/evolution.py
 ```
 
 ### Validation Checks

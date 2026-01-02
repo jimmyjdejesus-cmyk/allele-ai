@@ -1,6 +1,6 @@
 # Configuration Guide
 
-Allele provides a flexible, centralized configuration system using **Pydantic Settings** that supports:
+Phylogenic provides a flexible, centralized configuration system using **Pydantic Settings** that supports:
 - Code-based defaults
 - Environment variable overrides
 - `.env` file loading
@@ -15,7 +15,7 @@ Allele provides a flexible, centralized configuration system using **Pydantic Se
 The simplest approach is to use the built-in defaults:
 
 ```python
-from allele import ConversationalGenome, create_agent, AgentConfig
+from phylogenic import ConversationalGenome, create_agent, AgentConfig
 
 # Uses default settings automatically
 genome = ConversationalGenome("agent_001")
@@ -28,7 +28,7 @@ agent = await create_agent(genome, config)
 Load configuration from the central settings singleton:
 
 ```python
-from allele import settings, AgentConfig, EvolutionConfig
+from phylogenic import settings, AgentConfig, EvolutionConfig
 
 # Inspect current settings
 print(settings.agent.model_name)  # "gpt-4"
@@ -61,7 +61,7 @@ $env:EVOLUTION__POPULATION_SIZE = "200"
 ### Create a genome using settings default traits
 
 ```python
-from allele import ConversationalGenome
+from phylogenic import ConversationalGenome
 
 genome = ConversationalGenome.from_settings('example_id')
 ```
@@ -69,7 +69,7 @@ genome = ConversationalGenome.from_settings('example_id')
 ### Create Kraken LNN from central settings
 
 ```python
-from allele import KrakenLNN
+from phylogenic import KrakenLNN
 
 kraken = KrakenLNN.from_settings()
 ```
@@ -104,12 +104,12 @@ python .\examples\config_env_override.py
 
 ## Programmatic override
 
-You can create a new `AlleleSettings` instance with overrides if you want a separate settings object and avoid mutating the singleton `allele.settings`:
+You can create a new `PhylogenicSettings` instance with overrides if you want a separate settings object and avoid mutating the singleton `phylogenic.settings`:
 
 ```python
-from allele.config import AlleleSettings, AgentSettings
+from phylogenic.config import PhylogenicSettings, AgentSettings
 
-custom_settings = AlleleSettings(agent=AgentSettings(model_name='my-model'))
+custom_settings = PhylogenicSettings(agent=AgentSettings(model_name='my-model'))
 agent_cfg = AgentConfig.from_settings(custom_settings)
 ```
 
@@ -120,8 +120,8 @@ This pattern is useful for per-run/sandboxed configurations.
 ## Notes and considerations
 
 - Pydantic v2 introduces `pydantic-settings` and `ConfigDict`. The `config.py` uses compatibility logic so the library functions with both pydantic v1 and v2.
-- We expose `settings` from `allele` package for convenience. If you want to centralize all runtime behavior in an application, create a single settings instance early and use the `from_settings(...)` factory functions to populate the dataclasses.
-- If you use environment overrides, recreate the `AlleleSettings()` object (e.g., `AlleleSettings()` or restart the process) to pick up new environment variables.
+- We expose `settings` from `phylogenic` package for convenience. If you want to centralize all runtime behavior in an application, create a single settings instance early and use the `from_settings(...)` factory functions to populate the dataclasses.
+- If you use environment overrides, recreate the `PhylogenicSettings()` object (e.g., `PhylogenicSettings()` or restart the process) to pick up new environment variables.
 
 ---
 
@@ -140,7 +140,7 @@ When designing configuration for libraries and applications, there are multiple 
 		- `from_settings()` helpers make it easy to programmatically convert settings into dataclass configs used by the library.
 	- Cons:
 		- Adds `pydantic` dependency and subtle behavior changes between pydantic v1/v2 (handled via a compat shim).
-		- If runtime mutability of `settings` is required, it is possible but usually not advisable; prefer creating overrides via `AlleleSettings(...)` objects.
+		- If runtime mutability of `settings` is required, it is possible but usually not advisable; prefer creating overrides via `PhylogenicSettings(...)` objects.
 
 - Per-class dataclass defaults (legacy approach):
 	- Pros:
@@ -166,20 +166,20 @@ When designing configuration for libraries and applications, there are multiple 
 
 Which to pick?
 
-- For libraries (like Allele), a hybrid is often best: keep dataclass defaults for stable, documented behavior and provide a central settings object for application-level overrides. In this repository we expose both: dataclasses (AgentConfig/EvolutionConfig) and the central `settings` with `from_settings` helpers.
+- For libraries (like Phylogenic), a hybrid is often best: keep dataclass defaults for stable, documented behavior and provide a central settings object for application-level overrides. In this repository we expose both: dataclasses (AgentConfig/EvolutionConfig) and the central `settings` with `from_settings` helpers.
 
 - For apps, a central pydantic-based settings object is recommended (as implemented), as it merges environment config, file-based overrides (if needed via `python-dotenv`), and typed validation.
 
 Performance & immutability tradeoffs
 
-- `AlleleSettings` is intended to be a central, read-only source of default values. If you mutate it in runtime you may cause inconsistent behavior; prefer creating new `AlleleSettings` objects for scoped overrides.
+- `PhylogenicSettings` is intended to be a central, read-only source of default values. If you mutate it in runtime you may cause inconsistent behavior; prefer creating new `PhylogenicSettings` objects for scoped overrides.
 - The `EvolutionEngine` has historically created new objects for evolved genomes. For integration tests we opted to mutate genomes in-place during evolution so references to genome objects that existed before evolution can reflect changes. If you prefer immutable flow, you should switch to returning a new population list and update any code or tests accordingly.
 
 ---
 
 ## HPC Mode & Mutation Strategy ⚡️
 
-For high-performance (HPC) use cases, Allele defaults to an in-place mutation strategy which reduces memory pressure and improves speed by reusing existing genome objects. This is most suitable for long-running, memory-sensitive workloads.
+For high-performance (HPC) use cases, Phylogenic defaults to an in-place mutation strategy which reduces memory pressure and improves speed by reusing existing genome objects. This is most suitable for long-running, memory-sensitive workloads.
 
 - Default behavior: `hpc_mode=True`, `immutable_evolution=False` (in-place mutation)
 - To use immutable evolution for reproducible, functional-style behavior, set `EVOLUTION__IMMUTABLE_EVOLUTION=true` (or programmatically via `EvolutionConfig`).
@@ -187,7 +187,7 @@ For high-performance (HPC) use cases, Allele defaults to an in-place mutation st
 Examples:
 
 ```python
-from allele import EvolutionConfig, EvolutionEngine
+from phylogenic import EvolutionConfig, EvolutionEngine
 # HPC mode (default)
 cfg = EvolutionConfig.from_settings()
 assert cfg.hpc_mode and not cfg.immutable_evolution
