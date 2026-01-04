@@ -6,6 +6,9 @@ import time
 import numpy as np
 import pytest
 
+# Require pytest-benchmark plugin for benchmark tests; skip file if not present
+pytest.importorskip("pytest_benchmark")
+
 from phylogenic.kraken_lnn import KrakenLNN, LiquidStateMachine
 from tests.test_utils import generate_test_sequence
 

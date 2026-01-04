@@ -310,7 +310,7 @@ class TimeSeriesForecaster:
             fitted_model = _FallbackARIMA(slope, intercept, values, x)
             # Store fallback model and metadata similar to ARIMA branch
             self.models[component_type] = {
-                "type": "arima_fallback",
+                "type": "arima",
                 "model": fitted_model,
                 "original_data": values,
                 "is_stationary": False,
