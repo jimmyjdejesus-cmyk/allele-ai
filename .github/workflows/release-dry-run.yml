@@ -53,6 +53,15 @@ jobs:
           python -m build --sdist --wheel
           ls -lah dist
 
+      - name: Generate whitepaper figures (dry-run)
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          pip install matplotlib pandas numpy || true
+          python3 scripts/generate_figures.py || true
+          mkdir -p docs/whitepaper/whitepaper_figures
+          mv -f whitepaper_figures/* docs/whitepaper/whitepaper_figures/ 2>/dev/null || true
+
       - name: Build whitepaper PDF (dry-run)
         run: |
           set -euo pipefail
