@@ -45,18 +45,28 @@ jobs:
           set -euo pipefail
           # Install plotting dependencies and generate figures used by the whitepaper
           python -m pip install --upgrade pip
-          pip install matplotlib pandas numpy || true
+          pip install matplotlib pandas numpy seaborn || true
           python3 scripts/generate_figures.py || true
           # Move generated figures into docs/whitepaper for LaTeX to pick up
           mkdir -p docs/whitepaper/whitepaper_figures
           mv -f whitepaper_figures/* docs/whitepaper/whitepaper_figures/ 2>/dev/null || true
 
+      - name: Ensure whitepaper figures present
+        run: |
+          set -euo pipefail
+          if ls docs/whitepaper/whitepaper_figures/*.png 1> /dev/null 2>&1; then
+            echo "Figures present"
+          else
+            echo "ERROR: No whitepaper figures found in docs/whitepaper/whitepaper_figures/. Failing build."
+            exit 1
+          fi
+
       - name: Build whitepaper PDF
         run: |
           set -euo pipefail
-          # Attempt to compile the LaTeX whitepaper into a PDF. This is non-fatal
-          # for the release (we don't want to block releases if building the PDF
-          # fails); successful builds are moved into `dist/` for release and Zenodo upload.
+          # Attempt to compile the LaTeX whitepaper into a PDF. If figures are missing,
+          # the previous step will have already failed and stopped the job. Successful
+          # builds are moved into `dist/` for release and Zenodo upload.
           if [ -f docs/whitepaper/phylogenic_whitepaper.tex ]; then
             sudo apt-get update -qq
             sudo apt-get install -y -qq texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended || true

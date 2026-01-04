@@ -62,6 +62,25 @@ jobs:
           mkdir -p docs/whitepaper/whitepaper_figures
           mv -f whitepaper_figures/* docs/whitepaper/whitepaper_figures/ 2>/dev/null || true
 
+      - name: Generate whitepaper figures (dry-run)
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          pip install matplotlib pandas numpy seaborn || true
+          python3 scripts/generate_figures.py || true
+          mkdir -p docs/whitepaper/whitepaper_figures
+          mv -f whitepaper_figures/* docs/whitepaper/whitepaper_figures/ 2>/dev/null || true
+
+      - name: Ensure whitepaper figures present (dry-run)
+        run: |
+          set -euo pipefail
+          if ls docs/whitepaper/whitepaper_figures/*.png 1> /dev/null 2>&1; then
+            echo "Figures present"
+          else
+            echo "ERROR: No whitepaper figures found in docs/whitepaper/whitepaper_figures/. Failing dry-run."
+            exit 1
+          fi
+
       - name: Build whitepaper PDF (dry-run)
         run: |
           set -euo pipefail
