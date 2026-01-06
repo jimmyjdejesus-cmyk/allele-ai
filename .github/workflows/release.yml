@@ -234,16 +234,7 @@ PY
           fi
           echo "Zenodo deposition id: $depo_id"
 
-          for f in dist/*; do
-            if [ -f "$f" ]; then
-              echo "Uploading $f to Zenodo deposition $depo_id..."
-              curl -s -X PUT "$ZENODO_URL/api/deposit/depositions/$depo_id/files?name=$(basename "$f")" \
-                -H "Authorization: Bearer $ZENODO_TOKEN" \
-                --data-binary @"$f"
-            fi
-          done
-
-          # Also upload whitepaper PDFs if present (docs/whitepaper/)
+          # Upload only the whitepaper PDFs to Zenodo (do NOT upload distribution artifacts)
           for wp in docs/whitepaper/*.pdf; do
             if [ -f "$wp" ]; then
               echo "Uploading $wp to Zenodo deposition $depo_id..."

@@ -185,10 +185,11 @@ PY
           if jq -e '.metadata.publication_type' .zenodo/payload.json >/dev/null 2>&1; then
             jq -e '.metadata.publication_type == "report"' .zenodo/payload.json >/dev/null || (echo "ERROR: payload.metadata.publication_type is not 'report'" && exit 1)
           fi
-          if ls dist/*.pdf 1> /dev/null 2>&1 || ls docs/whitepaper/*.pdf 1> /dev/null 2>&1; then
-            echo "Found PDF artifact for upload."
+          # Require at least one whitepaper PDF to be present
+          if ls docs/whitepaper/*.pdf 1> /dev/null 2>&1; then
+            echo "Found whitepaper PDF artifact for upload to Zenodo."
           else
-            echo "ERROR: No PDF artifact found in dist/ or docs/whitepaper/. Aborting dry-run to avoid empty publication."
+            echo "ERROR: No PDF artifact found in docs/whitepaper/. Aborting dry-run to avoid empty publication."
             exit 1
           fi
 
@@ -197,10 +198,10 @@ PY
           echo "Release tag: $RELEASE_TAG"
           echo "Payload preview:"
           jq . .zenodo/payload.json || true
-          echo "Files to upload:"
-          ls -lah dist || true
-          echo "Whitepaper PDFs:"
+          echo "Files to upload to Zenodo:"
           ls -lah docs/whitepaper/*.pdf || true
+          echo "Distribution artifacts (will be attached to GitHub Release but NOT uploaded to Zenodo):"
+          ls -lah dist || true
           if [ "$DRY_RUN" = "true" ]; then
             echo "DRY RUN enabled: No remote uploads will be performed.";
             exit 0
