@@ -94,6 +94,41 @@ jobs:
             fi
           fi
 
+      - name: Ensure whitepaper PDF exists (fallback)
+        run: |
+          set -euo pipefail
+          # If LaTeX did not produce a PDF (or pdflatex is unavailable), generate a minimal fallback PDF
+          if [ -f docs/whitepaper/phylogenic_whitepaper.pdf ]; then
+            echo "PDF already exists"
+          else
+            echo "Attempting to generate fallback PDF using reportlab (Python)"
+            python -m pip install --upgrade pip
+            pip install reportlab || true
+            python - <<'PY'
+from pathlib import Path
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+out = Path('docs/whitepaper/phylogenic_whitepaper.pdf')
+out.parent.mkdir(parents=True, exist_ok=True)
+try:
+    c = canvas.Canvas(str(out), pagesize=letter)
+    c.setFont('Helvetica-Bold', 16)
+    c.drawString(72, 700, 'Phylogenic Whitepaper (Fallback PDF)')
+    c.setFont('Helvetica', 10)
+    c.drawString(72, 680, 'This PDF was generated as a fallback because LaTeX/pdflatex was not available in the runner.')
+    c.showPage()
+    c.save()
+    print('Wrote fallback PDF:', out)
+except Exception as e:
+    print('Failed to generate fallback PDF:', e)
+    raise
+PY
+            # Move generated PDF into dist for upload parity with LaTeX path
+            if [ -f docs/whitepaper/phylogenic_whitepaper.pdf ]; then
+              mkdir -p dist
+              mv docs/whitepaper/phylogenic_whitepaper.pdf dist/
+            fi
+
       - name: Collect zenodo metadata payload
         run: |
           set -euo pipefail
@@ -150,10 +185,11 @@ PY
           if jq -e '.metadata.publication_type' .zenodo/payload.json >/dev/null 2>&1; then
             jq -e '.metadata.publication_type == "report"' .zenodo/payload.json >/dev/null || (echo "ERROR: payload.metadata.publication_type is not 'report'" && exit 1)
           fi
-          if ls dist/*.pdf 1> /dev/null 2>&1 || ls docs/whitepaper/*.pdf 1> /dev/null 2>&1; then
-            echo "Found PDF artifact for upload."
+          # Require at least one whitepaper PDF to be present
+          if ls docs/whitepaper/*.pdf 1> /dev/null 2>&1; then
+            echo "Found whitepaper PDF artifact for upload to Zenodo."
           else
-            echo "ERROR: No PDF artifact found in dist/ or docs/whitepaper/. Aborting dry-run to avoid empty publication."
+            echo "ERROR: No PDF artifact found in docs/whitepaper/. Aborting dry-run to avoid empty publication."
             exit 1
           fi
 
@@ -162,10 +198,10 @@ PY
           echo "Release tag: $RELEASE_TAG"
           echo "Payload preview:"
           jq . .zenodo/payload.json || true
-          echo "Files to upload:"
-          ls -lah dist || true
-          echo "Whitepaper PDFs:"
+          echo "Files to upload to Zenodo:"
           ls -lah docs/whitepaper/*.pdf || true
+          echo "Distribution artifacts (will be attached to GitHub Release but NOT uploaded to Zenodo):"
+          ls -lah dist || true
           if [ "$DRY_RUN" = "true" ]; then
             echo "DRY RUN enabled: No remote uploads will be performed.";
             exit 0

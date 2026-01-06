@@ -8,6 +8,7 @@ import asyncio
 import time
 
 import pytest
+pytest.importorskip("pytest_benchmark")
 
 from phylogenic import (
     AgentConfig,

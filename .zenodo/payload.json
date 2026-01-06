@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "title": "phylogenic v0.0.0-test",
+    "upload_type": "software",
+    "description": "Testing package name phylogenic",
+    "creators": [
+      {
+        "name": "Jimmy De Jesus",
+        "affiliation": "Bravetto",
+        "orcid": "0000-0002-1825-0097"
+      }
+    ],
+    "version": "1.0.2",
+    "keywords": [
+      "benchmark",
+      "matrix-evaluation",
+      "LLM"
+    ],
+    "license": "AGPL-3.0",
+    "related_identifiers": [
+      {
+        "identifier": "https://github.com/PhylogenicAIAgents/Phylogenic-AI-Agents/pull/19",
+        "relation": "isSupplementTo"
+      },
+      {
+        "identifier": "https://zenodo.org/records/18010560",
+        "relation": "isRelatedTo",
+        "scheme": "url"
+      }
+    ]
+  }
+}

@@ -2,6 +2,7 @@ import json
 from unittest.mock import patch
 
 import pytest
+import datetime
 
 from scripts.collect_agent_spec_metrics import collect_metrics
 
@@ -19,7 +20,7 @@ class DummyResponse:
 @patch('scripts.collect_agent_spec_metrics.get_pr_changed_files')
 def test_collect_metrics_basic(mock_changed, mock_get):
     # Mock PR list: one PR updated recently
-    now = '2025-12-27T00:00:00Z'
+    now = datetime.datetime.utcnow().isoformat() + 'Z'
     pr = {'number': 1, 'updated_at': now, 'labels': []}
     # First call returns PRs
     # get_recent_prs may call the pulls API twice (page 1, page 2) and pr_has_failure_comment will call comments
@@ -39,7 +40,7 @@ def test_collect_metrics_basic(mock_changed, mock_get):
 @patch('scripts.collect_agent_spec_metrics.pr_has_failure_comment')
 def test_collect_metrics_flagged(mock_has_failure, mock_changed, mock_recent_prs):
     # Mock get_recent_prs to return a PR directly
-    pr = {'number': 2, 'updated_at': '2025-12-27T00:00:00Z', 'labels': [{'name': 'allow-agent-without-spec'}]}
+    pr = {'number': 2, 'updated_at': datetime.datetime.utcnow().isoformat() + 'Z', 'labels': [{'name': 'allow-agent-without-spec'}]}
     mock_recent_prs.return_value = [pr]
     
     # Mock pr_has_failure_comment to return True (PR was flagged)
