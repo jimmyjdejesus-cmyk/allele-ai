@@ -17,18 +17,6 @@
       "matrix-evaluation",
       "LLM"
     ],
-    "license": "AGPL-3.0",
-    "related_identifiers": [
-      {
-        "identifier": "https://github.com/PhylogenicAIAgents/Phylogenic-AI-Agents/pull/19",
-        "relation": "isSupplementTo",
-        "scheme": "url"
-      },
-      {
-        "identifier": "https://zenodo.org/records/18010560",
-        "relation": "isRelatedTo",
-        "scheme": "url"
-      }
-    ]
+    "license": "AGPL-3.0"
   }
 }
