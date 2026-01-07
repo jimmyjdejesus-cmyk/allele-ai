@@ -28,7 +28,6 @@ jobs:
           if [ -f .zenodo/payload.json ]; then jq . .zenodo/payload.json || true; else echo "(no payload)"; fi
 
       - name: Publish whitepaper to Zenodo
-        if: ${{ secrets.ZENODO_TOKEN != '' }}
         env:
           ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
           ZENODO_URL: ${{ secrets.ZENODO_URL || 'https://zenodo.org' }}
