@@ -244,9 +244,9 @@ PY
           for wp in docs/whitepaper/*.pdf; do
             if [ -f "$wp" ]; then
               echo "Uploading $wp to Zenodo deposition $depo_id..."
-              curl -s -X PUT "$ZENODO_URL/api/deposit/depositions/$depo_id/files?name=$(basename "$wp")" \
+              curl -s -X POST "$ZENODO_URL/api/deposit/depositions/$depo_id/files" \
                 -H "Authorization: Bearer $ZENODO_TOKEN" \
-                --data-binary @"$wp"
+                -F file=@"$wp" -F name="$(basename "$wp")"
             fi
           done
 
