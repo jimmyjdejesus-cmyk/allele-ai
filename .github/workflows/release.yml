@@ -115,11 +115,15 @@ PY
             fi
 
       - name: Upload to PyPI (if PYPI_API_TOKEN provided)
-        if: ${{ secrets.PYPI_API_TOKEN != '' }}
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
+          set -euo pipefail
+          if [ -z "${TWINE_PASSWORD:-}" ]; then
+            echo "PYPI_API_TOKEN not set; skipping PyPI upload."
+            exit 0
+          fi
           python -m pip install --upgrade twine
           python -m twine upload dist/*
 
@@ -130,7 +134,6 @@ PY
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Collect project and release metadata for Zenodo
-        if: ${{ secrets.ZENODO_TOKEN != '' }}
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
           RELEASE_NAME: ${{ github.event.release.name }}
@@ -200,13 +203,16 @@ print('Zenodo metadata payload written to .zenodo/payload.json')
 PY
 
       - name: Publish release to Zenodo (optional)
-        if: ${{ secrets.ZENODO_TOKEN != '' }}
         env:
           ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
           ZENODO_URL: ${{ secrets.ZENODO_URL || 'https://zenodo.org' }}
           DRY_RUN: ${{ env.ZENODO_DRY_RUN || 'false' }}
         run: |
           set -euo pipefail
+          if [ -z "${ZENODO_TOKEN:-}" ]; then
+            echo "ZENODO_TOKEN not set; skipping Zenodo publish."
+            exit 0
+          fi
           payload_file=.zenodo/payload.json
           if [ ! -f "$payload_file" ]; then
             echo "Payload $payload_file missing"
@@ -238,9 +244,9 @@ PY
           for wp in docs/whitepaper/*.pdf; do
             if [ -f "$wp" ]; then
               echo "Uploading $wp to Zenodo deposition $depo_id..."
-              curl -s -X PUT "$ZENODO_URL/api/deposit/depositions/$depo_id/files?name=$(basename "$wp")" \
+              curl -s -X POST "$ZENODO_URL/api/deposit/depositions/$depo_id/files" \
                 -H "Authorization: Bearer $ZENODO_TOKEN" \
-                --data-binary @"$wp"
+                -F file=@"$wp" -F name="$(basename "$wp")"
             fi
           done
 

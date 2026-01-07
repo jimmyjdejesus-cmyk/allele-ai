@@ -1,0 +1,70 @@
+name: Zenodo publish (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Mode: publish or sandbox'
+        required: false
+        default: 'publish'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Debug workspace
+        run: |
+          echo "Files in repo root:"
+          ls -lah
+          echo "Whitepaper files:"
+          ls -lah docs/whitepaper || true
+          echo ".zenodo payload:" 
+          if [ -f .zenodo/payload.json ]; then jq . .zenodo/payload.json || true; else echo "(no payload)"; fi
+
+      - name: Publish whitepaper to Zenodo
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
+          ZENODO_URL: ${{ secrets.ZENODO_URL || 'https://zenodo.org' }}
+        run: |
+          set -euo pipefail
+          echo "Using Zenodo URL: $ZENODO_URL"
+          if [ ! -f .zenodo/payload.json ]; then
+            echo "ERROR: .zenodo/payload.json missing" >&2
+            ls -lah .zenodo || true
+            exit 1
+          fi
+          resp=$(curl -s -X POST "$ZENODO_URL/api/deposit/depositions" -H "Content-Type: application/json" -H "Authorization: Bearer $ZENODO_TOKEN" -d @.zenodo/payload.json)
+          echo "Create response:" >&2
+          echo "$resp" | jq . || true
+          depo_id=$(echo "$resp" | jq -r '.id')
+          if [ -z "$depo_id" ] || [ "$depo_id" = "null" ]; then
+            echo "Failed to create deposition" >&2
+            exit 1
+          fi
+          echo "Uploading whitepaper PDFs..."
+          for wp in docs/whitepaper/*.pdf; do
+            if [ -f "$wp" ]; then
+              echo "Uploading $wp to deposition $depo_id..."
+              curl -s -X POST "$ZENODO_URL/api/deposit/depositions/$depo_id/files" -H "Authorization: Bearer $ZENODO_TOKEN" -F file=@"$wp" -F name="$(basename "$wp")"
+            fi
+          done
+          echo "Publishing deposition..."
+          pub_resp=$(curl -s -X POST "$ZENODO_URL/api/deposit/depositions/$depo_id/actions/publish" -H "Authorization: Bearer $ZENODO_TOKEN")
+          echo "$pub_resp" | jq . || true
+          doi=$(echo "$pub_resp" | jq -r '.doi_url // .links.doi')
+          echo "Zenodo DOI/URL: $doi"
+
+      - name: Check Zenodo token at runtime
+        run: |
+          if [ -z "${ZENODO_TOKEN:-}" ]; then
+            echo "ZENODO_TOKEN secret is not set in this repo. Aborting publish." >&2
+            exit 1
+          fi
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}

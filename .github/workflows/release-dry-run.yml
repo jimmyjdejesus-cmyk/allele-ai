@@ -30,6 +30,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Debug: show environment & workspace snapshot
+        run: |
+          echo "--- ENV ---"
+          env | sort
+          echo "--- ROOT LIST ---"
+          ls -lah
+          echo "--- DOCS WHITEPAPER LIST ---"
+          ls -lah docs/whitepaper || true
+          echo "--- DIST LIST ---"
+          ls -lah dist || true
+          echo "--- ZENODO PAYLOAD (if exists) ---"
+          if [ -f .zenodo/payload.json ]; then jq . .zenodo/payload.json || true; else echo "(none)"; fi
+
       - name: Set env from inputs
         run: |
           echo "RELEASE_TAG=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
