@@ -60,7 +60,11 @@ jobs:
           doi=$(echo "$pub_resp" | jq -r '.doi_url // .links.doi')
           echo "Zenodo DOI/URL: $doi"
 
-      - name: No Zenodo token
-        if: ${{ secrets.ZENODO_TOKEN == '' }}
+      - name: Check Zenodo token at runtime
         run: |
-          echo "ZENODO_TOKEN secret is not set in this repo. Aborting publish." && exit 1
+          if [ -z "${ZENODO_TOKEN:-}" ]; then
+            echo "ZENODO_TOKEN secret is not set in this repo. Aborting publish." >&2
+            exit 1
+          fi
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
